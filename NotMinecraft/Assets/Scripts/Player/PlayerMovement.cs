@@ -113,8 +113,6 @@ public class PlayerMovement : MonoBehaviour {
     {
         foreach (ContactPoint col in collision.contacts)
         {
-            Debug.Log(col.point.y);
-            Debug.Log(transform.position.y + 0.1);
             if (col.point.y <= transform.position.y + 0.1 && !isGrounded)
             {
                 isGrounded = true;
