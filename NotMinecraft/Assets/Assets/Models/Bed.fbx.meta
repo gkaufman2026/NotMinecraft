@@ -7,7 +7,7 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: bed
+      name: pasted.png
     second: {fileID: 2100000, guid: 020a487857b974e4b95377a9b0a9d964, type: 2}
   materials:
     materialImportMode: 2
@@ -55,7 +55,7 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    keepQuads: 0
+    keepQuads: 1
     weldVertices: 1
     bakeAxisConversion: 0
     preserveHierarchy: 0
