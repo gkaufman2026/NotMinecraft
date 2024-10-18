@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] float sprintFOV = 100f;
 
     [Header("Jumping")]
-    public float jumpForce = 5f;
+    public float jumpForce = 50f;
     public float jumpRate = 15f;
 
     [Header("Keybinds")]
@@ -49,18 +49,13 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Update() {
-        isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, out RaycastHit hit, groundDistance, groundMask);
-
-        Debug.DrawRay(groundCheck.position, Vector3.down * groundDistance, Color.red);
-        Debug.Log($"Is Grounded: {isGrounded} - Raycast Hit: {hit.collider?.name ?? "None"}");
-
         isMoving = (moveDirection != Vector3.zero);
 
         HandleInput();
         ControlDrag();
         ControlSpeed();
 
-        if (Input.GetKey(jumpKey) && isGrounded && Time.time >= nextTimeToJump) {
+        if (Input.GetKey(jumpKey) && isGrounded) {
             nextTimeToJump = Time.time + 1f / jumpRate;
             HandleJump();
         }
@@ -85,8 +80,8 @@ public class PlayerMovement : MonoBehaviour {
     void HandleJump() {
         if (isGrounded) {
             Debug.Log("Jump Triggered");
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
         }
     }
 
@@ -110,6 +105,19 @@ public class PlayerMovement : MonoBehaviour {
             if (isSprinting) {
                 cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 90f, 8f * Time.deltaTime);
                 isSprinting = false;
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        foreach (ContactPoint col in collision.contacts)
+        {
+            Debug.Log(col.point.y);
+            Debug.Log(transform.position.y + 0.1);
+            if (col.point.y <= transform.position.y + 0.1 && !isGrounded)
+            {
+                isGrounded = true;
             }
         }
     }
