@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using static UnityEngine.Mesh;
 
@@ -47,6 +48,30 @@ public class ChunkRenderer : MonoBehaviour
         collisionMesh.RecalculateNormals();
 
         meshCollider.sharedMesh = collisionMesh;
-
     }
+    public void UpdateChunk(MeshData data) {
+        RenderMesh(data);
+    }
+
+    public void UpdateChunk() {
+        RenderMesh(Chunk.GetChunkMeshData(ChunkData));
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (showGizmo)
+        {
+            if (Application.isPlaying && ChunkData != null)
+            {
+                if (Selection.activeObject == gameObject)
+                    Gizmos.color = new Color(0, 1, 0, 0.4f);
+                else
+                    Gizmos.color = new Color(1, 0, 1, 0.4f);
+
+                Gizmos.DrawCube(transform.position + new Vector3(ChunkData.chunkSize / 2f, ChunkData.chunkHeight / 2f, ChunkData.chunkSize / 2f), new Vector3(ChunkData.chunkSize, ChunkData.chunkHeight, ChunkData.chunkSize));
+            }
+        }
+    }
+#endif
 }
