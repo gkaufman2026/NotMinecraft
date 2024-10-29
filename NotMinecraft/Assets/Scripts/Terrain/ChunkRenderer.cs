@@ -20,7 +20,7 @@ public class ChunkRenderer : MonoBehaviour {
         mesh = meshFilter.mesh;
     }
 
-    public void InitalzieChunk(ChunkData chunk) {
+    public void InitalizeChunk(ChunkData chunk) {
         ChunkData = chunk;
     }
 
