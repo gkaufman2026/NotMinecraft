@@ -11,14 +11,20 @@ public class MeshData {
     public List<int> collidierTriangles = new();
 
     public MeshData waterMesh;
-    private bool isMainMesh = true;
 
     public MeshData(bool isMainMesh) {
         if (isMainMesh) {
-            waterMesh = new MeshData(false);
+            // Water Mesh 
         }
     }
-    
+
+    public void AddVertex(Vector3 vertex, bool vertexGeneratesCollider) {
+        vertices.Add(vertex);
+        if (vertexGeneratesCollider) {
+            collidierVertices.Add(vertex);
+        }
+    }
+
     public void AddQuadTriangles(bool canQuadGenerate) {
         triangles.Add(vertices.Count - 4);
         triangles.Add(vertices.Count - 3);
@@ -32,6 +38,7 @@ public class MeshData {
             collidierTriangles.Add(triangles.Count - 4);
             collidierTriangles.Add(triangles.Count - 3);
             collidierTriangles.Add(triangles.Count - 2);
+
             collidierTriangles.Add(triangles.Count - 4);
             collidierTriangles.Add(triangles.Count - 2);
             collidierTriangles.Add(triangles.Count - 1);
