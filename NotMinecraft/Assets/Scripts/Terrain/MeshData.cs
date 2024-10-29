@@ -5,16 +5,15 @@ using UnityEngine;
 public class MeshData {
     public List<Vector3> vertices = new();
     public List<Vector2> uv = new();
-    public List<int> triangles = new();
-
     public List<Vector3> collidierVertices = new();
+    public List<int> triangles = new();
     public List<int> collidierTriangles = new();
 
     public MeshData waterMesh;
 
     public MeshData(bool isMainMesh) {
         if (isMainMesh) {
-            // Water Mesh 
+            waterMesh = new MeshData(false);
         }
     }
 
@@ -35,13 +34,12 @@ public class MeshData {
         triangles.Add(vertices.Count - 1);
 
         if (canQuadGenerate) {
-            collidierTriangles.Add(triangles.Count - 4);
-            collidierTriangles.Add(triangles.Count - 3);
-            collidierTriangles.Add(triangles.Count - 2);
-
-            collidierTriangles.Add(triangles.Count - 4);
-            collidierTriangles.Add(triangles.Count - 2);
-            collidierTriangles.Add(triangles.Count - 1);
+            collidierTriangles.Add(collidierVertices.Count - 4);
+            collidierTriangles.Add(collidierVertices.Count - 3);
+            collidierTriangles.Add(collidierVertices.Count - 2);
+            collidierTriangles.Add(collidierVertices.Count - 4);
+            collidierTriangles.Add(collidierVertices.Count - 2);
+            collidierTriangles.Add(collidierVertices.Count - 1);
         }
     }
 }

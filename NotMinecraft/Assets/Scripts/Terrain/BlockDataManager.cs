@@ -9,9 +9,9 @@ public class BlockDataManager : MonoBehaviour {
 
     private void Awake() {
         foreach (var item in textureData.textureDataList) {
-            if (textureList.ContainsKey(item.blockType) == false) {
+            if (!textureList.ContainsKey(item.blockType)) {
                 textureList.Add(item.blockType, item);
-            };
+            }
         }
         tileSize = textureData.textureSize;
     }

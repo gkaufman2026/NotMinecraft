@@ -26,22 +26,17 @@ public class ChunkRenderer : MonoBehaviour {
 
     private void RenderMesh(MeshData meshData) {
         mesh.Clear();
-
-        mesh.subMeshCount = 1;
-        mesh.vertices = meshData.vertices.ToArray();
-
+        mesh.subMeshCount = 2;
+        mesh.vertices = meshData.vertices.Concat(meshData.waterMesh.vertices).ToArray();
         mesh.SetTriangles(meshData.triangles.ToArray(), 0);
-
-        mesh.uv = meshData.uv.ToArray();
+        mesh.SetTriangles(meshData.waterMesh.triangles.Select(val => val + meshData.vertices.Count).ToArray(), 1);
+        mesh.uv = meshData.uv.Concat(meshData.waterMesh.uv).ToArray();
         mesh.RecalculateNormals();
-
         meshCollider.sharedMesh = null;
-        Mesh collisionMesh = new() {
-            vertices = meshData.collidierVertices.ToArray(),
-            triangles = meshData.collidierTriangles.ToArray()
-        };
+        Mesh collisionMesh = new Mesh();
+        collisionMesh.vertices = meshData.collidierVertices.ToArray();
+        collisionMesh.triangles = meshData.collidierTriangles.ToArray();
         collisionMesh.RecalculateNormals();
-
         meshCollider.sharedMesh = collisionMesh;
     }
 
@@ -57,11 +52,7 @@ public class ChunkRenderer : MonoBehaviour {
     private void OnDrawGizmos() {
         if (showGizmo) {
             if (Application.isPlaying && ChunkData != null) {
-                if (Selection.activeObject == gameObject)
-                    Gizmos.color = new Color(0, 1, 0, 0.4f);
-                else
-                    Gizmos.color = new Color(1, 0, 1, 0.4f);
-
+                Gizmos.color = (Selection.activeObject == gameObject) ? new Color(0, 1, 0, 0.4f) : new Color(1, 0, 1, 0.4f);
                 Gizmos.DrawCube(
                     transform.position + new Vector3(ChunkData.chunkSize / 2f, ChunkData.chunkHeight / 2f, ChunkData.chunkSize / 2f),
                     new Vector3(ChunkData.chunkSize, ChunkData.chunkHeight, ChunkData.chunkSize)

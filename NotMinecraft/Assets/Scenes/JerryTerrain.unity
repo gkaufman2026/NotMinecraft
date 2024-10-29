@@ -154,8 +154,8 @@ MonoBehaviour:
   mapSizeInChunks: 6
   chunkSize: 16
   chunkHeight: 100
-  waterThreshold: 50
-  noiseScale: 0.05
+  waterThreshold: 39
+  noiseScale: 0.01
   chunkPrefab: {fileID: 4443192061081385954, guid: 1c00b035e263f934a9711fcf71e3336a, type: 3}
 --- !u!4 &60251132
 Transform:
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 499907351}
   - component: {fileID: 499907354}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
