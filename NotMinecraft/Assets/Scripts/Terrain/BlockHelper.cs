@@ -23,7 +23,6 @@ public static class BlockHelper {
             var type = Chunk.GetBlockFromChunkCoordinates(chunk, coords);
 
             if (type != BlockType.NOTHING && BlockDataManager.textureList[type].isSolid == false) {
-
                 if (type == BlockType.WATER) {
                     if (type == BlockType.AIR) {
 
@@ -45,7 +44,6 @@ public static class BlockHelper {
 
     public static void GetFaceVertices(Direction direction, int x, int y, int z, MeshData meshData, BlockType blockType) {
         var generatesCollider = BlockDataManager.textureList[blockType].canGenerate;
-        //order of vertices matters for the normals and how we render the mesh
         switch (direction) {
             case Direction.BACKWARDS:
                 meshData.AddVertex(new Vector3(x - 0.5f, y - 0.5f, z - 0.5f), generatesCollider);
@@ -102,7 +100,6 @@ public static class BlockHelper {
 
         UVs[3] = new Vector2(BlockDataManager.tileSize.x * tilePos.x + BlockDataManager.textureOffset,
             BlockDataManager.tileSize.y * tilePos.y + BlockDataManager.textureOffset);
-
         return UVs;
     }
 

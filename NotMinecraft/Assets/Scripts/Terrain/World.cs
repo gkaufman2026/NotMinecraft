@@ -11,14 +11,15 @@ public class World : MonoBehaviour
     public float noiseScale = 0.05f;
     public GameObject chunkPrefab;
 
-    Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new Dictionary<Vector3Int, ChunkData>();
-    Dictionary<Vector3Int, ChunkRenderer> chunkDictionary = new Dictionary<Vector3Int, ChunkRenderer>();
+    public List<GameObject> chunks;
+    private Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new Dictionary<Vector3Int, ChunkData>();
+    private Dictionary<Vector3Int, ChunkRenderer> chunkDictionary = new Dictionary<Vector3Int, ChunkRenderer>();
 
     public void GenerateWorld() {
         chunkDataDictionary.Clear();
         foreach (ChunkRenderer chunk in chunkDictionary.Values) {
             Destroy(chunk.gameObject);
-        }
+        }   
         chunkDictionary.Clear();
 
         for (int x = 0; x < mapSizeInChunks; x++) {
@@ -31,7 +32,8 @@ public class World : MonoBehaviour
 
         foreach (ChunkData data in chunkDataDictionary.Values) {
             MeshData meshData = Chunk.GetChunkMeshData(data);
-            GameObject chunkObject = Instantiate(chunkPrefab, data.worldPos, Quaternion.identity);
+            chunks.Add(Instantiate(chunkPrefab, data.worldPos, Quaternion.identity));
+            // get index of chunk and initalize chunkRenderer with it
             ChunkRenderer chunkRenderer = chunkObject.GetComponent<ChunkRenderer>();
             chunkDictionary.Add(data.worldPos, chunkRenderer);
             chunkRenderer.InitalzieChunk(data);
@@ -52,13 +54,11 @@ public class World : MonoBehaviour
             for (int z = 0; z < data.chunkSize; z++) {
                 float noiseValue = Mathf.PerlinNoise((data.worldPos.x + x) * noiseScale, (data.worldPos.z + z) * noiseScale);
                 int groundPos = Mathf.RoundToInt(noiseValue * chunkHeight);
-
                 for (int y = 0; y < data.chunkHeight; y++) {
                     BlockType voxelType = BlockType.DIRT;
-
                     if (y > groundPos) {
                         if (y < waterThreshold) {
-                            // SET VOXEL TYPE TO WATER
+                            voxelType = BlockType.WATER;
                         } else {
                             voxelType = BlockType.AIR;
                         }
@@ -72,7 +72,7 @@ public class World : MonoBehaviour
     }
 
     internal BlockType GetBlockFromChunkCoordinates(ChunkData chunkData, Vector3Int coords) {
-        Vector3Int pos = Chunk.ChunkPositionFromBlockCoords(this, coords.x, coords.y, coords.z);
+        Vector3Int pos = Chunk.ChunkPositionFromBlockCoords(this, coords);
         chunkDataDictionary.TryGetValue(pos, out ChunkData containerChunk);
 
         if (containerChunk == null) {
