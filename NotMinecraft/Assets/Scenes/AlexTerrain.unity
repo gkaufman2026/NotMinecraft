@@ -434,15 +434,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aad77075f94aef4f871321feee171d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawingMode: 1
   mapWidth: 100
   mapHeight: 100
-  noiseScale: 4
-  octaves: 6
-  persistence: 0.5
+  noiseScale: 23.73
+  octaves: 14
+  persistence: 0.85
   lacunarity: 1
-  seed: 76
+  seed: 80
   offset: {x: 0, y: 0}
   autoUpdate: 1
+  regions:
+  - terrainName: Ocean
+    height: 0.1
+    color: {r: 0, g: 0.19231641, b: 0.4433962, a: 0}
+  - terrainName: Deep Water
+    height: 0.2
+    color: {r: 0, g: 0.28205517, b: 0.6509434, a: 0}
+  - terrainName: Water
+    height: 0.3
+    color: {r: 0.31372374, g: 0.4429624, b: 0.8867924, a: 0}
+  - terrainName: Sand
+    height: 0.4
+    color: {r: 0.95730364, g: 1, b: 0.3537736, a: 0}
+  - terrainName: Grass 1
+    height: 0.5
+    color: {r: 0.049252648, g: 0.6320754, b: 0, a: 0}
+  - terrainName: Grass 2
+    height: 0.6
+    color: {r: 0.091847636, g: 0.4528302, b: 0.103683114, a: 1}
+  - terrainName: Grass 3
+    height: 0.7
+    color: {r: 0.023225822, g: 0.3018868, b: 0, a: 0}
+  - terrainName: Stone
+    height: 0.8
+    color: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 0}
+  - terrainName: Deepslate
+    height: 0.9
+    color: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 0}
+  - terrainName: Snow
+    height: 1
+    color: {r: 1, g: 1, b: 1, a: 0}
 --- !u!4 &1808400418
 Transform:
   m_ObjectHideFlags: 0

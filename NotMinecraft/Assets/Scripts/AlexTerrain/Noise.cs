@@ -54,6 +54,7 @@ public static class Noise
                     frequency *= lacunarity;
                 }
 
+                // Sets new max values if the passed in value is greater than the current max or minimum
                 if (noiseHeight > maxNoiseHeight)
                 {
                     maxNoiseHeight = noiseHeight;
