@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public static class Noise
 {
     // Returns a 2D Array of floats 
-    public static float[,] generateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
+    public static float[,] generateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
 
@@ -24,8 +23,8 @@ public static class Noise
             scale = 0.0001f;
         }
 
-        float maxNoiseHeight = float.MaxValue;
-        float minNoiseHeight = float.MinValue;
+        float maxNoiseHeight = float.MinValue;
+        float minNoiseHeight = float.MaxValue;
 
         float halfWidth = mapWidth / 2f;
         float halfHeight = mapHeight / 2f;
@@ -49,7 +48,7 @@ public static class Noise
                     noiseHeight += perlinValue * amplitude;
 
                     // Decreases each octave, since persisten is < 1
-                    amplitude *= persistence;
+                    amplitude *= persistance;
 
                     // Increases each octave, since lacunarity is > 1
                     frequency *= lacunarity;

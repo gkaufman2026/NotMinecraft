@@ -436,11 +436,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapWidth: 100
   mapHeight: 100
-  noiseScale: 27.6
-  octaves: 4
-  persistence: 0.25
+  noiseScale: 4
+  octaves: 6
+  persistence: 0.5
   lacunarity: 1
-  seed: 62
+  seed: 76
   offset: {x: 0, y: 0}
   autoUpdate: 1
 --- !u!4 &1808400418
