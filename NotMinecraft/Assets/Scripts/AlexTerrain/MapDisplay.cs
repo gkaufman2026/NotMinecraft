@@ -15,11 +15,11 @@ public class MapDisplay : MonoBehaviour
 
         Color[] colorMap = new Color[width * height];
 
-        for (int i = 0; i < height; i++)
+        for (int y = 0; y < height; y++)
         {
-            for (int j = 0; j < width; j++)
+            for (int x = 0; x < width; x++)
             {
-                colorMap[i * width + j] = Color.Lerp(Color.black, Color.white, noiseMap[j, i]);
+                colorMap[y * width + x] = Color.Lerp(Color.black, Color.white, noiseMap[x, y]);
             }
         }
 
