@@ -28,9 +28,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] float airDrag = 2f;
 
     [Header("Ground Detection")]
-    [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask groundMask;
-    [SerializeField] float groundDistance = 0.5f; // Increased distance for better detection
     public bool isGrounded { get; private set; }
 
     [HideInInspector] public bool isSprinting;

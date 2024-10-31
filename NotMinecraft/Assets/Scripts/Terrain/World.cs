@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +11,9 @@ public class World : MonoBehaviour {
     private GameObject chunksParent;
     private Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new Dictionary<Vector3Int, ChunkData>();
     private Dictionary<Vector3Int, ChunkRenderer> chunkDictionary = new Dictionary<Vector3Int, ChunkRenderer>();
+
+    public GameObject ChunksParent { get => chunksParent; }
+    public Dictionary<Vector3Int, ChunkRenderer> ChunkDictionary { get => chunkDictionary; }
 
     private void Awake() {
         chunksParent = new("Chunks");

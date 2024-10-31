@@ -3,7 +3,6 @@ using ImGuiNET;
 
 public class TerrainUI : MonoBehaviour {
     private World world;
-    private bool showsControls, showsSettings;
 
     private void Awake() {
         world = FindAnyObjectByType<World>();
@@ -18,19 +17,89 @@ public class TerrainUI : MonoBehaviour {
     }
 
     void OnLayout() {
-        ShowHeaderBar();
-    }
+        if (!ImGui.Begin("Terrain Generation")) {
+            ImGui.End();
+            return;
+        }
+        // Settings for Procedural Generation
+        float labelWidth = 130.0f, checkboxWidth = 150f, width = 100f; 
 
-    private void ShowHeaderBar() {
-        ImGui.BeginMainMenuBar();
+        ImGui.Text("Size In Chunks");
+        ImGui.SameLine(labelWidth);
+        ImGui.SetNextItemWidth(width);
+        ImGui.SliderInt("##SizeInChunksSlider", ref world.mapSizeInChunks, 1, 10);
 
-        if (ImGui.BeginMenu("Terrain Generation")) {
-            ImGui.MenuItem("Controls", null, ref showsControls);
-            ImGui.Separator();
-            ImGui.MenuItem("Terrain Settings", null, ref showsSettings);
-            ImGui.EndMenu();
+        ImGui.Text("Chunk Size");
+        ImGui.SameLine(labelWidth);
+        ImGui.SetNextItemWidth(width);
+        ImGui.SliderInt("##ChunkSizeSlider", ref world.chunkSize, 1, 20);
+
+        ImGui.Text("Chunk Height");
+        ImGui.SameLine(labelWidth);
+        ImGui.SetNextItemWidth(width);
+        ImGui.SliderInt("##ChunkHeightSlider", ref world.chunkHeight, 50, 200);
+
+        ImGui.Text("Water Threshold");
+        ImGui.SameLine(labelWidth);
+        ImGui.SetNextItemWidth(width);
+        ImGui.SliderInt("##WaterThresholdSlider", ref world.waterThreshold, 1, 75);
+
+        ImGui.Text("Noise Scale");
+        ImGui.SameLine(labelWidth);
+        ImGui.SetNextItemWidth(width);
+        ImGui.SliderFloat("##NoiseScaleSlider", ref world.noiseScale, 0, 1);
+
+        ImGui.NewLine();
+        if (ImGui.CollapsingHeader("Chunks Visuals") && world.ChunkDictionary != null) {
+            int chunkIndex = 1;
+            // Creating buttons to visualize per chunk. 2 checkboxes per row
+            for (int i = 0; i < world.ChunksParent.transform.childCount; i += 2) {
+                Transform chunkTransform = world.ChunksParent.transform.GetChild(i);
+                GameObject chunk = chunkTransform.gameObject;
+
+                if (chunk.TryGetComponent<ChunkRenderer>(out var chunkRenderer)) {
+                    ImGui.SetNextItemWidth(checkboxWidth); 
+                    ImGui.Checkbox("Show Chunk " + chunkIndex++, ref chunkRenderer.showGizmo);
+                }
+                
+                if (i + 1 < world.ChunksParent.transform.childCount) {
+                    Transform nextChunkTransform = world.ChunksParent.transform.GetChild(i + 1);
+                    GameObject nextChunk = nextChunkTransform.gameObject;
+                    if (nextChunk.TryGetComponent<ChunkRenderer>(out var nextChunkRenderer)) {
+                        ImGui.SameLine(); 
+                        ImGui.SetNextItemWidth(checkboxWidth); 
+                        ImGui.Checkbox("Show Chunk " + chunkIndex++, ref nextChunkRenderer.showGizmo);
+                    }
+                }
+                ImGui.NewLine(); 
+            }
+
+            // Toggle Button to Enable/Disable All
+            if (ImGui.Button("Toggle Chunks", new Vector2(-1, 20))) {
+                foreach (Transform chunkTransform in world.ChunksParent.transform) {
+                    GameObject chunk = chunkTransform.gameObject;
+                    if (chunk.TryGetComponent<ChunkRenderer>(out var chunkRenderer)) {
+                        chunkRenderer.showGizmo = !chunkRenderer.showGizmo;
+                    }
+                }
+            }
         }
 
-        ImGui.EndMainMenuBar();
+
+        ImGui.Separator();
+
+        // Centering Buttons
+        float spacing = ImGui.GetStyle().ItemSpacing.x;
+        float totalWidth = width * 2 + spacing;
+        float windowWidth = ImGui.GetWindowWidth();
+        float cursorPosX = (windowWidth - totalWidth) * 0.5f;
+        ImGui.SetCursorPosX(cursorPosX);
+
+        // Buttons to Generate & Clear Terrain
+        if (ImGui.Button("Generate", new Vector2(width, 20))) {  world.GenerateWorld(); }
+        ImGui.SameLine(); 
+        if (ImGui.Button("Clear", new Vector2(width, 20))) { world.ClearWorld(); }
+
+        ImGui.End();
     }
 }
