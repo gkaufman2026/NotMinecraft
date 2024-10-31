@@ -157,6 +157,7 @@ MonoBehaviour:
   waterThreshold: 39
   noiseScale: 0.01
   chunkPrefab: {fileID: 4443192061081385954, guid: 1c00b035e263f934a9711fcf71e3336a, type: 3}
+  offset: {x: -120, y: -45, z: -145}
 --- !u!4 &60251132
 Transform:
   m_ObjectHideFlags: 0
