@@ -7,6 +7,7 @@ public class World : MonoBehaviour {
     public int waterThreshold = 50;
     public float noiseScale = 0.05f;
     public GameObject chunkPrefab;
+    public Vector3 offset;
 
     private GameObject chunksParent;
     private Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new Dictionary<Vector3Int, ChunkData>();
@@ -17,6 +18,13 @@ public class World : MonoBehaviour {
 
     private void Awake() {
         chunksParent = new("Chunks");
+    }
+
+    private void FixedUpdate() {
+        foreach (ChunkData data in chunkDataDictionary.Values) {
+            Vector3 adjustedPosition = data.worldPos + offset;
+            chunksParent.transform.position = adjustedPosition;
+        }
     }
 
     public void GenerateWorld() {

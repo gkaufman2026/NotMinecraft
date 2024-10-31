@@ -50,41 +50,60 @@ public class TerrainUI : MonoBehaviour {
         ImGui.SliderFloat("##NoiseScaleSlider", ref world.noiseScale, 0, 1);
 
         ImGui.NewLine();
-        if (ImGui.CollapsingHeader("Chunks Visuals") && world.ChunkDictionary != null) {
-            int chunkIndex = 1;
-            // Creating buttons to visualize per chunk. 2 checkboxes per row
-            for (int i = 0; i < world.ChunksParent.transform.childCount; i += 2) {
-                Transform chunkTransform = world.ChunksParent.transform.GetChild(i);
-                GameObject chunk = chunkTransform.gameObject;
 
-                if (chunk.TryGetComponent<ChunkRenderer>(out var chunkRenderer)) {
-                    ImGui.SetNextItemWidth(checkboxWidth); 
-                    ImGui.Checkbox("Show Chunk " + chunkIndex++, ref chunkRenderer.showGizmo);
-                }
-                
-                if (i + 1 < world.ChunksParent.transform.childCount) {
-                    Transform nextChunkTransform = world.ChunksParent.transform.GetChild(i + 1);
-                    GameObject nextChunk = nextChunkTransform.gameObject;
-                    if (nextChunk.TryGetComponent<ChunkRenderer>(out var nextChunkRenderer)) {
-                        ImGui.SameLine(); 
-                        ImGui.SetNextItemWidth(checkboxWidth); 
-                        ImGui.Checkbox("Show Chunk " + chunkIndex++, ref nextChunkRenderer.showGizmo);
-                    }
-                }
-                ImGui.NewLine(); 
-            }
+        // Offset Options
+        ImGui.Text("X Offset");
+        ImGui.SameLine(labelWidth);
+        ImGui.SetNextItemWidth(width);
+        ImGui.SliderFloat("##XOffsetSlider", ref world.offset.x, -300f, 300f);
 
-            // Toggle Button to Enable/Disable All
-            if (ImGui.Button("Toggle Chunks", new Vector2(-1, 20))) {
-                foreach (Transform chunkTransform in world.ChunksParent.transform) {
+        ImGui.Text("Y Offset");
+        ImGui.SameLine(labelWidth);
+        ImGui.SetNextItemWidth(width);
+        ImGui.SliderFloat("##YOffsetSlider", ref world.offset.y, -300f, 300f);
+
+        ImGui.Text("Z Offset");
+        ImGui.SameLine(labelWidth);
+        ImGui.SetNextItemWidth(width);
+        ImGui.SliderFloat("##ZOffsetSlider", ref world.offset.z, -300f, 300f);
+
+        ImGui.NewLine();
+        if (ImGui.CollapsingHeader("Chunk Visuals")) {
+            if (world.ChunkDictionary != null) {
+                int chunkIndex = 1;
+                // Creating buttons to visualize per chunk. 2 checkboxes per row
+                for (int i = 0; i < world.ChunksParent.transform.childCount; i += 2) {
+                    Transform chunkTransform = world.ChunksParent.transform.GetChild(i);
                     GameObject chunk = chunkTransform.gameObject;
+
                     if (chunk.TryGetComponent<ChunkRenderer>(out var chunkRenderer)) {
-                        chunkRenderer.showGizmo = !chunkRenderer.showGizmo;
+                        ImGui.SetNextItemWidth(checkboxWidth);
+                        ImGui.Checkbox("Show Chunk " + chunkIndex++, ref chunkRenderer.showGizmo);
+                    }
+
+                    if (i + 1 < world.ChunksParent.transform.childCount) {
+                        Transform nextChunkTransform = world.ChunksParent.transform.GetChild(i + 1);
+                        GameObject nextChunk = nextChunkTransform.gameObject;
+                        if (nextChunk.TryGetComponent<ChunkRenderer>(out var nextChunkRenderer)) {
+                            ImGui.SameLine();
+                            ImGui.SetNextItemWidth(checkboxWidth);
+                            ImGui.Checkbox("Show Chunk " + chunkIndex++, ref nextChunkRenderer.showGizmo);
+                        }
+                    }
+                    ImGui.NewLine();
+                }
+
+                // Toggle Button to Enable/Disable All
+                if (ImGui.Button("Toggle Chunks", new Vector2(-1, 20))) {
+                    foreach (Transform chunkTransform in world.ChunksParent.transform) {
+                        GameObject chunk = chunkTransform.gameObject;
+                        if (chunk.TryGetComponent<ChunkRenderer>(out var chunkRenderer)) {
+                            chunkRenderer.showGizmo = !chunkRenderer.showGizmo;
+                        }
                     }
                 }
             }
         }
-
 
         ImGui.Separator();
 
