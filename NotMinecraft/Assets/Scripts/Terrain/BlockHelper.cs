@@ -22,7 +22,7 @@ public static class BlockHelper {
             var type = Chunk.GetBlockFromChunkCoordinates(chunk, updatedCoords);
 
             if (type != BlockType.NOTHING && !BlockDataManager.textureList[type].isSolid) {
-                if (type == BlockType.WATER && type == BlockType.AIR) {
+                if (type == BlockType.WATER || type == BlockType.AIR) {
                     meshData.waterMesh = GetFaceDataIn(direction, coords, meshData.waterMesh, blockType);
                 } else {
                     meshData = GetFaceDataIn(direction, coords, meshData, type);
