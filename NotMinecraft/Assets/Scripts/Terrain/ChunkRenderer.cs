@@ -6,9 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
 public class ChunkRenderer : MonoBehaviour {
-    MeshFilter meshFilter;
-    MeshCollider meshCollider;
-    Mesh mesh;
+    private MeshFilter meshFilter;
+    private MeshCollider meshCollider;
+    private Mesh mesh;
 
     public bool showGizmo = false;
 

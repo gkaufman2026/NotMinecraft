@@ -1,11 +1,26 @@
 using UnityEngine;
 using ImGuiNET;
+using Unity.Collections.LowLevel.Unsafe;
 
 public class TerrainUI : MonoBehaviour {
     private World world;
+    private CameraTest movement;
+
+    // Default values
+    private int defaultMapSize, defaultChunkSize, defaultChunkHeight, defaultWaterThreshold;
+    private float defaultNoiseScale;
+    private Vector2 defaultOffset;
 
     private void Awake() {
         world = FindAnyObjectByType<World>();
+        movement = FindAnyObjectByType<CameraTest>();
+
+        defaultMapSize = world.mapSizeInChunks;
+        defaultChunkSize = world.chunkSize;
+        defaultChunkHeight = world.chunkHeight;
+        defaultWaterThreshold = world.waterThreshold;
+        defaultNoiseScale = world.noiseScale;
+        defaultOffset = world.offset;
     }
 
     void OnEnable() {
@@ -27,7 +42,7 @@ public class TerrainUI : MonoBehaviour {
         ImGui.Text("Size In Chunks");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##SizeInChunksSlider", ref world.mapSizeInChunks, 1, 10);
+        ImGui.SliderInt("##SizeInChunksSlider", ref world.mapSizeInChunks, 1, 20);
 
         ImGui.Text("Chunk Size");
         ImGui.SameLine(labelWidth);
@@ -42,12 +57,12 @@ public class TerrainUI : MonoBehaviour {
         ImGui.Text("Water Threshold");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##WaterThresholdSlider", ref world.waterThreshold, 1, 75);
+        ImGui.SliderInt("##WaterThresholdSlider", ref world.waterThreshold, 1, 50);
 
         ImGui.Text("Noise Scale");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderFloat("##NoiseScaleSlider", ref world.noiseScale, 0, 1);
+        ImGui.SliderFloat("##NoiseScaleSlider", ref world.noiseScale, 0, 0.05f);
 
         ImGui.NewLine();
 
@@ -68,6 +83,14 @@ public class TerrainUI : MonoBehaviour {
         ImGui.SliderFloat("##ZOffsetSlider", ref world.offset.z, -300f, 300f);
 
         ImGui.NewLine();
+
+        if (ImGui.CollapsingHeader("Player Settings")) {
+            ImGui.Text("Sprint Movement");
+            ImGui.SameLine(labelWidth);
+            ImGui.SetNextItemWidth(width);
+            ImGui.SliderFloat("##SprintMovementSlider", ref movement.fastMovementSpeed, 0, 100f);
+        }
+
         if (ImGui.CollapsingHeader("Chunk Visuals")) {
             if (world.ChunkDictionary != null) {
                 int chunkIndex = 1;
@@ -118,6 +141,16 @@ public class TerrainUI : MonoBehaviour {
         if (ImGui.Button("Generate", new Vector2(width, 20))) {  world.GenerateWorld(); }
         ImGui.SameLine(); 
         if (ImGui.Button("Clear", new Vector2(width, 20))) { world.ClearWorld(); }
+
+        ImGui.SetCursorPosX(cursorPosX + width / 2);
+        if (ImGui.Button("Reset", new Vector2(width, 20))) {
+            world.mapSizeInChunks = defaultMapSize;
+            world.chunkSize = defaultChunkSize;
+            world.chunkHeight = defaultChunkHeight;
+            world.waterThreshold = defaultWaterThreshold;
+            world.noiseScale = defaultNoiseScale;
+            world.offset = defaultOffset;
+        }
 
         ImGui.End();
     }

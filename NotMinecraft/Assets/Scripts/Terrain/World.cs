@@ -4,7 +4,7 @@ using UnityEngine;
 public class World : MonoBehaviour {
     public int mapSizeInChunks = 6;
     public int chunkSize = 16, chunkHeight = 100;
-    public int waterThreshold = 50;
+    public int waterThreshold = 50, stoneThreshold = 60, dirtDepth = 3;
     public float noiseScale = 0.05f;
     public GameObject chunkPrefab;
     public Vector3 offset;
@@ -32,7 +32,7 @@ public class World : MonoBehaviour {
         foreach (ChunkRenderer chunk in chunkDictionary.Values) {
             Destroy(chunk.gameObject);
         }
-        chunkDictionary.Clear(); 
+        chunkDictionary.Clear();
 
         for (int x = 0; x < mapSizeInChunks; x++) {
             for (int z = 0; z < mapSizeInChunks; z++) {
