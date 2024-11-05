@@ -155,6 +155,7 @@ MonoBehaviour:
   chunkSize: 16
   chunkHeight: 100
   waterThreshold: 39
+  stoneThreshold: 60
   noiseScale: 0.01
   chunkPrefab: {fileID: 4443192061081385954, guid: 1c00b035e263f934a9711fcf71e3336a, type: 3}
   offset: {x: -120, y: -45, z: -145}
@@ -279,10 +280,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 10
-  fastMovementSpeed: 50
+  fastMovementSpeed: 100
   freeLookSensitivity: 3
-  zoomSensitivity: 10
-  fastZoomSensitivity: 50
 --- !u!1 &646506972
 GameObject:
   m_ObjectHideFlags: 0

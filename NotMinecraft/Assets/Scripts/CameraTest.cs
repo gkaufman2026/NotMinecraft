@@ -1,11 +1,7 @@
 using UnityEngine;
 
 public class CameraTest : MonoBehaviour {
-    public float movementSpeed = 10f;
-    public float fastMovementSpeed = 25f;
-    public float freeLookSensitivity = 3f;
-    public float zoomSensitivity = 10f;
-    public float fastZoomSensitivity = 50f;
+    public float movementSpeed = 10f, fastMovementSpeed = 25f, sensitivity = 3f;
     private bool isLooking = false;
 
     void Update() {
@@ -30,8 +26,8 @@ public class CameraTest : MonoBehaviour {
         }
 
         if (isLooking) {
-            rot.x = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * freeLookSensitivity;
-            rot.y = transform.localEulerAngles.x - Input.GetAxis("Mouse Y") * freeLookSensitivity;
+            rot.x = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivity;
+            rot.y = transform.localEulerAngles.x - Input.GetAxis("Mouse Y") * sensitivity;
             transform.localEulerAngles = new Vector3(rot.y, rot.x, 0f);
         }
 

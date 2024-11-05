@@ -32,17 +32,8 @@ public class ChunkRenderer : MonoBehaviour {
         int[] landTriangles = meshData.triangles.ToArray();
         int[] waterTriangles = meshData.waterMesh.triangles.Select(val => val + meshData.vertices.Count).ToArray();
 
-        if (landTriangles.Length == 0) {
-            Debug.LogWarning("Land triangles array is empty, no triangles set for land submesh.");
-        } else {
-            mesh.SetTriangles(landTriangles, 0);
-        }
-
-        if (waterTriangles.Length == 0) {
-            Debug.LogWarning("Water triangles array is empty, no triangles set for water submesh.");
-        } else {
-            mesh.SetTriangles(waterTriangles, 1);
-        }
+        mesh.SetTriangles(landTriangles, 0);
+        mesh.SetTriangles(waterTriangles, 1);
 
         mesh.uv = meshData.uv.Concat(meshData.waterMesh.uv).ToArray();
         mesh.RecalculateNormals();

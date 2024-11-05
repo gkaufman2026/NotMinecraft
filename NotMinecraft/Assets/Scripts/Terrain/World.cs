@@ -4,14 +4,14 @@ using UnityEngine;
 public class World : MonoBehaviour {
     public int mapSizeInChunks = 6;
     public int chunkSize = 16, chunkHeight = 100;
-    public int waterThreshold = 50, stoneThreshold = 60, dirtDepth = 3;
+    public int waterThreshold = 50, stoneThreshold = 60;
     public float noiseScale = 0.05f;
     public GameObject chunkPrefab;
     public Vector3 offset;
 
     private GameObject chunksParent;
-    private Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new Dictionary<Vector3Int, ChunkData>();
-    private Dictionary<Vector3Int, ChunkRenderer> chunkDictionary = new Dictionary<Vector3Int, ChunkRenderer>();
+    private Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new();
+    private Dictionary<Vector3Int, ChunkRenderer> chunkDictionary = new();
 
     public GameObject ChunksParent { get => chunksParent; }
     public Dictionary<Vector3Int, ChunkRenderer> ChunkDictionary { get => chunkDictionary; }
@@ -71,8 +71,10 @@ public class World : MonoBehaviour {
                     BlockType voxelType = BlockType.DIRT;
                     if (y > groundPos) {
                         voxelType = y < waterThreshold ? BlockType.WATER : BlockType.AIR;
-                    } else if (y == groundPos) {
+                    } else if (y == groundPos && !(y <= waterThreshold)) {
                         voxelType = BlockType.GRASS;
+                    } else if (y <= waterThreshold) {
+                        voxelType = BlockType.SAND;
                     }
                     Chunk.SetBlock(data, new Vector3Int(x, y, z), voxelType);
                 }

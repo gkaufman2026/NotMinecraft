@@ -1,6 +1,6 @@
 using UnityEngine;
 using ImGuiNET;
-using Unity.Collections.LowLevel.Unsafe;
+
 
 public class TerrainUI : MonoBehaviour {
     private World world;
@@ -88,7 +88,12 @@ public class TerrainUI : MonoBehaviour {
             ImGui.Text("Sprint Movement");
             ImGui.SameLine(labelWidth);
             ImGui.SetNextItemWidth(width);
-            ImGui.SliderFloat("##SprintMovementSlider", ref movement.fastMovementSpeed, 0, 100f);
+            ImGui.SliderFloat("##SprintMovementSlider", ref movement.fastMovementSpeed, 50f, 200f);
+
+            ImGui.Text("Sensitivity");
+            ImGui.SameLine(labelWidth);
+            ImGui.SetNextItemWidth(width);
+            ImGui.SliderFloat("##SensitivitySlider", ref movement.sensitivity, 0f, 10f);
         }
 
         if (ImGui.CollapsingHeader("Chunk Visuals")) {

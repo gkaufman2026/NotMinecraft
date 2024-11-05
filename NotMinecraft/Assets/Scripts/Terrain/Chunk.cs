@@ -11,9 +11,9 @@ public static class Chunk {
 
     private static Vector3Int GetPostitionFromIndex(ChunkData chunkData, int i) {
         return new Vector3Int {
-            x = i % chunkData.chunkSize,
+            x =  i % chunkData.chunkSize,
             y = (i / chunkData.chunkSize) % chunkData.chunkHeight,
-            z = i / (chunkData.chunkSize * chunkData.chunkHeight)
+            z =  i / (chunkData.chunkSize * chunkData.chunkHeight)
         };
     }
 
@@ -38,9 +38,7 @@ public static class Chunk {
             int index = GetIndexFromPosition(chunkData, new Vector3Int(x,y,z));
             return chunkData.blocks[index];
         }
-
-        Vector3Int coords = new(chunkData.worldPos.x + x, chunkData.worldPos.y + y, chunkData.worldPos.z + z);
-        return chunkData.world.GetBlockFromChunkCoordinates(chunkData, coords);
+        return chunkData.world.GetBlockFromChunkCoordinates(chunkData, new Vector3Int(chunkData.worldPos.x + x, chunkData.worldPos.y + y, chunkData.worldPos.z + z));
     }
 
     public static void SetBlock(ChunkData chunkData, Vector3Int localPosition, BlockType block) {
@@ -63,17 +61,16 @@ public static class Chunk {
     }
 
     public static MeshData GetChunkMeshData(ChunkData chunkData) {
-        MeshData meshData = new MeshData(true);
-        LoopThroughBlocks(chunkData, (x, y, z) => meshData = BlockHelper.GetMeshData(chunkData, new Vector3Int(x, y, z), meshData, 
-                chunkData.blocks[GetIndexFromPosition(chunkData, new Vector3Int(x, y, z))]));
+        MeshData meshData = new(true);
+        LoopThroughBlocks(chunkData, (x, y, z) => meshData = BlockHelper.GetMeshData(chunkData, new Vector3Int(x, y, z), meshData, chunkData.blocks[GetIndexFromPosition(chunkData, new Vector3Int(x, y, z))]));
         return meshData;
     }
 
     internal static Vector3Int ChunkPositionFromBlockCoords(World world, Vector3Int coords) {
         return new Vector3Int {
-            x = Mathf.FloorToInt(coords.x / (float)world.chunkSize) * world.chunkSize,
-            y = Mathf.FloorToInt(coords.y / (float)world.chunkHeight) * world.chunkHeight,
-            z = Mathf.FloorToInt(coords.z / (float)world.chunkSize) * world.chunkSize
+            x = Mathf.FloorToInt(coords.x / (float) world.chunkSize)   * world.chunkSize,
+            y = Mathf.FloorToInt(coords.y / (float) world.chunkHeight) * world.chunkHeight,
+            z = Mathf.FloorToInt(coords.z / (float) world.chunkSize)   * world.chunkSize
         };
     }
 }
