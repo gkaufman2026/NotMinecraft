@@ -7,7 +7,8 @@ public class AlexMapGenerator : MonoBehaviour
     public enum DrawingMode
     {
         NoiseMap,
-        ColorMap
+        ColorMap,
+        Mesh
     }
 
     public DrawingMode drawingMode;
@@ -65,7 +66,10 @@ public class AlexMapGenerator : MonoBehaviour
         {
             display.drawTexture(TextureGenerator.colorMapTexture(colorMap, mapWidth, mapHeight));
         }
-        
+        else if (drawingMode == DrawingMode.Mesh)
+        {
+            display.drawMesh(MeshGenerator.generateTerrainMesh(noiseMap), TextureGenerator.colorMapTexture(colorMap, mapWidth, mapHeight));
+        }
     }
 
     // Clamping values when they are changed in the editor if they go above or below a certain value
