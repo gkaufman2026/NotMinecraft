@@ -14,13 +14,13 @@ public class AlexMapGenerator : MonoBehaviour
     public DrawingMode drawingMode;
 
     // 241 is choosen here because of Unity's mesh vertice limit of 65025, 240 is divisable by 2,4,6,8,10,and 12
-    // making it optimal for chunk threading
+    // making it optimal for chunk threading, 241 is choosen because our actual size will be the size - 1
     // When looping through the map, we are incrementing by i, creating a vertex at each point
     // The created mesh can be simplified by making i > 1, doing this will decrease the totla number of verticies
     // however i must be a factor of the map's widthm if i is not a factor, we will leave the scope of the map array
     // since we are looping through the width and height of the map
     // width and height must both be less than 255 since 255^2 = 65025
-    const int mapChunkSize = 241;
+    public const int mapChunkSize = 241;
     [Range(0, 6)]
     public int meshSimplification;
 
