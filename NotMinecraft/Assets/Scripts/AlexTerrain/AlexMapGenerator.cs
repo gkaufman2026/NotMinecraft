@@ -13,9 +13,21 @@ public class AlexMapGenerator : MonoBehaviour
 
     public DrawingMode drawingMode;
 
-    public int mapWidth;
-    public int mapHeight;
+    // 241 is choosen here because of Unity's mesh vertice limit of 65025, 240 is divisable by 2,4,6,8,10,and 12
+    // making it optimal for chunk threading
+    // When looping through the map, we are incrementing by i, creating a vertex at each point
+    // The created mesh can be simplified by making i > 1, doing this will decrease the totla number of verticies
+    // however i must be a factor of the map's widthm if i is not a factor, we will leave the scope of the map array
+    // since we are looping through the width and height of the map
+    // width and height must both be less than 255 since 255^2 = 65025
+    const int mapChunkSize = 241;
+    [Range(0, 6)]
+    public int meshSimplification;
+
     public float noiseScale;
+
+    public float meshHeightScalar;
+    public AnimationCurve meshHeightCurve;
 
     public int octaves;
 
@@ -34,13 +46,13 @@ public class AlexMapGenerator : MonoBehaviour
 
     public void generateMap()
     {
-        float[,] noiseMap = Noise.generateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistence, lacunarity, offset);
+        float[,] noiseMap = Noise.generateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves, persistence, lacunarity, offset);
 
-        Color[] colorMap = new Color[mapWidth * mapHeight];
+        Color[] colorMap = new Color[mapChunkSize * mapChunkSize];
 
-        for (int y = 0; y < mapHeight; y++)
+        for (int y = 0; y < mapChunkSize; y++)
         {
-            for (int x = 0; x < mapWidth; x++)
+            for (int x = 0; x < mapChunkSize; x++)
             {
                 float currentHeight = noiseMap[x, y];
 
@@ -50,7 +62,7 @@ public class AlexMapGenerator : MonoBehaviour
                     if (currentHeight <= regions[i].height)
                     {
                         // Sets the color map at index to the corresponding region color
-                        colorMap[y * mapWidth + x] = regions[i].color;
+                        colorMap[y * mapChunkSize + x] = regions[i].color;
                         break;
                     }
                 }
@@ -64,25 +76,17 @@ public class AlexMapGenerator : MonoBehaviour
         }
         else if (drawingMode == DrawingMode.ColorMap)
         {
-            display.drawTexture(TextureGenerator.colorMapTexture(colorMap, mapWidth, mapHeight));
+            display.drawTexture(TextureGenerator.colorMapTexture(colorMap, mapChunkSize, mapChunkSize));
         }
         else if (drawingMode == DrawingMode.Mesh)
         {
-            display.drawMesh(MeshGenerator.generateTerrainMesh(noiseMap), TextureGenerator.colorMapTexture(colorMap, mapWidth, mapHeight));
+            display.drawMesh(MeshGenerator.generateTerrainMesh(noiseMap, meshHeightScalar, meshHeightCurve, meshSimplification), TextureGenerator.colorMapTexture(colorMap, mapChunkSize, mapChunkSize));
         }
     }
 
     // Clamping values when they are changed in the editor if they go above or below a certain value
     void OnValidate()
     {
-        if (mapWidth < 1)
-        {
-            mapWidth = 1;
-        }
-        if (mapHeight < 1)
-        {
-            mapHeight = 1;
-        }
         if (lacunarity < 1)
         {
             lacunarity = 1;
