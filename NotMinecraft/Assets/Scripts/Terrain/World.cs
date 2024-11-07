@@ -4,7 +4,8 @@ using UnityEngine;
 public class World : MonoBehaviour {
     public int mapSizeInChunks = 6;
     public int chunkSize = 16, chunkHeight = 100;
-    public int waterThreshold = 50, stoneThreshold = 60;
+    // Each block in world is equal to threshold of 3
+    public int waterThreshold = 50, dirtThreshold = 9, stoneThreshold = 21, sandThreshold = 12; 
     public float noiseScale = 0.05f;
     public GameObject chunkPrefab;
     public Vector3 offset;
@@ -73,8 +74,10 @@ public class World : MonoBehaviour {
                         voxelType = y < waterThreshold ? BlockType.WATER : BlockType.AIR;
                     } else if (y == groundPos && !(y <= waterThreshold)) {
                         voxelType = BlockType.GRASS;
-                    } else if (y <= waterThreshold) {
+                    } else if (y <= waterThreshold && !(y <= stoneThreshold) && (y <= sandThreshold)) {
                         voxelType = BlockType.SAND;
+                    } else if (!(y <= dirtThreshold) && y < groundPos - 3 || (y <= stoneThreshold)) {
+                        voxelType= BlockType.STONE;
                     }
                     Chunk.SetBlock(data, new Vector3Int(x, y, z), voxelType);
                 }
