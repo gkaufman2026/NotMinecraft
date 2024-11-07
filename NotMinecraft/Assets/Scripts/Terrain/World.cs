@@ -87,7 +87,7 @@ public class World : MonoBehaviour {
         chunkDataDictionary.TryGetValue(pos, out ChunkData containerChunk);
 
         if (containerChunk == null) {
-            return BlockType.NOTHING;
+            return BlockType.AIR;
         }
 
         Vector3Int blockInChunkCoordinates = Chunk.GetBlockInChunkCoordinates(containerChunk, coords);

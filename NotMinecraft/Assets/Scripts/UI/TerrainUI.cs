@@ -9,7 +9,7 @@ public class TerrainUI : MonoBehaviour {
     // Default values
     private int defaultMapSize, defaultChunkSize, defaultChunkHeight, defaultWaterThreshold;
     private float defaultNoiseScale;
-    private Vector2 defaultOffset;
+    private Vector3 defaultOffset;
 
     private void Awake() {
         world = FindAnyObjectByType<World>();

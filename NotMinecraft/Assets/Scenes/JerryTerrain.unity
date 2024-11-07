@@ -281,7 +281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   fastMovementSpeed: 100
-  freeLookSensitivity: 3
+  sensitivity: 3
 --- !u!1 &646506972
 GameObject:
   m_ObjectHideFlags: 0
