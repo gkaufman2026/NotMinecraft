@@ -151,14 +151,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9616bc8b57ac787459c092009d233f5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSizeInChunks: 6
+  mapSizeInChunks: 7
   chunkSize: 16
-  chunkHeight: 100
+  chunkHeight: 71
   waterThreshold: 39
   stoneThreshold: 60
-  noiseScale: 0.01
+  sandThreshold: 3
+  noiseScale: 0.015
   chunkPrefab: {fileID: 4443192061081385954, guid: 1c00b035e263f934a9711fcf71e3336a, type: 3}
-  offset: {x: -120, y: -45, z: -145}
+  offset: {x: -130, y: -45, z: -145}
 --- !u!4 &60251132
 Transform:
   m_ObjectHideFlags: 0

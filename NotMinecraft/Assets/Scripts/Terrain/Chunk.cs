@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 public static class Chunk {
-    public static void LoopThroughBlocks(ChunkData chunkData, Action<int, int, int> actionToPerform) {
+    public static void LoopThroughChunk(ChunkData chunkData, Action<int, int, int> actionToPerform) {
         for (int i = 0; i < chunkData.blocks.Length; i++) {
             Vector3Int pos = GetPostitionFromIndex(chunkData, i);
             actionToPerform(pos.x, pos.y, pos.z);
@@ -42,7 +42,7 @@ public static class Chunk {
     }
 
     public static void SetBlock(ChunkData chunkData, Vector3Int localPosition, BlockType block) {
-        if (IsInRange(chunkData, localPosition.x) && InRangeHeight(chunkData, localPosition.y) && IsInRange(chunkData, localPosition.z)) {
+        if (IsVectorInRange(chunkData, localPosition)) {
             int index = GetIndexFromPosition(chunkData, localPosition);
             chunkData.blocks[index] = block;
         }
@@ -62,7 +62,7 @@ public static class Chunk {
 
     public static MeshData GetChunkMeshData(ChunkData chunkData) {
         MeshData meshData = new(true);
-        LoopThroughBlocks(chunkData, (x, y, z) => meshData = BlockHelper.GetMeshData(chunkData, new Vector3Int(x, y, z), meshData, chunkData.blocks[GetIndexFromPosition(chunkData, new Vector3Int(x, y, z))]));
+        LoopThroughChunk(chunkData, (x, y, z) => meshData = BlockHelper.GetMeshData(chunkData, new Vector3Int(x, y, z), meshData, chunkData.blocks[GetIndexFromPosition(chunkData, new Vector3Int(x, y, z))]));
         return meshData;
     }
 

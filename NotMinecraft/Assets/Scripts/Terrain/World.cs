@@ -5,7 +5,7 @@ public class World : MonoBehaviour {
     public int mapSizeInChunks = 6;
     public int chunkSize = 16, chunkHeight = 100;
     // Each block in world is equal to threshold of 3
-    public int waterThreshold = 50, dirtThreshold = 9, stoneThreshold = 21, sandThreshold = 12; 
+    public int waterThreshold = 50, stoneThreshold = 21, sandThreshold = 6; 
     public float noiseScale = 0.05f;
     public GameObject chunkPrefab;
     public Vector3 offset;
@@ -69,15 +69,25 @@ public class World : MonoBehaviour {
                 float noiseValue = Mathf.PerlinNoise((data.worldPos.x + x) * noiseScale, (data.worldPos.z + z) * noiseScale);
                 int groundPos = Mathf.RoundToInt(noiseValue * chunkHeight);
                 for (int y = 0; y < data.chunkHeight; y++) {
-                    BlockType voxelType = BlockType.DIRT;
+                    BlockType voxelType;
                     if (y > groundPos) {
+                        // ABOVE GROUND
                         voxelType = y < waterThreshold ? BlockType.WATER : BlockType.AIR;
-                    } else if (y == groundPos && !(y <= waterThreshold)) {
-                        voxelType = BlockType.GRASS;
-                    } else if (y <= waterThreshold && !(y <= stoneThreshold) && (y <= sandThreshold)) {
+                    } else if (y == groundPos) {
+                        // GRASS ABOVE WATER, SAND UNDERWATER
+                        voxelType = y >= waterThreshold ? BlockType.GRASS : BlockType.SAND;
+                    } else if (y > groundPos - 4 && y < groundPos) {
+                        // DIRT LAYERS BELOW SURFACE, ONLY IF NOT UNDER WATER
+                        if (y >= waterThreshold) {
+                            voxelType = BlockType.DIRT;
+                        } else {
+                            voxelType = (y > groundPos - sandThreshold) ? BlockType.SAND : BlockType.STONE;
+                        }
+                    } else if (y <= waterThreshold && y > groundPos - sandThreshold) {
+                        // SAND NEAR WATER, BENEATH SURFACE, LIMITED TO WATER SECTIONS
                         voxelType = BlockType.SAND;
-                    } else if (!(y <= dirtThreshold) && y < groundPos - 3 || (y <= stoneThreshold)) {
-                        voxelType= BlockType.STONE;
+                    } else {
+                        voxelType = BlockType.STONE;
                     }
                     Chunk.SetBlock(data, new Vector3Int(x, y, z), voxelType);
                 }
