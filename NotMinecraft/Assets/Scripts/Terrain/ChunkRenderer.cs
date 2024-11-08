@@ -1,5 +1,5 @@
 using System.Linq;
-using UnityEditor;
+
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -55,11 +55,13 @@ public class ChunkRenderer : MonoBehaviour {
 
     // For Scene Viewing, Will Draw Cube For Chunk Visual
     private void OnDrawGizmos() {
+#if UNITY_EDITOR
         if (showGizmo) {
             if (Application.isPlaying && ChunkData != null) {
-                Gizmos.color = (Selection.activeObject == gameObject) ? new Color(0, 1, 0, 0.4f) : new Color(1, 0, 1, 0.4f);
+                Gizmos.color = (UnityEditor.Selection.activeObject == gameObject) ? new Color(0, 1, 0, 0.4f) : new Color(1, 0, 1, 0.4f);
                 Gizmos.DrawCube(transform.position + new Vector3(ChunkData.chunkSize / 2f, ChunkData.chunkHeight / 2f, ChunkData.chunkSize / 2f), new Vector3(ChunkData.chunkSize, ChunkData.chunkHeight, ChunkData.chunkSize));
             }
         }
+#endif
     }
 }
