@@ -18,7 +18,7 @@ public class InfiniteTerrain : MonoBehaviour
 
     // Vector for chunk coordinate and terrainChunk as the value
     Dictionary<Vector2, TerrainChunk> chunkDictionary = new Dictionary<Vector2, TerrainChunk>();
-    List<TerrainChunk> previouslyVisibleTerrainChunks = new List<TerrainChunk>();
+    static List<TerrainChunk> previouslyVisibleTerrainChunks = new List<TerrainChunk>();
 
     void Start()
     {
@@ -41,6 +41,8 @@ public class InfiniteTerrain : MonoBehaviour
         updateVisibleChunks();
     }
 
+    // Updates all chunks within the viewable range and then each of those visible chunks after the update
+    // are added to the previouslyVisibleTerrainChunks list
     void updateVisibleChunks()
     {
         for (int i = 0; i < previouslyVisibleTerrainChunks.Count; i++)
@@ -62,12 +64,6 @@ public class InfiniteTerrain : MonoBehaviour
                 if (chunkDictionary.ContainsKey(viewedChunkCord))
                 {
                     chunkDictionary[viewedChunkCord].updateChunk();
-
-                    if (chunkDictionary[viewedChunkCord].isVisible())
-                    {
-                        previouslyVisibleTerrainChunks.Add(chunkDictionary[viewedChunkCord]);
-                    }
-
                 } else {
                     chunkDictionary.Add(viewedChunkCord, new TerrainChunk(viewedChunkCord, chunkSize, detailLevels, transform, mapMaterial));
                 }
@@ -170,6 +166,8 @@ public class InfiniteTerrain : MonoBehaviour
                             LodMesh.meshRequest(mapData);
                         }
                     }
+
+                    previouslyVisibleTerrainChunks.Add(this);
                 }
 
                 setVisibility(isVisible);
