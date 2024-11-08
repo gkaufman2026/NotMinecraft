@@ -4,23 +4,25 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
-    public static MeshData generateTerrainMesh(float[,] heightMap, float heightScalar, AnimationCurve heightCurve, int meshSimplification)
+    public static MeshData generateTerrainMesh(float[,] heightMap, float heightScalar, AnimationCurve _heightCurve, int lod)
     {
+        AnimationCurve heightCurve = new AnimationCurve(_heightCurve.keys);
+
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
 
         float topLeftX = (width - 1) / -2f;
         float topLeftZ = (height - 1) / 2f;
 
-        int meshSimplificationIncrement = (meshSimplification == 0) ? 1 : meshSimplification * 2;
-        int verticesPerLine = (width - 1) / meshSimplificationIncrement + 1;
+        int lodIncrement = (lod == 0) ? 1 : lod * 2;
+        int verticesPerLine = (width - 1) / lodIncrement + 1;
 
         MeshData meshData = new MeshData(verticesPerLine, verticesPerLine);
         int vertexIndex = 0;
 
-        for (int y = 0; y < height; y += meshSimplificationIncrement)
+        for (int y = 0; y < height; y += lodIncrement)
         {
-            for (int x = 0; x < width; x += meshSimplificationIncrement)
+            for (int x = 0; x < width; x += lodIncrement)
             {
                 meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x,y]) * heightMap[x, y] * heightScalar, topLeftZ - y);
                 meshData.uvs[vertexIndex] = new Vector2(x/(float)width, y/(float)height);

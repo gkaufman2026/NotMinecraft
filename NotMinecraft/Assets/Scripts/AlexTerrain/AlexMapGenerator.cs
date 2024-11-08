@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Threading;
 
 public class AlexMapGenerator : MonoBehaviour
 {
@@ -21,32 +23,119 @@ public class AlexMapGenerator : MonoBehaviour
     // since we are looping through the width and height of the map
     // width and height must both be less than 255 since 255^2 = 65025
     public const int mapChunkSize = 241;
-    [Range(0, 6)]
-    public int meshSimplification;
 
+    [Range(0, 6)]
+    public int lod;
     public float noiseScale;
 
-    public float meshHeightScalar;
-    public AnimationCurve meshHeightCurve;
-
     public int octaves;
-
     // Creates a slider in the editor for persistence
     [Range(0, 1)]
     public float persistence;
-
     public float lacunarity;
 
     public int seed;
     public Vector2 offset;
 
+    public float meshHeightScalar;
+    public AnimationCurve meshHeightCurve;
+
     public bool autoUpdate;
 
     public TerrainType[] regions;
 
-    public void generateMap()
+    Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
+    Queue<MapThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
+
+    public void drawMapInEditor()
     {
-        float[,] noiseMap = Noise.generateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves, persistence, lacunarity, offset);
+        MapData mapData = generateMapData(Vector2.zero);
+
+        MapDisplay display = FindObjectOfType<MapDisplay>();
+        if (drawingMode == DrawingMode.NoiseMap)
+        {
+            display.drawTexture(TextureGenerator.heightMapTexture(mapData.heightMap));
+        }
+        else if (drawingMode == DrawingMode.ColorMap)
+        {
+            display.drawTexture(TextureGenerator.colorMapTexture(mapData.colorMap, mapChunkSize, mapChunkSize));
+        }
+        else if (drawingMode == DrawingMode.Mesh)
+        {
+            display.drawMesh(MeshGenerator.generateTerrainMesh(mapData.heightMap, meshHeightScalar, meshHeightCurve, lod), TextureGenerator.colorMapTexture(mapData.colorMap, mapChunkSize, mapChunkSize));
+        }
+    }
+
+    // Threading works by passing in methods as a varible where map data is sent and recived
+    // between multiple methods, dividing up the work that is being done across multiple processes
+
+    // This function starts the thread that will be used
+    // the callback parameter refers to the mapDataRecived method
+    public void requestMapData(Vector2 center, Action<MapData> callback)
+    {
+        ThreadStart threadStart = delegate
+        {
+            mapDataThread(center, callback);
+        };
+
+        new Thread(threadStart).Start();
+    }
+
+    // Gets the map data and adds it to a queue
+    void mapDataThread(Vector2 center, Action<MapData> callback)
+    {
+        MapData mapData = generateMapData(center);
+
+        // locking makes it so when one thread reaches this point no other thread can execute this code
+        lock (mapDataThreadInfoQueue)
+        {
+            mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
+        }
+    }
+
+    public void requestMeshData(MapData mapData, int lod, Action<MeshData> callback)
+    {
+        ThreadStart threadStart = delegate
+        {
+            meshDataThread(mapData, lod, callback);
+        };
+
+        new Thread(threadStart).Start();
+    }
+
+    void meshDataThread(MapData mapData, int lod, Action<MeshData> callback)
+    {
+        MeshData meshData = MeshGenerator.generateTerrainMesh(mapData.heightMap, meshHeightScalar, meshHeightCurve, lod);
+        lock (meshDataThreadInfoQueue)
+        {
+            meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));
+        }
+    }
+
+    void Update()
+    {
+        if (mapDataThreadInfoQueue.Count > 0)
+        {
+            for (int i = 0; i < mapDataThreadInfoQueue.Count; i++)
+            {
+                MapThreadInfo<MapData> threadInfo = mapDataThreadInfoQueue.Dequeue();
+                threadInfo.callback(threadInfo.parameter);
+            }
+        }
+
+        if (meshDataThreadInfoQueue.Count > 0)
+        {
+            for (int i = 0; i < meshDataThreadInfoQueue.Count; i++)
+            {
+                MapThreadInfo<MeshData> threadInfo = meshDataThreadInfoQueue.Dequeue();
+                threadInfo.callback(threadInfo.parameter);
+            }
+        }
+    }
+
+    MapData generateMapData(Vector2 center)
+    {
+        float[,] noiseMap = Noise.generateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset);
 
         Color[] colorMap = new Color[mapChunkSize * mapChunkSize];
 
@@ -69,19 +158,7 @@ public class AlexMapGenerator : MonoBehaviour
             }
         }
 
-        MapDisplay display = FindObjectOfType<MapDisplay>();
-        if (drawingMode == DrawingMode.NoiseMap)
-        {
-            display.drawTexture(TextureGenerator.heightMapTexture(noiseMap));
-        }
-        else if (drawingMode == DrawingMode.ColorMap)
-        {
-            display.drawTexture(TextureGenerator.colorMapTexture(colorMap, mapChunkSize, mapChunkSize));
-        }
-        else if (drawingMode == DrawingMode.Mesh)
-        {
-            display.drawMesh(MeshGenerator.generateTerrainMesh(noiseMap, meshHeightScalar, meshHeightCurve, meshSimplification), TextureGenerator.colorMapTexture(colorMap, mapChunkSize, mapChunkSize));
-        }
+        return new MapData(noiseMap, colorMap);
     }
 
     // Clamping values when they are changed in the editor if they go above or below a certain value
@@ -94,6 +171,18 @@ public class AlexMapGenerator : MonoBehaviour
         if (octaves < 0)
         {
             octaves = 0;
+        }
+    }
+
+    struct MapThreadInfo<T>
+    {
+        public Action<T> callback;
+        public T parameter;
+
+        public MapThreadInfo(Action<T> callback, T parameter)
+        {
+            this.callback = callback;
+            this.parameter = parameter;
         }
     }
 }
@@ -109,5 +198,16 @@ public struct TerrainType
     // and 0.4 to 1 will be the land region
     public float height;
     public Color color;
-    
+}
+
+public struct MapData
+{
+    public float[,] heightMap;
+    public Color[] colorMap;
+
+    public MapData(float[,] heightMap, Color[] colorMap)
+    {
+        this.heightMap = heightMap;
+        this.colorMap = colorMap;
+    }
 }
