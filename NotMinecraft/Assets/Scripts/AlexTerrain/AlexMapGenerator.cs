@@ -15,6 +15,8 @@ public class AlexMapGenerator : MonoBehaviour
 
     public DrawingMode drawingMode;
 
+    public Noise.NormalizeMode normalizeMode;
+
     // 241 is choosen here because of Unity's mesh vertice limit of 65025, 240 is divisable by 2,4,6,8,10,and 12
     // making it optimal for chunk threading, 241 is choosen because our actual size will be the size - 1
     // When looping through the map, we are incrementing by i, creating a vertex at each point
@@ -135,7 +137,7 @@ public class AlexMapGenerator : MonoBehaviour
 
     MapData generateMapData(Vector2 center)
     {
-        float[,] noiseMap = Noise.generateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset);
+        float[,] noiseMap = Noise.generateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);
 
         Color[] colorMap = new Color[mapChunkSize * mapChunkSize];
 
@@ -148,10 +150,11 @@ public class AlexMapGenerator : MonoBehaviour
                 for (int i = 0; i < regions.Length; i++)
                 {
                     // When true, means region of the currentHeight of the noise map is found 
-                    if (currentHeight <= regions[i].height)
+                    if (currentHeight >= regions[i].height)
                     {
                         // Sets the color map at index to the corresponding region color
                         colorMap[y * mapChunkSize + x] = regions[i].color;
+                    } else {
                         break;
                     }
                 }
