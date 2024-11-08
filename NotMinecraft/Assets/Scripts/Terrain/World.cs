@@ -68,6 +68,7 @@ public class World : MonoBehaviour {
             for (int z = 0; z < data.chunkSize; z++) {
                 float noiseValue = Mathf.PerlinNoise((data.worldPos.x + x) * noiseScale, (data.worldPos.z + z) * noiseScale);
                 int groundPos = Mathf.RoundToInt(noiseValue * chunkHeight);
+
                 for (int y = 0; y < data.chunkHeight; y++) {
                     BlockType voxelType;
                     if (y > groundPos) {
@@ -89,6 +90,7 @@ public class World : MonoBehaviour {
                     } else {
                         voxelType = BlockType.STONE;
                     }
+
                     Chunk.SetBlock(data, new Vector3Int(x, y, z), voxelType);
                 }
             }
@@ -99,9 +101,7 @@ public class World : MonoBehaviour {
         Vector3Int pos = Chunk.ChunkPositionFromBlockCoords(this, coords);
         chunkDataDictionary.TryGetValue(pos, out ChunkData containerChunk);
 
-        if (containerChunk == null) {
-            return BlockType.AIR;
-        }
+        if (containerChunk == null) { return BlockType.AIR; }
 
         Vector3Int blockInChunkCoordinates = Chunk.GetBlockInChunkCoordinates(containerChunk, coords);
         return Chunk.GetBlockFromChunkCoordinates(containerChunk, blockInChunkCoordinates);

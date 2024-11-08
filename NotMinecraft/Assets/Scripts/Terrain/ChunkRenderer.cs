@@ -53,6 +53,7 @@ public class ChunkRenderer : MonoBehaviour {
         RenderMesh(Chunk.GetChunkMeshData(ChunkData));
     }
 
+    // For Scene Viewing, Will Draw Cube For Chunk Visual
     private void OnDrawGizmos() {
         if (showGizmo) {
             if (Application.isPlaying && ChunkData != null) {

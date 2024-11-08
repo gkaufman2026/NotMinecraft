@@ -23,7 +23,7 @@ public class MeshData {
             collidierVertices.Add(vertex);
         }
     }
-
+    // Creating the sqaure for voxel
     public void AddQuadTriangles(bool canQuadGenerate) {
         triangles.Add(vertices.Count - 4);
         triangles.Add(vertices.Count - 3);

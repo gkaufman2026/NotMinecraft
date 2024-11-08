@@ -12,14 +12,14 @@ public class TerrainUI : MonoBehaviour {
     private Vector3 defaultOffset;
 
     // Min Values
-    private const int minMapSize = 1, minChunkSize = 1, minChunkHeight = 50;
-    private const int minWaterThreshold = 1, minStoneThreshold = 1, minSandThreshold = 1;
-    private const float minNoiseScale = 0f;
+    private const int MIN_MAP_SIZE = 1, MIN_CHUNK_SIZE = 1, MIN_CHUNK_HEIGHT = 50;
+    private const int MIN_WATER_THRESHOLD = 1, MIN_STONE_THRESHOLD = 1, MIN_SAND_THRESHOLD = 1;
+    private const float MIN_NOISE_SCALE = 0f;
 
     // Max Values
-    private const int maxMapSize = 20, maxChunkSize = 20, maxChunkHeight = 200;
-    private const int maxWaterThreshold = 50, maxStoneThreshold = 75, maxSandThreshold = 10;
-    private const float maxNoiseScale = 0.05f;
+    private const int MAX_MAP_SIZE = 20, MAX_CHUNK_SIZE = 20, MAX_CHUNK_HEIGHT = 200;
+    private const int MAX_WATER_THRESHOLD = 50, MAX_STONE_THRESHOLD = 75, MAX_SAND_THRESHOLD = 10;
+    private const float MAX_NOISE_SCALE = 0.05f;
 
     // Settings for Procedural Generation
     private const float labelWidth = 130.0f, checkboxWidth = 150f, width = 100f, presetWidth = 50f;
@@ -31,6 +31,7 @@ public class TerrainUI : MonoBehaviour {
         world = FindAnyObjectByType<World>();
         movement = FindAnyObjectByType<CameraTest>();
 
+        // On Start of Game, the default settings are stored for reset button
         defaultMapSize = world.mapSizeInChunks;
         defaultChunkSize = world.chunkSize;
         defaultChunkHeight = world.chunkHeight;
@@ -223,37 +224,37 @@ public class TerrainUI : MonoBehaviour {
         ImGui.Text("Size In Chunks");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##SizeInChunksSlider", ref world.mapSizeInChunks, minMapSize, maxMapSize);
+        ImGui.SliderInt("##SizeInChunksSlider", ref world.mapSizeInChunks, MIN_MAP_SIZE, MAX_MAP_SIZE);
 
         ImGui.Text("Chunk Size");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##ChunkSizeSlider", ref world.chunkSize, minChunkSize, maxChunkSize);
+        ImGui.SliderInt("##ChunkSizeSlider", ref world.chunkSize, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE);
 
         ImGui.Text("Chunk Height");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##ChunkHeightSlider", ref world.chunkHeight, minChunkHeight, maxChunkHeight);
+        ImGui.SliderInt("##ChunkHeightSlider", ref world.chunkHeight, MIN_CHUNK_HEIGHT, MAX_CHUNK_HEIGHT);
 
         ImGui.Text("Water Threshold");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##WaterThresholdSlider", ref world.waterThreshold, minWaterThreshold, maxWaterThreshold);
+        ImGui.SliderInt("##WaterThresholdSlider", ref world.waterThreshold, MIN_WATER_THRESHOLD, MAX_WATER_THRESHOLD);
 
         ImGui.Text("Stone Threshold");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##StoneThresholdSlider", ref world.stoneThreshold, minStoneThreshold, maxStoneThreshold);
+        ImGui.SliderInt("##StoneThresholdSlider", ref world.stoneThreshold, MIN_STONE_THRESHOLD, MAX_STONE_THRESHOLD);
 
         ImGui.Text("Sand Threshold");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##SandThresholdSlider", ref world.sandThreshold, minSandThreshold, maxSandThreshold);
+        ImGui.SliderInt("##SandThresholdSlider", ref world.sandThreshold, MIN_SAND_THRESHOLD, MAX_SAND_THRESHOLD);
 
         ImGui.Text("Noise Scale");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderFloat("##NoiseScaleSlider", ref world.noiseScale, minNoiseScale, maxNoiseScale);
+        ImGui.SliderFloat("##NoiseScaleSlider", ref world.noiseScale, MIN_NOISE_SCALE, MAX_NOISE_SCALE);
 
         // Offset Options
         ImGui.Text("X Offset");
@@ -272,14 +273,15 @@ public class TerrainUI : MonoBehaviour {
         ImGui.SliderFloat("##ZOffsetSlider", ref world.offset.z, -1000f, 1000f);
     }
 
+    // Using Min and Max values set and generating randoms and assigning to the var
     private void GenerateRandomWorld() {
-        world.mapSizeInChunks = UnityEngine.Random.Range(minMapSize, maxMapSize + 1);
-        world.chunkSize = UnityEngine.Random.Range(minChunkSize, maxChunkSize + 1);
-        world.chunkHeight = UnityEngine.Random.Range(minChunkHeight, maxChunkHeight + 1);
-        world.waterThreshold = UnityEngine.Random.Range(minWaterThreshold, maxWaterThreshold + 1);
-        world.stoneThreshold = UnityEngine.Random.Range(minStoneThreshold, maxStoneThreshold + 1);
-        world.sandThreshold = UnityEngine.Random.Range(minSandThreshold, maxSandThreshold + 1);
-        world.noiseScale = UnityEngine.Random.Range(minNoiseScale, maxNoiseScale);
+        world.mapSizeInChunks = UnityEngine.Random.Range(MIN_MAP_SIZE, MAX_MAP_SIZE + 1);
+        world.chunkSize = UnityEngine.Random.Range(MIN_CHUNK_SIZE, MAX_CHUNK_SIZE + 1);
+        world.chunkHeight = UnityEngine.Random.Range(MIN_CHUNK_HEIGHT, MAX_CHUNK_HEIGHT + 1);
+        world.waterThreshold = UnityEngine.Random.Range(MIN_WATER_THRESHOLD, MAX_WATER_THRESHOLD + 1);
+        world.stoneThreshold = UnityEngine.Random.Range(MIN_STONE_THRESHOLD, MAX_STONE_THRESHOLD + 1);
+        world.sandThreshold = UnityEngine.Random.Range(MIN_SAND_THRESHOLD, MAX_SAND_THRESHOLD + 1);
+        world.noiseScale = UnityEngine.Random.Range(MIN_NOISE_SCALE, MAX_NOISE_SCALE);
     }
 
     private void GenerateCenteredLayout() {

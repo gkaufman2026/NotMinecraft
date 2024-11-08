@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Outdated Script, Was Used Before Dear ImGui Implementation
 public class UI : MonoBehaviour {
     private World world;
     private bool showMenu = true;
