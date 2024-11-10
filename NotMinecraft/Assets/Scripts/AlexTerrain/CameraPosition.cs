@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraPosition : MonoBehaviour
 {
+    // Basic free cam controlling script
+
     public GameObject player;
     public Camera Camera;
     Rigidbody rb;

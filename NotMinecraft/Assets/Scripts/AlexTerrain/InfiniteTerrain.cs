@@ -35,6 +35,7 @@ public class InfiniteTerrain : MonoBehaviour
         updateVisibleChunks();
     }
 
+    // Gets the current player position and calls update visible chunks
     void Update()
     {
         playerPosition = new Vector2(player.position.x, player.position.z);
@@ -120,6 +121,7 @@ public class InfiniteTerrain : MonoBehaviour
             mapGenerator.requestMapData(position, onMapDataReceived);
         }
 
+        // When map data is recieved the map texture is updated
         void onMapDataReceived(MapData mapData)
         {
             this.mapData = mapData;
@@ -129,6 +131,7 @@ public class InfiniteTerrain : MonoBehaviour
             meshRenderer.material.mainTexture = texture;
         }
 
+        // Updates chunks with the appropriate detail level based upon the players distance from them
         public void updateChunk()
         {
             if (mapDataReceived)

@@ -5,6 +5,8 @@ using UnityEditor;
 
 [CustomEditor (typeof (AlexMapGenerator))]
 
+// Makes it so whenever a value for the map generator is updated in the editor,
+// the map automatically regenerates if auto update is on
 public class MapGeneratorEditor : Editor
 {
     public override void OnInspectorGUI()

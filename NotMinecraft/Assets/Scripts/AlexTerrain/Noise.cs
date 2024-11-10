@@ -9,7 +9,8 @@ public static class Noise
         Global
     }
 
-    // Returns a 2D Array of floats 
+    // Generates noise map
+    // Returns a 2D Array of floats
     public static float[,] generateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];

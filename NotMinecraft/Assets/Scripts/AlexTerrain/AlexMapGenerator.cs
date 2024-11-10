@@ -48,12 +48,13 @@ public class AlexMapGenerator : MonoBehaviour
     Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
     Queue<MapThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
 
+    // ImGui Ui
     private void OnGUI()
     {
-        string octavesString = octaves.ToString();
+        float octavesF = (float)octaves;
         string seedString = seed.ToString();
 
-        GUI.BeginGroup(new Rect(25, 25, 300, 300));
+        GUI.BeginGroup(new Rect(25, 25, 300, 325));
 
         GUI.Box(new Rect(0, 0, 200, 500), "Mesh Generation Options");
         GUI.Label(new Rect(10, 20, 200, 500), "Mesh will auto update when values are changed!");
@@ -61,32 +62,33 @@ public class AlexMapGenerator : MonoBehaviour
         GUI.Label(new Rect(10, 60, 120, 30), "Noise Scale: " + Mathf.Round(noiseScale * 100) / 100.0);
         noiseScale = GUI.HorizontalSlider(new Rect(10, 80, 100, 30), noiseScale, 1.0f, 100.0f);
 
-        GUI.Label(new Rect(10, 92, 120, 30), "Octaves: ");
-        octavesString = GUI.TextField(new Rect(80, 94, 60, 20), octavesString);
-        octaves = int.Parse(octavesString);
+        GUI.Label(new Rect(10, 92, 120, 30), "Octaves: " + octaves);
+        octavesF = GUI.HorizontalSlider(new Rect(10, 114, 100, 30), octavesF, 1.0f, 50.0f);
+        octaves = (int)octavesF;
 
-        GUI.Label(new Rect(10, 114, 120, 30), "Persistance: " + Mathf.Round(persistence * 100) / 100.0);
-        persistence = GUI.HorizontalSlider(new Rect(10, 134, 100, 30), persistence, 0.0f, 1.0f);
+        GUI.Label(new Rect(10, 124, 120, 30), "Persistance: " + Mathf.Round(persistence * 100) / 100.0);
+        persistence = GUI.HorizontalSlider(new Rect(10, 144, 100, 30), persistence, 0.0f, 1.0f);
 
-        GUI.Label(new Rect(10, 144, 120, 30), "Lacunarity: " + Mathf.Round(lacunarity * 100) / 100.0);
-        lacunarity = GUI.HorizontalSlider(new Rect(10, 164, 100, 30), lacunarity, 0.0f, 1.92f);
+        GUI.Label(new Rect(10, 154, 120, 30), "Lacunarity: " + Mathf.Round(lacunarity * 100) / 100.0);
+        lacunarity = GUI.HorizontalSlider(new Rect(10, 174, 100, 30), lacunarity, 0.0f, 1.92f);
 
-        GUI.Label(new Rect(10, 176, 120, 30), "Seed: ");
-        seedString = GUI.TextField(new Rect(80, 178, 60, 20), seedString);
+        GUI.Label(new Rect(10, 186, 120, 30), "Seed: ");
+        seedString = GUI.TextField(new Rect(80, 188, 60, 20), seedString);
         seed = int.Parse(seedString);
 
-        GUI.Label(new Rect(10, 198, 120, 30), "X Offset: " + Mathf.Round(offset.x * 100) / 100.0);
-        offset.x = GUI.HorizontalSlider(new Rect(10, 218, 100, 30), offset.x, -100.0f, 100.0f);
+        GUI.Label(new Rect(10, 210, 120, 30), "X Offset: " + Mathf.Round(offset.x * 100) / 100.0);
+        offset.x = GUI.HorizontalSlider(new Rect(10, 230, 100, 30), offset.x, -100.0f, 100.0f);
 
-        GUI.Label(new Rect(10, 230, 120, 30), "Y Offset: " + Mathf.Round(offset.y * 100) / 100.0);
-        offset.y = GUI.HorizontalSlider(new Rect(10, 250, 100, 30), offset.y, -100.0f, 100.0f);
+        GUI.Label(new Rect(10, 242, 120, 30), "Y Offset: " + Mathf.Round(offset.y * 100) / 100.0);
+        offset.y = GUI.HorizontalSlider(new Rect(10, 262, 100, 30), offset.y, -100.0f, 100.0f);
 
-        GUI.Label(new Rect(10, 262, 200, 30), "Mesh Height Scalar: " + Mathf.Round(meshHeightScalar * 100) / 100.0);
-        meshHeightScalar = GUI.HorizontalSlider(new Rect(10, 282, 100, 30), meshHeightScalar, -100.0f, 100.0f);
+        GUI.Label(new Rect(10, 274, 200, 30), "Mesh Height Scalar: " + Mathf.Round(meshHeightScalar * 100) / 100.0);
+        meshHeightScalar = GUI.HorizontalSlider(new Rect(10, 294, 100, 30), meshHeightScalar, -100.0f, 100.0f);
 
         GUI.EndGroup();
     }
 
+    // Draws the type of map based upon what is specified within the editor
     public void drawMapInEditor()
     {
         MapData mapData = generateMapData(Vector2.zero);
@@ -133,6 +135,7 @@ public class AlexMapGenerator : MonoBehaviour
         }
     }
 
+    // This is the same threading process as the maps but instead for the meshes that are created
     public void requestMeshData(MapData mapData, int lod, Action<MeshData> callback)
     {
         ThreadStart threadStart = delegate
@@ -143,6 +146,7 @@ public class AlexMapGenerator : MonoBehaviour
         new Thread(threadStart).Start();
     }
 
+    // Gets the mesh data and adds it to a queue
     void meshDataThread(MapData mapData, int lod, Action<MeshData> callback)
     {
         MeshData meshData = MeshGenerator.generateTerrainMesh(mapData.heightMap, meshHeightScalar, meshHeightCurve, lod);
@@ -152,6 +156,7 @@ public class AlexMapGenerator : MonoBehaviour
         }
     }
 
+    // Recives info from the map data and mesh data queues and removes it from the queue
     void Update()
     {
         if (mapDataThreadInfoQueue.Count > 0)
@@ -173,6 +178,7 @@ public class AlexMapGenerator : MonoBehaviour
         }
     }
 
+    // Generates the noise and color maps
     MapData generateMapData(Vector2 center)
     {
         float[,] noiseMap = Noise.generateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves, persistence, lacunarity, center + offset, normalizeMode);

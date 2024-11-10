@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class MeshGenerator
 {
+    // Generates the terrain mesh based upon the passed in parameters
     public static MeshData generateTerrainMesh(float[,] heightMap, float heightScalar, AnimationCurve _heightCurve, int lod)
     {
         AnimationCurve heightCurve = new AnimationCurve(_heightCurve.keys);
