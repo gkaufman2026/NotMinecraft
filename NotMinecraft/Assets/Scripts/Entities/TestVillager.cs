@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class TestVillager : MonoBehaviour
@@ -9,6 +10,11 @@ public class TestVillager : MonoBehaviour
         ZOMBIE
     }
     public VillagerTypes type;
+    private Villager villager;
+
+    private void Awake() {
+        villager = GetComponent<Villager>();
+    }
 
     void Update()
     {
@@ -16,6 +22,14 @@ public class TestVillager : MonoBehaviour
         MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer renderer in renderers) {
             renderer.material = textures[(int)type];
+        }
+
+        if (type == VillagerTypes.ZOMBIE) {
+            villager.rightArm.active = false;
+            villager.middleArm.active = false;
+            villager.leftArm.active = false;
+            villager.zombieLeftArm.active = true;
+            villager.zombieRightArm.active = true;
         }
     }
 }
