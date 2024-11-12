@@ -5,7 +5,7 @@ using UnityEngine;
 public static class MeshGenerator
 {
     // Generates the terrain mesh based upon the passed in parameters
-    public static MeshData generateTerrainMesh(float[,] heightMap, float heightScalar, AnimationCurve _heightCurve, int lod)
+    public static AlexMeshData generateTerrainMesh(float[,] heightMap, float heightScalar, AnimationCurve _heightCurve, int lod)
     {
         AnimationCurve heightCurve = new AnimationCurve(_heightCurve.keys);
 
@@ -18,7 +18,7 @@ public static class MeshGenerator
         int lodIncrement = (lod == 0) ? 1 : lod * 2;
         int verticesPerLine = (width - 1) / lodIncrement + 1;
 
-        MeshData meshData = new MeshData(verticesPerLine, verticesPerLine);
+        AlexMeshData meshData = new AlexMeshData(verticesPerLine, verticesPerLine);
         int vertexIndex = 0;
 
         for (int y = 0; y < height; y += lodIncrement)
@@ -43,7 +43,7 @@ public static class MeshGenerator
     }
 }
 
-public class MeshData
+public class AlexMeshData
 {
     public Vector3[] vertices;
     public int[] tris;
@@ -51,7 +51,7 @@ public class MeshData
 
     int triIndex;
 
-    public MeshData(int meshWidth, int meshHeight)
+    public AlexMeshData(int meshWidth, int meshHeight)
     {
         vertices = new Vector3[meshWidth * meshHeight];
         tris = new int[(meshWidth - 1) * (meshHeight - 1) * 6];

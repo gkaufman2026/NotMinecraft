@@ -46,7 +46,7 @@ public class AlexMapGenerator : MonoBehaviour
     public TerrainType[] regions;
 
     Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
-    Queue<MapThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
+    Queue<MapThreadInfo<AlexMeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<AlexMeshData>>();
 
     // ImGui Ui
     private void OnGUI()
@@ -136,7 +136,7 @@ public class AlexMapGenerator : MonoBehaviour
     }
 
     // This is the same threading process as the maps but instead for the meshes that are created
-    public void requestMeshData(MapData mapData, int lod, Action<MeshData> callback)
+    public void requestMeshData(MapData mapData, int lod, Action<AlexMeshData> callback)
     {
         ThreadStart threadStart = delegate
         {
@@ -147,12 +147,12 @@ public class AlexMapGenerator : MonoBehaviour
     }
 
     // Gets the mesh data and adds it to a queue
-    void meshDataThread(MapData mapData, int lod, Action<MeshData> callback)
+    void meshDataThread(MapData mapData, int lod, Action<AlexMeshData> callback)
     {
-        MeshData meshData = MeshGenerator.generateTerrainMesh(mapData.heightMap, meshHeightScalar, meshHeightCurve, lod);
+        AlexMeshData meshData = MeshGenerator.generateTerrainMesh(mapData.heightMap, meshHeightScalar, meshHeightCurve, lod);
         lock (meshDataThreadInfoQueue)
         {
-            meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));
+            meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<AlexMeshData>(callback, meshData));
         }
     }
 
@@ -172,7 +172,7 @@ public class AlexMapGenerator : MonoBehaviour
         {
             for (int i = 0; i < meshDataThreadInfoQueue.Count; i++)
             {
-                MapThreadInfo<MeshData> threadInfo = meshDataThreadInfoQueue.Dequeue();
+                MapThreadInfo<AlexMeshData> threadInfo = meshDataThreadInfoQueue.Dequeue();
                 threadInfo.callback(threadInfo.parameter);
             }
         }

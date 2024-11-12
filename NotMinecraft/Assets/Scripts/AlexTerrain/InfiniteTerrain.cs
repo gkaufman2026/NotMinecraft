@@ -204,7 +204,7 @@ public class InfiniteTerrain : MonoBehaviour
             this.updateCallback = updateCallBack;
         }
 
-        void onMeshDataReceived(MeshData meshData)
+        void onMeshDataReceived(AlexMeshData meshData)
         {
             mesh = meshData.createMesh();
             hasMesh = true;

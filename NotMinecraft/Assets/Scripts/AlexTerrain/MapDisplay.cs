@@ -16,7 +16,7 @@ public class MapDisplay : MonoBehaviour
     }
 
     // Draws the mesh
-    public void drawMesh(MeshData meshData, Texture2D texture)
+    public void drawMesh(AlexMeshData meshData, Texture2D texture)
     {
         // Must be shared because the mesh might be generated outside of gamemode
         meshFilter.sharedMesh = meshData.createMesh();
