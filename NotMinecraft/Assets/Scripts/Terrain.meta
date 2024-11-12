@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:NotMinecraft/Assets/Scripts/Terrain.meta
 guid: 2991506aa74bfce49abe30f63971751a
+========
+guid: 7bd73d241e002a249a2ebda8f6d80201
+>>>>>>>> origin/Alex-Terrian:NotMinecraft/Assets/Scripts/AlexTerrain.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
