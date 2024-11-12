@@ -1224,7 +1224,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44b4f2508823ef847aab99ef35ff3837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraPos: {fileID: 1629110025}
+  cameraPos: {fileID: 1447429379}
+--- !u!4 &1447429379 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7876023681238672744, guid: 93113bde7a1c4a74ab1611d7bded1519, type: 3}
+  m_PrefabInstance: {fileID: 1447429373}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1629110024
 GameObject:
   m_ObjectHideFlags: 0
@@ -1252,7 +1257,7 @@ Transform:
   m_GameObject: {fileID: 1629110024}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8888889, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1726,27 +1731,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b1a55be7ee9c5499da52db67d3462e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  orientation: {fileID: 1225732688}
   moveSpeed: 6
   airMultiplier: 0.4
+  rotationSpeed: 25
   walkSpeed: 4
   sprintSpeed: 6
   acceleration: 10
   cam: {fileID: 1629110027}
   sprintFOV: 100
-  jumpForce: 8
-  jumpRate: 15
+  jumpForce: 7
+  jumpRate: 8
   jumpKey: 32
-  sprintKey: 306
+  sprintKey: 304
   groundDrag: 6
   airDrag: 2
-  groundCheck: {fileID: 2093421704}
   groundMask:
     serializedVersion: 2
     m_Bits: 64
-  groundDistance: 0.2
   isSprinting: 0
   isMoving: 0
-  orientation: {fileID: 1225732688}
 --- !u!114 &2039862903
 MonoBehaviour:
   m_ObjectHideFlags: 0

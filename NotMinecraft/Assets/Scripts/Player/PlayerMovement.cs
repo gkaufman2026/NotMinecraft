@@ -1,9 +1,12 @@
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
+    [SerializeField] Transform orientation;
+
     [Header("Movement")]
     [SerializeField] float moveSpeed = 6f;
     [SerializeField] float airMultiplier = 0.4f;
+    public float rotationSpeed;
     private float movementMultiplier = 10f;
 
     [Header("Sprinting")]
@@ -28,15 +31,11 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] float airDrag = 2f;
 
     [Header("Ground Detection")]
-    [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask groundMask;
-    [SerializeField] float groundDistance = 0.5f; // Increased distance for better detection
     public bool isGrounded { get; private set; }
 
     [HideInInspector] public bool isSprinting;
     [HideInInspector] public bool isMoving;
-
-    [SerializeField] Transform orientation;
 
     private Vector3 moveDirection;
     private Vector2 movement;
@@ -79,7 +78,6 @@ public class PlayerMovement : MonoBehaviour {
 
     void HandleJump() {
         if (isGrounded) {
-            Debug.Log("Jump Triggered");
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
         }
