@@ -2,17 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Constraint : MonoBehaviour
+public abstract class Constraint
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public abstract bool isViolated(GameObject character, Vector3Int startPos, Vector3Int goalPos);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract Vector3 suggestNewGoal(GameObject character, Vector3Int startPos, Vector3Int goalPos);
 }

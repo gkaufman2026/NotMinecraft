@@ -106,4 +106,22 @@ public class World : MonoBehaviour {
         Vector3Int blockInChunkCoordinates = Chunk.GetBlockInChunkCoordinates(containerChunk, coords);
         return Chunk.GetBlockFromChunkCoordinates(containerChunk, blockInChunkCoordinates);
     }
+
+    internal ChunkData GetChunkDataFromWorldCords(Vector3Int coords)
+    {
+        Vector3Int chunkGridCords = coords / chunkSize;
+        if (chunkDataDictionary.ContainsKey(chunkGridCords))
+        {
+            return chunkDataDictionary[chunkGridCords];
+        }
+
+        Debug.Log("Could not find chunk");
+        return null;
+    }
+
+    internal BlockType GetBlockFromWorldCords(Vector3Int coords)
+    {
+        ChunkData currChunk = GetChunkDataFromWorldCords(coords);
+        return GetBlockFromChunkCoordinates(currChunk, coords);
+    }
 }

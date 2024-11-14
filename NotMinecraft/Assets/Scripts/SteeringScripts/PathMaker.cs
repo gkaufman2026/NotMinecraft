@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEditor.Search;
 using UnityEngine;
 using Utils;
 
@@ -68,56 +69,74 @@ public static class PathMaker
             visited[currNode.centerPoint] = true; //Sets the current point as visited
 
             //Gest neighbors from gridmask
-        //    List<Vector3Int> neighbors = getGridMaskPoints(gridMaskSize, minSegmentSize, noise, currNode.centerPoint, frontierSet, visited); //Gets the neighbors of the current point
-        //    totalNeighborsEvaluated += neighbors.Count;
-        //    Debug.Log("Ne: " + neighbors.Count);
+            List<Vector3Int> neighbors = getVisitableNeightbors(ref world, currNode.centerPoint, ref frontierSet, ref visited); //Gets the neighbors of the current point
+            totalNeighborsEvaluated += neighbors.Count;
 
-        //    //While the neighbors exist, update the cameFrom map with them and add them to the priority queue
-        //    if (neighbors.Count > 0)
-        //    {
-        //        foreach (Vector3Int neighbor in neighbors)
-        //        {
-        //            cameFrom[neighbor] = currNode.centerPoint;
-        //            AStarNode newNeighborNode = new AStarNode(neighbor); //Converts neighbor point into AStar node
+            //While the neighbors exist, update the cameFrom map with them and add them to the priority queue
+            if (neighbors.Count > 0)
+            {
+                foreach (Vector3Int neighbor in neighbors)
+                {
+                    cameFrom[neighbor] = currNode.centerPoint;
+                    AStarNode newNeighborNode = new AStarNode(neighbor); //Converts neighbor point into AStar node
 
-        //            //Calculates weight by converting positions to a unit cube (since the noise values are from 0-1)
-        //            //and then finds the magnatude of the displacment vector which is added to the previous node's weight
-        //            Vector2 scaledNeighborXYPos = (Vector2)neighbor / noise.GetLength(0);
-        //            Vector2 scaledCurrentXYPos = (Vector2)currNode.centerPoint / noise.GetLength(0);
-        //            Vector3 worldDisVec = new Vector3(scaledNeighborXYPos.x, noise[neighbor.y, neighbor.x], scaledNeighborXYPos.y) - new Vector3(scaledCurrentXYPos.x, noise[currNode.centerPoint.y, currNode.centerPoint.x], scaledCurrentXYPos.y);
-        //            newNeighborNode.weight = currNode.weight + worldDisVec.magnitude; //Updates neighbor weights
+                    //Calculates weight by converting positions to a unit cube (since the noise values are from 0-1)
+                    //and then finds the magnatude of the displacment vector which is added to the previous node's weight
+                    newNeighborNode.weight = currNode.weight + 1; //Updates neighbor weights
 
-        //            newNeighborNode.heuristic = newNeighborNode.calculateEuclideanHeuristic(goalPoint, noise); //Calculates node heuristic
+                    newNeighborNode.heuristic = newNeighborNode.calculateEuclideanHeuristic(goalPoint); //Calculates node heuristic
 
-        //            //Adds neighbor to priority queue and frontier set
-        //            frontier.Enqueue(newNeighborNode, newNeighborNode.getTotalWeight());
-        //            frontierSet.Add(neighbor);
-        //        }
-        //    }
+                    //Adds neighbor to priority queue and frontier set
+                    frontier.Enqueue(newNeighborNode, newNeighborNode.getTotalWeight());
+                    frontierSet.Add(neighbor);
+                }
+            }
         }
 
-        //Debug.Log("Total Neighbors Evaluated: " + totalNeighborsEvaluated);
         List<Vector3Int> path = new List<Vector3Int>(); //Path from the goal to the start
 
-        //if (endPoint != goalPoint)
-        //{
-        //    Debug.Log("Did not find goal");
-        //}
-        //else
-        //{
-        //    Debug.Log("Found Goal!!");
-        //}
+        if (endPoint != goalPoint)
+        {
+            Debug.Log("Did not find goal");
+        }
+        else
+        {
+            Debug.Log("Found Goal!!");
+        }
 
-        ////Builds path only if a goal was found
-        //Vector3Int current = endPoint;
-        //while (current != start.centerPoint)
-        //{ //Runs backwards through cameFrom map to build path from the goal to the start
-        //    path.Add(current);
-        //    current = cameFrom[current];
-        //}
+        //Builds path only if a goal was found
+        Vector3Int current = endPoint;
+        while (current != start.centerPoint)
+        { //Runs backwards through cameFrom map to build path from the goal to the start
+            path.Add(current);
+            current = cameFrom[current];
+        }
 
-        //path.Add(start.centerPoint); //Adds start to path
+        path.Add(start.centerPoint); //Adds start to path
 
         return path;
+    }
+
+    private static List<Vector3Int> getVisitableNeightbors(ref World world, Vector3Int currPoint, ref HashSet<Vector3Int> frontierSet, ref Dictionary<Vector3Int, bool> visited)
+    {
+        List<Vector3Int> visitables = new();
+
+        //Finds neighbors around center
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                for (int k = -1; k <= 1; k++) {
+                    Vector3Int checkPoint = currPoint + new Vector3Int(i, j, k);
+                    BlockType currBlockType = world.GetBlockFromWorldCords(checkPoint);
+                    if (!frontierSet.Contains(checkPoint) && !visited.ContainsKey(checkPoint) && (currBlockType == BlockType.AIR || currBlockType == BlockType.WATER) && checkPoint != currPoint)
+                    {
+                        visitables.Add(checkPoint);
+                    }
+                }
+            }
+        }
+
+        return visitables; //Returns neighbors found
     }
 }
