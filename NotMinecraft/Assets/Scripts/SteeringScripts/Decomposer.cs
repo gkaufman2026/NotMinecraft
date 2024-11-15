@@ -5,25 +5,19 @@ using UnityEngine;
 
 public class Decomposer
 {
-    private List<List<Vector3Int>> currentPaths = new();
-    private float satisfactionRadiusSquared = 1.0f;
+    private List<Vector3Int> mCurrentPath = new();
+    private float satisfactionRadiusSquared = 0.5f;
 
     public List<Vector3Int> getCurrPath()
     {
-        if (currentPaths.Count > 0)
-        {
-            return currentPaths[0];
-        }
-
-        return null;
+        return mCurrentPath;
     }
 
     public Nullable<Vector3Int> getCurrSubGoal()
     {
-        List<Vector3Int> currPath = getCurrPath();
-        if (currPath.Count > 0)
+        if (mCurrentPath.Count > 0)
         {
-            return currPath[0];
+            return mCurrentPath[0];
         }
 
         return null;
@@ -31,11 +25,10 @@ public class Decomposer
 
     public Nullable<Vector3Int> getCurrSubGoal(Vector3 characterPos)
     {
-        List<Vector3Int> currPath = getCurrPath();
-        if (currPath.Count > 0)
+        if (mCurrentPath.Count > 0)
         {
-            Vector3Int currSubGoal = currPath[0];
-            while (currPath.Count > 0)
+            Vector3Int currSubGoal = mCurrentPath[0];
+            while (mCurrentPath.Count > 0)
             {
                 float squaredDist = (characterPos - currSubGoal).sqrMagnitude;
 
@@ -49,7 +42,7 @@ public class Decomposer
                 }
             }
 
-            if (currPath.Count > 0)
+            if (mCurrentPath.Count > 0)
             {
                 return currSubGoal;
             }
@@ -65,12 +58,7 @@ public class Decomposer
         Nullable<Vector3Int> currSubGoal = getCurrSubGoal();
         if (currSubGoal != null)
         {
-            currentPaths[0].Remove((Vector3Int)currSubGoal);
-
-            if (currentPaths[0].Count == 0)
-            {
-                currentPaths.RemoveAt(0);
-            }
+            mCurrentPath.Remove((Vector3Int)currSubGoal);
         }
     }
 
@@ -86,7 +74,6 @@ public class Decomposer
 
     public void buildAndAddNextPath(ref World world, Vector3Int start, Vector3Int goal)
     {
-        List<Vector3Int> newPath = PathMaker.generatePath(ref world, start, goal);
-        currentPaths.Add(newPath);
+        mCurrentPath = PathMaker.generatePath(ref world, start, goal);
     }
 }

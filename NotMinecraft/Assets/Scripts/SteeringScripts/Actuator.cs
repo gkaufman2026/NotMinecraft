@@ -7,7 +7,7 @@ public class Actuator
 {
     public struct Action
     {
-        public Vector3 walkingVelocity;
+        public Vector2 walkingVelocity;
         public float jumpVelocity;
         public bool openDoor;
 
@@ -26,12 +26,19 @@ public class Actuator
 
         Action currAction = new Action();
 
-        if (yDiffSquared == 0)
+        if (yDiffSquared == 1)
         {
             currAction.jumpVelocity = 1f;
         }
 
-        currAction.walkingVelocity = dirVec.normalized;
+        currAction.walkingVelocity = new Vector2(dirVec.x, dirVec.z).normalized;
+
+        Mob mobData = character.GetComponent<Mob>();
+        if (mobData != null)
+        {
+            currAction.walkingVelocity *= mobData.WalkSpeed * Time.fixedDeltaTime;
+            currAction.jumpVelocity *= mobData.MaxJumpPower;
+        }
 
         //Add way to find a door here to mark if the character should open the door
         currAction.openDoor = false;
