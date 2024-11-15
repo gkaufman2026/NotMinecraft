@@ -1,12 +1,9 @@
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
-    [SerializeField] Transform orientation;
-
     [Header("Movement")]
     [SerializeField] float moveSpeed = 6f;
     [SerializeField] float airMultiplier = 0.4f;
-    public float rotationSpeed;
     private float movementMultiplier = 10f;
 
     [Header("Sprinting")]
@@ -31,16 +28,18 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] float airDrag = 2f;
 
     [Header("Ground Detection")]
+    [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask groundMask;
     public bool isGrounded { get; private set; }
 
     [HideInInspector] public bool isSprinting;
     [HideInInspector] public bool isMoving;
 
+    [SerializeField] Transform orientation;
+
     private Vector3 moveDirection;
     private Vector2 movement;
     private Rigidbody rb;
-    private float nextTimeToJump = 0f;
 
     private void Start() {
         rb = GetComponent<Rigidbody>();
@@ -55,7 +54,6 @@ public class PlayerMovement : MonoBehaviour {
         ControlSpeed();
 
         if (Input.GetKey(jumpKey) && isGrounded) {
-            nextTimeToJump = Time.time + 1f / jumpRate;
             HandleJump();
         }
 
