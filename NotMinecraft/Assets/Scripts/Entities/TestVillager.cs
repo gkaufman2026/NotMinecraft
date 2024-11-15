@@ -25,11 +25,6 @@ public class TestVillager : MonoBehaviour
         }
 
         if (type == VillagerTypes.ZOMBIE) {
-            villager.rightArm.active = false;
-            villager.middleArm.active = false;
-            villager.leftArm.active = false;
-            villager.zombieLeftArm.active = true;
-            villager.zombieRightArm.active = true;
         }
     }
 }
