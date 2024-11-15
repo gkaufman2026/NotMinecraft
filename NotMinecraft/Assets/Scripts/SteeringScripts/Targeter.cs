@@ -1,13 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Targeter
 {
-    List<Vector3Int> targets = new();
+    private List<Vector3Int> targets = new();
 
-    public Vector3Int getNextTarget()
+    public void addGoal(Vector3Int goal)
     {
-        return targets[0];
+        targets.Add(goal);
+    }
+
+    public Nullable<Vector3Int> getCurrentTarget()
+    {
+        if (targets.Count > 0)
+        {
+            return targets[0];
+        }
+
+        return null;
+    }
+
+    public void achievedCurrTarget()
+    {
+        Nullable<Vector3Int> currTarget = getCurrentTarget();
+        if (currTarget != null)
+        {
+            targets.Remove((Vector3Int)currTarget);
+        }
     }
 }

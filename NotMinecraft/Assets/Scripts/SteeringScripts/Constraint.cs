@@ -6,5 +6,5 @@ public abstract class Constraint
 {
     public abstract bool isViolated(GameObject character, Vector3Int startPos, Vector3Int goalPos);
 
-    public abstract Vector3 suggestNewGoal(GameObject character, Vector3Int startPos, Vector3Int goalPos);
+    public abstract Vector3Int suggestNewGoal(GameObject character, Vector3Int startPos, Vector3Int goalPos);
 }

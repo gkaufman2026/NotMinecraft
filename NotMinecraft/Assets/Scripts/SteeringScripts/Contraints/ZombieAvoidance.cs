@@ -2,19 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmoothTurning : Constraint
+public class ZombieAvoidance : Constraint
 {
-    private float maxTurnAngle = 20f;
+    private float mAvoidanceRadius = 1f;
 
     public override bool isViolated(GameObject character, Vector3Int startPos, Vector3Int goalPos)
     {
-        float currTurnAngle = (Vector3.Dot((goalPos - startPos), character.transform.forward) - 1) * 0.5f * -180;
-        if (currTurnAngle > maxTurnAngle)
-        {
-            return false;
-        }
+        bool zombieInPath = false; //Code way to detect if zombie is in the way
 
-        return true;
+        return zombieInPath;
     }
 
     public override Vector3Int suggestNewGoal(GameObject character, Vector3Int startPos, Vector3Int goalPos)

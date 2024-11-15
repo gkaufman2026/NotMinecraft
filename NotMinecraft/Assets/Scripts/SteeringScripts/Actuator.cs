@@ -3,26 +3,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Actuator : MonoBehaviour
+public class Actuator
 {
-    private List<Vector3Int> goals;
-
-    public Nullable<Vector3Int> getCurrentGoal()
+    public struct Action
     {
-        if (goals.Count > 0)
-        {
-            return goals[0];
-        }
+        public Vector3 walkingVelocity;
+        public float jumpVelocity;
+        public bool openDoor;
 
-        return null;
+        public Action(Vector3 walkingVelocity, float jumpVelocity, bool openDoor)
+        {
+            this.walkingVelocity = walkingVelocity;
+            this.jumpVelocity = jumpVelocity;
+            this.openDoor = openDoor;
+        }
     }
 
-    public void achievedCurrGoal()
+    public Action getActionToPerform(GameObject character, Vector3 start, Vector3 goal)
     {
-        Nullable<Vector3Int> currGoal = getCurrentGoal();
-        if (currGoal != null)
+        Vector3 dirVec = goal - start;
+        float yDiffSquared = dirVec.y * dirVec.y;
+
+        Action currAction = new Action();
+
+        if (yDiffSquared == 0)
         {
-            goals.Remove((Vector3Int)currGoal);
+            currAction.jumpVelocity = 1f;
         }
+
+        currAction.walkingVelocity = dirVec.normalized;
+
+        //Add way to find a door here to mark if the character should open the door
+        currAction.openDoor = false;
+
+        return currAction;
     }
 }
