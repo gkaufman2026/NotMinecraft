@@ -1,9 +1,9 @@
 using UnityEngine;
 using ImGuiNET;
-using System;
 
 public class TerrainUI : MonoBehaviour {
     private World world;
+    private BiomeGenerator biomeGenerator;
     private CameraTest movement;
 
     // Default values
@@ -29,16 +29,17 @@ public class TerrainUI : MonoBehaviour {
 
     private void Awake() {
         world = FindAnyObjectByType<World>();
+        biomeGenerator = FindAnyObjectByType<BiomeGenerator>();
         movement = FindAnyObjectByType<CameraTest>();
 
         // On Start of Game, the default settings are stored for reset button
         defaultMapSize = world.mapSizeInChunks;
         defaultChunkSize = world.chunkSize;
         defaultChunkHeight = world.chunkHeight;
-        defaultWaterThreshold = world.waterThreshold;
-        defaultStoneTreshold = world.stoneThreshold;
-        defaultSandThreshold = world.sandThreshold;
-        defaultNoiseScale = world.noiseScale;
+        defaultWaterThreshold = biomeGenerator.waterThreshold;
+        defaultStoneTreshold = biomeGenerator.stoneThreshold;
+        defaultSandThreshold = biomeGenerator.sandThreshold;
+        defaultNoiseScale = biomeGenerator.noiseScale;
         defaultOffset = world.offset;
     }
 
@@ -83,10 +84,10 @@ public class TerrainUI : MonoBehaviour {
             world.mapSizeInChunks = defaultMapSize;
             world.chunkSize = defaultChunkSize;
             world.chunkHeight = defaultChunkHeight;
-            world.waterThreshold = defaultWaterThreshold;
-            world.sandThreshold = defaultSandThreshold;
-            world.stoneThreshold = defaultStoneTreshold;
-            world.noiseScale = defaultNoiseScale;
+            biomeGenerator.waterThreshold = defaultWaterThreshold;
+            biomeGenerator.sandThreshold = defaultSandThreshold;
+            biomeGenerator.stoneThreshold = defaultStoneTreshold;
+            biomeGenerator.noiseScale = defaultNoiseScale;
             world.offset = defaultOffset;
         }
 
@@ -108,10 +109,10 @@ public class TerrainUI : MonoBehaviour {
                 world.mapSizeInChunks = 6;
                 world.chunkSize = 16;
                 world.chunkHeight = 100;
-                world.waterThreshold = 39;
-                world.stoneThreshold = 60;
-                world.sandThreshold = 4;
-                world.noiseScale = 0.01f;
+                biomeGenerator.waterThreshold = 39;
+                biomeGenerator.stoneThreshold = 60;
+                biomeGenerator.sandThreshold = 4;
+                biomeGenerator.noiseScale = 0.01f;
                 world.offset = new Vector3(-120, -45, -145);
                 world.GenerateWorld();
             }
@@ -121,10 +122,10 @@ public class TerrainUI : MonoBehaviour {
                 world.mapSizeInChunks = 20;
                 world.chunkSize = 20;
                 world.chunkHeight = 200;
-                world.waterThreshold = 50;
-                world.stoneThreshold = 60;
-                world.sandThreshold = 6;
-                world.noiseScale = 0.05f;
+                biomeGenerator.waterThreshold = 50;
+                biomeGenerator.stoneThreshold = 60;
+                biomeGenerator.sandThreshold = 6;
+                biomeGenerator.noiseScale = 0.05f;
                 world.offset = new Vector3(-565, -185, -485);
                 world.GenerateWorld();
             }
@@ -134,10 +135,10 @@ public class TerrainUI : MonoBehaviour {
                 world.mapSizeInChunks = 6;
                 world.chunkSize = 16;
                 world.chunkHeight = 100;
-                world.waterThreshold = 31;
-                world.stoneThreshold = 60;
-                world.sandThreshold = 4;
-                world.noiseScale = 0.01f;
+                biomeGenerator.waterThreshold = 31;
+                biomeGenerator.stoneThreshold = 60;
+                biomeGenerator.sandThreshold = 4;
+                biomeGenerator.noiseScale = 0.01f;
                 world.offset = new Vector3(-145, -45, -145);
                 world.GenerateWorld();
             }
@@ -147,10 +148,10 @@ public class TerrainUI : MonoBehaviour {
                 world.mapSizeInChunks = 12;
                 world.chunkSize = 12;
                 world.chunkHeight = 150;
-                world.waterThreshold = 50;
-                world.stoneThreshold = 20;
-                world.sandThreshold = 4;
-                world.noiseScale = 0.024f;
+                biomeGenerator.waterThreshold = 50;
+                biomeGenerator.stoneThreshold = 20;
+                biomeGenerator.sandThreshold = 4;
+                biomeGenerator.noiseScale = 0.024f;
                 world.offset = new Vector3(-175, -115, -145);
                 world.GenerateWorld();
             }
@@ -239,22 +240,22 @@ public class TerrainUI : MonoBehaviour {
         ImGui.Text("Water Threshold");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##WaterThresholdSlider", ref world.waterThreshold, MIN_WATER_THRESHOLD, MAX_WATER_THRESHOLD);
+        ImGui.SliderInt("##WaterThresholdSlider", ref biomeGenerator.waterThreshold, MIN_WATER_THRESHOLD, MAX_WATER_THRESHOLD);
 
         ImGui.Text("Stone Threshold");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##StoneThresholdSlider", ref world.stoneThreshold, MIN_STONE_THRESHOLD, MAX_STONE_THRESHOLD);
+        ImGui.SliderInt("##StoneThresholdSlider", ref biomeGenerator.stoneThreshold, MIN_STONE_THRESHOLD, MAX_STONE_THRESHOLD);
 
         ImGui.Text("Sand Threshold");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderInt("##SandThresholdSlider", ref world.sandThreshold, MIN_SAND_THRESHOLD, MAX_SAND_THRESHOLD);
+        ImGui.SliderInt("##SandThresholdSlider", ref biomeGenerator.sandThreshold, MIN_SAND_THRESHOLD, MAX_SAND_THRESHOLD);
 
         ImGui.Text("Noise Scale");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
-        ImGui.SliderFloat("##NoiseScaleSlider", ref world.noiseScale, MIN_NOISE_SCALE, MAX_NOISE_SCALE);
+        ImGui.SliderFloat("##NoiseScaleSlider", ref biomeGenerator.noiseScale, MIN_NOISE_SCALE, MAX_NOISE_SCALE);
 
         // Offset Options
         ImGui.Text("X Offset");
@@ -278,10 +279,10 @@ public class TerrainUI : MonoBehaviour {
         world.mapSizeInChunks = UnityEngine.Random.Range(MIN_MAP_SIZE, MAX_MAP_SIZE + 1);
         world.chunkSize = UnityEngine.Random.Range(MIN_CHUNK_SIZE, MAX_CHUNK_SIZE + 1);
         world.chunkHeight = UnityEngine.Random.Range(MIN_CHUNK_HEIGHT, MAX_CHUNK_HEIGHT + 1);
-        world.waterThreshold = UnityEngine.Random.Range(MIN_WATER_THRESHOLD, MAX_WATER_THRESHOLD + 1);
-        world.stoneThreshold = UnityEngine.Random.Range(MIN_STONE_THRESHOLD, MAX_STONE_THRESHOLD + 1);
-        world.sandThreshold = UnityEngine.Random.Range(MIN_SAND_THRESHOLD, MAX_SAND_THRESHOLD + 1);
-        world.noiseScale = UnityEngine.Random.Range(MIN_NOISE_SCALE, MAX_NOISE_SCALE);
+        biomeGenerator.waterThreshold = UnityEngine.Random.Range(MIN_WATER_THRESHOLD, MAX_WATER_THRESHOLD + 1);
+        biomeGenerator.stoneThreshold = UnityEngine.Random.Range(MIN_STONE_THRESHOLD, MAX_STONE_THRESHOLD + 1);
+        biomeGenerator.sandThreshold = UnityEngine.Random.Range(MIN_SAND_THRESHOLD, MAX_SAND_THRESHOLD + 1);
+        biomeGenerator.noiseScale = UnityEngine.Random.Range(MIN_NOISE_SCALE, MAX_NOISE_SCALE);
     }
 
     private void GenerateCenteredLayout() {

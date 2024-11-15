@@ -36,10 +36,10 @@ public class UI : MonoBehaviour {
             world.chunkHeight = (int)GUI.HorizontalSlider(new Rect(20, 165, 180, 20), world.chunkHeight, 50.0f, 200.0f);
 
             GUI.Label(new Rect(20, 180, 180, 20), "Water Threshold:", sliderLabelStyle);
-            world.waterThreshold = (int)GUI.HorizontalSlider(new Rect(20, 195, 180, 20), world.waterThreshold, 1.0f, 75.0f);
+            world.terrainGenerator.biomeGenerator.waterThreshold = (int)GUI.HorizontalSlider(new Rect(20, 195, 180, 20), world.terrainGenerator.biomeGenerator.waterThreshold, 1.0f, 75.0f);
 
             GUI.Label(new Rect(20, 210, 180, 20), "Noise Scale:", sliderLabelStyle);
-            world.noiseScale = GUI.HorizontalSlider(new Rect(20, 225, 180, 20), world.noiseScale, 0.0f, 1.0f);
+            world.terrainGenerator.biomeGenerator.noiseScale = GUI.HorizontalSlider(new Rect(20, 225, 180, 20), world.terrainGenerator.biomeGenerator.noiseScale, 0.0f, 1.0f);
         }
     }
 }
