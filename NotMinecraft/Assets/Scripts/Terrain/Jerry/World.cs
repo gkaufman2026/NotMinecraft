@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -123,5 +124,9 @@ public class World : MonoBehaviour {
     {
         ChunkData currChunk = GetChunkDataFromWorldCords(coords);
         return GetBlockFromChunkCoordinates(currChunk, coords);
+    }
+
+    internal void LoadAdditionalChunksRequest(GameObject player) {
+        GenerateWorld();
     }
 }
