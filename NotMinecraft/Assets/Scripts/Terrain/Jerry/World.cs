@@ -71,31 +71,14 @@ public class World : MonoBehaviour {
             ChunkData data = worldData.chunkDataDictionary[pos];
             MeshData meshData = Chunk.GetChunkMeshData(data);
             GameObject chunkObject = Instantiate(chunkPrefab, data.worldPos, Quaternion.identity);
+            chunkObject.transform.parent = chunksParent.transform;
             ChunkRenderer chunkRenderer = chunkObject.GetComponent<ChunkRenderer>();
             worldData.chunkDictionary.Add(data.worldPos, chunkRenderer);
             chunkRenderer.InitalizeChunk(data);
             chunkRenderer.UpdateChunk(meshData);
-
         }
 
         OnWorldCreated?.Invoke();
-    }
-
-    private Vector3Int GetBlockPos(RaycastHit hit) {
-        Vector3 pos = new() {
-            x = GetBlockPositionIn(hit.point.x, hit.normal.x),
-            y = GetBlockPositionIn(hit.point.y, hit.normal.y),
-            z = GetBlockPositionIn(hit.point.z, hit.normal.z)
-        };
-
-        return Vector3Int.RoundToInt(pos);
-    }
-
-    private float GetBlockPositionIn(float pos, float normal) {
-        if (Mathf.Abs(pos % 1) == 0.5f) {
-            pos -= (normal / 2);
-        }
-        return pos;
     }
 
     internal void RemoveChunk(ChunkRenderer chunk) {
@@ -112,7 +95,7 @@ public class World : MonoBehaviour {
         List<Vector3Int> chunkPositionsToRemove = WorldDataHelper.GetUnnededChunks(worldData, allChunkPositionsNeeded);
         List<Vector3Int> chunkDataToRemove = WorldDataHelper.GetUnnededData(worldData, allChunkDataPositionsNeeded);
 
-        WorldGenerationData data = new WorldGenerationData {
+        WorldGenerationData data = new() {
             chunkPosToCreate = chunkPositionsToCreate,
             chunkDataPosToCreate = chunkDataPositionsToCreate,
             chunkPosToRemove = chunkPositionsToRemove,
