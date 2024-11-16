@@ -158,6 +158,36 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 0}
   seedOffset: {x: 0, y: 0}
   terrainGenerator: {fileID: 1101071063}
+  OnWorldCreated:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1238926682}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SpawnPlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnNewChunksGenerated:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1238926682}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: CheckWorld
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &60251132
 Transform:
   m_ObjectHideFlags: 0
@@ -616,7 +646,7 @@ Transform:
   m_GameObject: {fileID: 1177953962}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 41.02314, y: 37.731544, z: 67.68945}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -672,6 +702,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5a3b6733bce1a54ba6f80510b2cf4b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1238926681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1238926683}
+  - component: {fileID: 1238926682}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1238926682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238926681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06a90f00438529e4c97c4728b3b91973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 9006255333725012504, guid: 59912e4269f1d94438e265b4c12a33da, type: 3}
+  playerPos: {x: 0, y: 0, z: 0}
+  world: {fileID: 60251131}
+  detectionTime: 1
+--- !u!4 &1238926683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238926681}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1446312218
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,5 +971,6 @@ SceneRoots:
   - {fileID: 646506974}
   - {fileID: 836582363}
   - {fileID: 60251132}
-  - {fileID: 1177953964}
   - {fileID: 1101071062}
+  - {fileID: 1177953964}
+  - {fileID: 1238926683}

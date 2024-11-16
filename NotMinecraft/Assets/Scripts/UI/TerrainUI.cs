@@ -27,6 +27,7 @@ public class TerrainUI : MonoBehaviour {
     // UI Variables
     private float spacing, totalWidth, windowWidth, cursorPosX;
 
+
     private void Awake() {
         world = FindAnyObjectByType<World>();
         biomeGenerator = FindAnyObjectByType<BiomeGenerator>();
@@ -123,7 +124,7 @@ public class TerrainUI : MonoBehaviour {
                 world.chunkSize = 20;
                 world.chunkHeight = 200;
                 biomeGenerator.waterThreshold = 50;
-                //biomeGenerator.stoneThreshold = 60;
+               // biomeGenerator.stoneThreshold = 60;
                 biomeGenerator.sandThreshold = 6;
                 //biomeGenerator.noiseScale = 0.05f;
                 world.offset = new Vector3Int(-565, -185, -485);
@@ -136,10 +137,10 @@ public class TerrainUI : MonoBehaviour {
                 world.chunkSize = 16;
                 world.chunkHeight = 100;
                 biomeGenerator.waterThreshold = 31;
-                //biomeGenerator.stoneThreshold = 60;
+               // biomeGenerator.stoneThreshold = 60;
                 biomeGenerator.sandThreshold = 4;
                 //biomeGenerator.noiseScale = 0.01f;
-                world.offset = new Vector3Int(-145, -45, -145);
+                //world.offset = new Vector3Int(-145, -45, -145);
                 world.GenerateWorld();
             }
             ImGui.SameLine();
@@ -242,7 +243,7 @@ public class TerrainUI : MonoBehaviour {
         ImGui.SetNextItemWidth(width);
         ImGui.SliderInt("##WaterThresholdSlider", ref biomeGenerator.waterThreshold, MIN_WATER_THRESHOLD, MAX_WATER_THRESHOLD);
 
-        /*ImGui.Text("Stone Threshold");
+/*        ImGui.Text("Stone Threshold");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
         ImGui.SliderInt("##StoneThresholdSlider", ref biomeGenerator.stoneThreshold, MIN_STONE_THRESHOLD, MAX_STONE_THRESHOLD);*/
@@ -252,7 +253,7 @@ public class TerrainUI : MonoBehaviour {
         ImGui.SetNextItemWidth(width);
         ImGui.SliderInt("##SandThresholdSlider", ref biomeGenerator.sandThreshold, MIN_SAND_THRESHOLD, MAX_SAND_THRESHOLD);
 
-        /*ImGui.Text("Noise Scale");
+/*        ImGui.Text("Noise Scale");
         ImGui.SameLine(labelWidth);
         ImGui.SetNextItemWidth(width);
         ImGui.SliderFloat("##NoiseScaleSlider", ref biomeGenerator.noiseScale, MIN_NOISE_SCALE, MAX_NOISE_SCALE);*/
