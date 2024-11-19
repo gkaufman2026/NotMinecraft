@@ -42,6 +42,10 @@ public class ChunkRenderer : MonoBehaviour {
         collisionMesh.vertices = meshData.collidierVertices.ToArray();
         collisionMesh.triangles = meshData.collidierTriangles.ToArray();
         collisionMesh.RecalculateNormals();
+
+        Debug.Log(collisionMesh.vertices.Length);
+        Debug.Log(collisionMesh.triangles.Length);
+
         meshCollider.sharedMesh = collisionMesh; 
     }
 
