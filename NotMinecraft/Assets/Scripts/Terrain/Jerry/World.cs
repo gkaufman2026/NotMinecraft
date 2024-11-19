@@ -140,6 +140,7 @@ public class World : MonoBehaviour {
     }
 
     internal void LoadAdditionalChunksRequest(GameObject player) {
+        GenerateWorld(Vector3Int.RoundToInt(player.transform.position));
         OnNewChunksGenerated?.Invoke();
     }
 }
