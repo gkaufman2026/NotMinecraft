@@ -22,7 +22,8 @@ public class CameraSwitcher : MonoBehaviour {
             if (player != null) {
                 playerCamera = player.GetComponentInChildren<Camera>();
                 if (playerCamera != null) {
-                    playerCamera.enabled = false;
+                    playerCamera.enabled = true;
+                    mainCamera.enabled = false;
                 }
             }
         }
