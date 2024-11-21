@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public World world;
 
     [SerializeField] private Vector3Int currentChunkCenter = Vector3Int.zero;
-    private GameObject player;
+    [HideInInspector] public GameObject player;
 
     public void SpawnPlayer() {
         if (player != null) return;
