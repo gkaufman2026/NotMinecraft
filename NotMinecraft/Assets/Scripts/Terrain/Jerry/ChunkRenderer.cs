@@ -37,15 +37,13 @@ public class ChunkRenderer : MonoBehaviour {
 
         mesh.uv = meshData.uv.Concat(meshData.waterMesh.uv).ToArray();
         mesh.RecalculateNormals();
-        meshCollider.sharedMesh = null; 
-        Mesh collisionMesh = new Mesh();
-        collisionMesh.name = "CollisionMesh";
-        collisionMesh.vertices = meshData.waterMesh.collidierVertices.ToArray();
-        collisionMesh.triangles = meshData.waterMesh.collidierTriangles.ToArray();
+        meshCollider.sharedMesh = null;
+        Mesh collisionMesh = new() {
+            name = "CollisionMesh",
+            vertices = meshData.waterMesh.collidierVertices.ToArray(),
+            triangles = meshData.waterMesh.collidierTriangles.ToArray()
+        };
         collisionMesh.RecalculateNormals();
-
-        Debug.Log(collisionMesh.vertices.Length);
-        Debug.Log(collisionMesh.triangles.Length);
 
         meshCollider.sharedMesh = collisionMesh; 
     }

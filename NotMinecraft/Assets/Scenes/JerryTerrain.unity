@@ -155,9 +155,10 @@ MonoBehaviour:
   chunkSize: 16
   chunkHeight: 100
   chunkPrefab: {fileID: 4443192061081385954, guid: 1c00b035e263f934a9711fcf71e3336a, type: 3}
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: -250, y: 15, z: -185}
   seedOffset: {x: 0, y: 0}
   terrainGenerator: {fileID: 1101071063}
+  gameManager: {fileID: 1819961351}
 --- !u!4 &60251132
 Transform:
   m_ObjectHideFlags: 0
@@ -260,7 +261,6 @@ GameObject:
   m_Component:
   - component: {fileID: 499907353}
   - component: {fileID: 499907352}
-  - component: {fileID: 499907351}
   - component: {fileID: 499907354}
   m_Layer: 0
   m_Name: Camera
@@ -269,14 +269,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &499907351
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 499907350}
-  m_Enabled: 1
 --- !u!20 &499907352
 Camera:
   m_ObjectHideFlags: 0
@@ -337,7 +329,7 @@ Transform:
   m_GameObject: {fileID: 499907350}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 40, y: 25, z: 15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -791,6 +783,55 @@ MonoBehaviour:
   noiseDomainX: {fileID: 11400000, guid: 1b692cd4711572a44b6ef9f8b5f68e53, type: 2}
   noiseDomainY: {fileID: 11400000, guid: be51c46ddd9d00f42948f90ce4da9d4a, type: 2}
   amplitude: {x: 60, y: 60}
+--- !u!1 &1819961350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1819961352}
+  - component: {fileID: 1819961351}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1819961351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819961350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06a90f00438529e4c97c4728b3b91973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 9006255333725012504, guid: 59912e4269f1d94438e265b4c12a33da, type: 3}
+  playerPos: {x: 0, y: 0, z: 0}
+  playerSpawnPos: {x: 35, y: 23.5, z: 0}
+  world: {fileID: 60251131}
+  currentChunkCenter: {x: 0, y: 0, z: 0}
+--- !u!4 &1819961352
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819961350}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1832800479
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,3 +937,4 @@ SceneRoots:
   - {fileID: 60251132}
   - {fileID: 1177953964}
   - {fileID: 1101071062}
+  - {fileID: 1819961352}

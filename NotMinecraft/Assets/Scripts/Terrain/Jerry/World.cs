@@ -9,6 +9,7 @@ public class World : MonoBehaviour {
     public Vector3 offset;
     public Vector2Int seedOffset;
     public TerrainGenerator terrainGenerator;
+    public GameManager gameManager;
 
     private GameObject chunksParent;
     private Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new();
@@ -55,6 +56,7 @@ public class World : MonoBehaviour {
             chunkRenderer.InitalizeChunk(data);
             chunkRenderer.UpdateChunk(meshData);
         }
+        gameManager.SpawnPlayer();
     }
 
     public void ClearWorld() {
@@ -63,10 +65,6 @@ public class World : MonoBehaviour {
             Destroy(chunk.gameObject);
         }
         chunkDictionary.Clear();
-    }
-
-    private void GenerateVoxels(ChunkData data) {
-        
     }
 
     internal BlockType GetBlockFromChunkCoordinates(ChunkData chunkData, Vector3Int coords) {
@@ -91,13 +89,8 @@ public class World : MonoBehaviour {
         return null;
     }
 
-    internal BlockType GetBlockFromWorldCords(Vector3Int coords)
-    {
+    internal BlockType GetBlockFromWorldCords(Vector3Int coords) {
         ChunkData currChunk = GetChunkDataFromWorldCords(coords);
         return GetBlockFromChunkCoordinates(currChunk, coords);
-    }
-
-    internal void LoadAdditionalChunksRequest(GameObject player) {
-        GenerateWorld();
     }
 }

@@ -212,7 +212,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.9, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8729433128320709197}
@@ -313,7 +313,7 @@ MonoBehaviour:
   groundCheck: {fileID: 1834885447337761111}
   groundMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   isSprinting: 0
   isMoving: 0
   orientation: {fileID: 3178653519007409915}
