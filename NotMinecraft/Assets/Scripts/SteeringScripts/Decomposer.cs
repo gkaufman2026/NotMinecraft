@@ -17,7 +17,7 @@ public class Decomposer
     {
         if (mCurrentPath.Count > 0)
         {
-            return mCurrentPath[0];
+            return mCurrentPath[mCurrentPath.Count - 1];
         }
 
         return null;
@@ -27,9 +27,10 @@ public class Decomposer
     {
         if (mCurrentPath.Count > 0)
         {
-            Vector3Int currSubGoal = mCurrentPath[0];
+            Vector3Int currSubGoal = Vector3Int.zero;
             while (mCurrentPath.Count > 0)
             {
+                currSubGoal = mCurrentPath[mCurrentPath.Count - 1];
                 float squaredDist = (characterPos - currSubGoal).sqrMagnitude;
 
                 if (squaredDist <= satisfactionRadiusSquared)

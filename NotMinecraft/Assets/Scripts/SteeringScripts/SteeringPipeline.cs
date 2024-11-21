@@ -7,8 +7,6 @@ using UnityEngine.UIElements;
 
 public class SteeringPipeline : MonoBehaviour
 {
-    [SerializeField] private World world;
-
     Targeter targeter = new(); //For determining the target action/goal
     Decomposer decomposer = new(); //For determining what sub goal in the path to go to
     List<Constraint> constraints = new(); //For determining if a movement is invalid and fix movment
@@ -16,7 +14,7 @@ public class SteeringPipeline : MonoBehaviour
 
     private int mConstraintSteps = 2;
 
-    public void buildPathToGoal(Vector3Int goal)
+    public void buildPathToGoal(Vector3Int goal, ref World world)
     {
         targeter.addGoal(goal);
 
@@ -56,8 +54,6 @@ public class SteeringPipeline : MonoBehaviour
         if (currGoal != null )
         {
             currGoal = decomposer.getCurrSubGoal(transform.position); //Change this to maybe only have one path at a time and handle path creation and destruction here
-            Debug.Log(currGoal.ToString());
-            Debug.Log(decomposer.getCurrPath().Count);
 
             if (currGoal != null)
             {

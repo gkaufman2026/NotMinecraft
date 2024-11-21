@@ -82,7 +82,7 @@ public static class PathMaker
 
                     //Calculates weight by converting positions to a unit cube (since the noise values are from 0-1)
                     //and then finds the magnatude of the displacment vector which is added to the previous node's weight
-                    newNeighborNode.weight = currNode.weight + 1; //Updates neighbor weights
+                    newNeighborNode.weight = currNode.weight + (neighbor - currNode.centerPoint).magnitude; //Updates neighbor weights
 
                     newNeighborNode.heuristic = newNeighborNode.calculateEuclideanHeuristic(goalPoint); //Calculates node heuristic
 
@@ -128,8 +128,8 @@ public static class PathMaker
             {
                 for (int k = -1; k <= 1; k++) {
                     Vector3Int checkPoint = currPoint + new Vector3Int(i, j, k);
-                    //BlockType currBlockType = world.GetBlockFromWorldCords(checkPoint);
-                    if (!frontierSet.Contains(checkPoint) && !visited.ContainsKey(checkPoint) && checkPoint != currPoint) //&& (currBlockType == BlockType.AIR || currBlockType == BlockType.WATER))
+                    BlockType currBlockType = world.GetBlockFromWorldCords(checkPoint);
+                    if (!frontierSet.Contains(checkPoint) && !visited.ContainsKey(checkPoint) && (currBlockType == BlockType.AIR || currBlockType == BlockType.WATER) && checkPoint != currPoint)
                     {
                         visitables.Add(checkPoint);
                     }

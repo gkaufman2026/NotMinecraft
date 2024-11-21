@@ -26,8 +26,9 @@ public class Actuator
 
         Action currAction = new Action();
 
-        if (yDiffSquared == 1)
+        if (yDiffSquared == 1f)
         {
+            Debug.Log("JUMP!!");
             currAction.jumpVelocity = 1f;
         }
 
@@ -36,7 +37,7 @@ public class Actuator
         Mob mobData = character.GetComponent<Mob>();
         if (mobData != null)
         {
-            currAction.walkingVelocity *= mobData.WalkSpeed * Time.fixedDeltaTime;
+            currAction.walkingVelocity *= mobData.WalkSpeed;
             currAction.jumpVelocity *= mobData.MaxJumpPower;
         }
 

@@ -3,29 +3,29 @@ using ImGuiNET;
 using System;
 
 public class TerrainUI : MonoBehaviour {
-    private World world;
-    private CameraTest movement;
+    protected World world;
+    protected CameraTest movement;
 
     // Default values
-    private int defaultMapSize, defaultChunkSize, defaultChunkHeight, defaultWaterThreshold, defaultStoneTreshold, defaultSandThreshold;
-    private float defaultNoiseScale;
-    private Vector3 defaultOffset;
+    protected int defaultMapSize, defaultChunkSize, defaultChunkHeight, defaultWaterThreshold, defaultStoneTreshold, defaultSandThreshold;
+    protected float defaultNoiseScale;
+    protected Vector3 defaultOffset;
 
     // Min Values
-    private const int MIN_MAP_SIZE = 1, MIN_CHUNK_SIZE = 1, MIN_CHUNK_HEIGHT = 50;
-    private const int MIN_WATER_THRESHOLD = 1, MIN_STONE_THRESHOLD = 1, MIN_SAND_THRESHOLD = 1;
-    private const float MIN_NOISE_SCALE = 0f;
+    protected const int MIN_MAP_SIZE = 1, MIN_CHUNK_SIZE = 1, MIN_CHUNK_HEIGHT = 50;
+    protected const int MIN_WATER_THRESHOLD = 1, MIN_STONE_THRESHOLD = 1, MIN_SAND_THRESHOLD = 1;
+    protected const float MIN_NOISE_SCALE = 0f;
 
     // Max Values
-    private const int MAX_MAP_SIZE = 20, MAX_CHUNK_SIZE = 20, MAX_CHUNK_HEIGHT = 200;
-    private const int MAX_WATER_THRESHOLD = 50, MAX_STONE_THRESHOLD = 75, MAX_SAND_THRESHOLD = 10;
-    private const float MAX_NOISE_SCALE = 0.05f;
+    protected const int MAX_MAP_SIZE = 20, MAX_CHUNK_SIZE = 20, MAX_CHUNK_HEIGHT = 200;
+    protected const int MAX_WATER_THRESHOLD = 50, MAX_STONE_THRESHOLD = 75, MAX_SAND_THRESHOLD = 10;
+    protected const float MAX_NOISE_SCALE = 0.05f;
 
     // Settings for Procedural Generation
-    private const float labelWidth = 130.0f, checkboxWidth = 150f, width = 100f, presetWidth = 50f;
+    protected const float labelWidth = 130.0f, checkboxWidth = 150f, width = 100f, presetWidth = 50f;
 
     // UI Variables
-    private float spacing, totalWidth, windowWidth, cursorPosX;
+    protected float spacing, totalWidth, windowWidth, cursorPosX;
 
     private void Awake() {
         world = FindAnyObjectByType<World>();
@@ -42,20 +42,16 @@ public class TerrainUI : MonoBehaviour {
         defaultOffset = world.offset;
     }
 
-    void OnEnable() {
+    private void OnEnable() {
         ImGuiUn.Layout += OnLayout;
     }
 
-    void OnDisable() {
+    private void OnDisable() {
         ImGuiUn.Layout -= OnLayout;
     }
 
-    void OnLayout() {
-        if (!ImGui.Begin("Terrain Generation")) {
-            ImGui.End();
-            return;
-        }
-
+    protected virtual void renderImGuiThings()
+    {
         // Adding Sliders for Custom Generation Options
         AddSliders();
 
@@ -74,12 +70,13 @@ public class TerrainUI : MonoBehaviour {
         GenerateCenteredLayout();
 
         // Buttons to Generate & Clear Terrain
-        if (ImGui.Button("Generate", new Vector2(width, 20))) {  world.GenerateWorld(); }
-        ImGui.SameLine(); 
+        if (ImGui.Button("Generate", new Vector2(width, 20))) { world.GenerateWorld(); }
+        ImGui.SameLine();
         if (ImGui.Button("Clear", new Vector2(width, 20))) { world.ClearWorld(); }
 
         ImGui.SetCursorPosX(cursorPosX + width / 2);
-        if (ImGui.Button("Reset", new Vector2(width, 20))) {
+        if (ImGui.Button("Reset", new Vector2(width, 20)))
+        {
             world.mapSizeInChunks = defaultMapSize;
             world.chunkSize = defaultChunkSize;
             world.chunkHeight = defaultChunkHeight;
@@ -89,6 +86,15 @@ public class TerrainUI : MonoBehaviour {
             world.noiseScale = defaultNoiseScale;
             world.offset = defaultOffset;
         }
+    }
+
+    private void OnLayout() {
+        if (!ImGui.Begin("Terrain Generation")) {
+            ImGui.End();
+            return;
+        }
+
+       renderImGuiThings();
 
         ImGui.End();
     }
