@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -67,7 +66,7 @@ public class World : MonoBehaviour {
         chunkDictionary.Clear();
     }
 
-    internal BlockType GetBlockFromChunkCoordinates(ChunkData chunkData, Vector3Int coords) {
+    internal BlockType GetBlockFromChunkCoordinates(ChunkData chunkData, Vector3Int coords) { 
         Vector3Int pos = Chunk.ChunkPositionFromBlockCoords(this, coords);
         chunkDataDictionary.TryGetValue(pos, out ChunkData containerChunk);
 
@@ -77,7 +76,7 @@ public class World : MonoBehaviour {
         return Chunk.GetBlockFromChunkCoordinates(containerChunk, blockInChunkCoordinates);
     }
 
-    internal ChunkData GetChunkDataFromWorldCords(Vector3Int coords)
+    internal ChunkData GetChunkDataFromWorldCoords(Vector3Int coords)
     {
         Vector3Int chunkGridCords = coords / chunkSize;
         if (chunkDataDictionary.ContainsKey(chunkGridCords))
@@ -89,8 +88,8 @@ public class World : MonoBehaviour {
         return null;
     }
 
-    internal BlockType GetBlockFromWorldCords(Vector3Int coords) {
-        ChunkData currChunk = GetChunkDataFromWorldCords(coords);
+    internal BlockType GetBlockFromWorldCoords(Vector3Int coords) {
+        ChunkData currChunk = GetChunkDataFromWorldCoords(coords);
         return GetBlockFromChunkCoordinates(currChunk, coords);
     }
 }

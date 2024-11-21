@@ -6,8 +6,8 @@ using UnityEngine;
 public class PathUI : TerrainUI
 {
     [SerializeField] private GameObject _mMobPrefab;
-    private Vector3 mStartPos = new Vector3(0, -6, 0);
-    private Vector3 mGoalPos = Vector3.zero;
+    private Vector3 mStartPos = new Vector3(35, 30, 10);
+    private Vector3 mGoalPos = new Vector3(-2, 40 , 55);
 
     private void OnEnable()
     {
@@ -59,7 +59,7 @@ public class PathUI : TerrainUI
 
     private void OnLayout()
     {
-        if (!ImGui.Begin("Terrain and Path Generation"))
+        if (!ImGui.Begin("Not Minecraft"))
         {
             ImGui.End();
             return;

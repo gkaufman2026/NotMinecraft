@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -6,7 +5,7 @@ public class GameManager : MonoBehaviour
     public GameObject playerPrefab;
     public Vector3Int playerPos;
     public Vector3 playerSpawnPos;
-    public World world;
+    [HideInInspector] public World world;
 
     [SerializeField] private Vector3Int currentChunkCenter = Vector3Int.zero;
     [HideInInspector] public GameObject player;
