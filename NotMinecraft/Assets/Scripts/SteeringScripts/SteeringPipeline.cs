@@ -79,7 +79,7 @@ public class SteeringPipeline : MonoBehaviour
             }
         }
 
-        Debug.Log("DONE!!");
+        //Debug.Log("DONE!!");
         Actuator.Action defaultAction = new Actuator.Action(Vector3.zero, 0, false);
         return defaultAction;
     }

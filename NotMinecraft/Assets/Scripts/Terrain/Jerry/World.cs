@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class World : MonoBehaviour {
@@ -41,6 +42,7 @@ public class World : MonoBehaviour {
                 ChunkData data = new(chunkSize, chunkHeight, this, chunkPosition);
 
                 ChunkData terrainData = terrainGenerator.GenerateChunkData(data, seedOffset);
+                Debug.Log(terrainData.worldPos);
 
                 chunkDataDictionary.Add(terrainData.worldPos, terrainData);
             }
@@ -78,7 +80,7 @@ public class World : MonoBehaviour {
 
     internal ChunkData GetChunkDataFromWorldCoords(Vector3Int coords)
     {
-        Vector3Int chunkGridCords = coords / chunkSize;
+        Vector3Int chunkGridCords = (coords / chunkSize) * chunkSize;
         if (chunkDataDictionary.ContainsKey(chunkGridCords))
         {
             return chunkDataDictionary[chunkGridCords];
@@ -88,8 +90,14 @@ public class World : MonoBehaviour {
         return null;
     }
 
-    internal BlockType GetBlockFromWorldCoords(Vector3Int coords) {
-        ChunkData currChunk = GetChunkDataFromWorldCoords(coords);
-        return GetBlockFromChunkCoordinates(currChunk, coords);
+    internal BlockType GetBlockFromWorldCoords(World world, Vector3Int coords) {
+        Vector3Int chunkGridCords = Chunk.ChunkPositionFromBlockCoords(world, coords);
+        if (chunkDataDictionary.ContainsKey(chunkGridCords))
+        {
+            return world.GetBlockFromChunkCoordinates(chunkDataDictionary[chunkGridCords], coords);
+        }
+
+        Debug.Log("Could not find block in chunk");
+        return BlockType.AIR;
     }
 }
