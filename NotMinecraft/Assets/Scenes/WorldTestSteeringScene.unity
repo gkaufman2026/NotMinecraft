@@ -155,7 +155,7 @@ MonoBehaviour:
   chunkSize: 16
   chunkHeight: 71
   chunkPrefab: {fileID: 4443192061081385954, guid: 1c00b035e263f934a9711fcf71e3336a, type: 3}
-  offset: {x: -96, y: 0, z: -96}
+  offset: {x: -96, y: 1, z: -96}
   seedOffset: {x: 0, y: 0}
   terrainGenerator: {fileID: 601969144}
   gameManager: {fileID: 1476115981}
@@ -432,8 +432,6 @@ MonoBehaviour:
   Next: {fileID: 0}
   stoneThreshold: 0.5
   stoneNoiseSettings: {fileID: 11400000, guid: 6c74f51dba9bfd64baaa5a8c9578c872, type: 2}
-  domainWarping: {fileID: 119574784}
-  useDomainWarping: 0
 --- !u!4 &576604482
 Transform:
   m_ObjectHideFlags: 0

@@ -42,9 +42,17 @@ public class Mob : MonoBehaviour
     private void FixedUpdate()
     {
         Actuator.Action currentAction = mSteeringPipeline.getSteering();
-        mRigidbody.AddForce(new Vector3(currentAction.walkingVelocity.x, 0, currentAction.walkingVelocity.y));
 
-        mRigidbody.AddForce(new Vector3(0, currentAction.jumpVelocity, 0));
+        if (!currentAction.idle)
+        {
+            mRigidbody.AddForce(new Vector3(currentAction.walkingVelocity.x, 0, currentAction.walkingVelocity.y));
+            mRigidbody.AddForce(new Vector3(0, currentAction.jumpVelocity, 0));
+        }
+        else
+        {
+            float velMag = mRigidbody.velocity.sqrMagnitude;
+            mRigidbody.velocity = mRigidbody.velocity * 0.9f;
+        }
 
         //mRigidbody.velocity += new Vector3(currentAction.walkingVelocity.x, 0, currentAction.walkingVelocity.y);
 

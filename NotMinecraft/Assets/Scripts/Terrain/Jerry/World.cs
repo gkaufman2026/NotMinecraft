@@ -22,12 +22,12 @@ public class World : MonoBehaviour {
         chunksParent = new("Chunks");
     }
 
-    private void FixedUpdate() {
-        foreach (ChunkData data in chunkDataDictionary.Values) {
-            Vector3 adjustedPosition = data.worldPos + offset;
-            chunksParent.transform.position = adjustedPosition;
-        }
-    }
+    //private void FixedUpdate() {
+    //    foreach (ChunkData data in chunkDataDictionary.Values) {
+    //        Vector3 adjustedPosition = data.worldPos + offset;
+    //        chunksParent.transform.position = adjustedPosition;
+    //    }
+    //}
 
     public void GenerateWorld() {
         chunkDataDictionary.Clear();

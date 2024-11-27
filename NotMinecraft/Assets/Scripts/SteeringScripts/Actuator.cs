@@ -10,12 +10,14 @@ public class Actuator
         public Vector2 walkingVelocity;
         public float jumpVelocity;
         public bool openDoor;
+        public bool idle;
 
-        public Action(Vector3 walkingVelocity, float jumpVelocity, bool openDoor)
+        public Action(Vector3 walkingVelocity, float jumpVelocity, bool openDoor, bool isIdle)
         {
             this.walkingVelocity = walkingVelocity;
             this.jumpVelocity = jumpVelocity;
             this.openDoor = openDoor;
+            this.idle = isIdle;
         }
     }
 
@@ -43,6 +45,7 @@ public class Actuator
 
         //Add way to find a door here to mark if the character should open the door
         currAction.openDoor = false;
+        currAction.idle = false;
 
         return currAction;
     }
