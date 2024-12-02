@@ -129,9 +129,13 @@ public static class PathMaker
                 for (int k = -1; k <= 1; k++) {
                     Vector3Int checkPoint = currPoint + new Vector3Int(i, j, k);
                     BlockType currBlockType = world.GetBlockFromWorldCoords(world, checkPoint);
+                    BlockType currBlockBelowType = world.GetBlockFromWorldCoords(world, checkPoint + Vector3Int.down);
                     if (!frontierSet.Contains(checkPoint) && !visited.ContainsKey(checkPoint) && (currBlockType == BlockType.AIR || currBlockType == BlockType.WATER) && checkPoint != currPoint)
                     {
-                        visitables.Add(checkPoint);
+                        if (currBlockBelowType != BlockType.AIR && currBlockBelowType != BlockType.WATER)
+                        {
+                            visitables.Add(checkPoint);
+                        }
                     }
                 }
             }

@@ -28,7 +28,7 @@ public class Actuator
 
         Action currAction = new Action();
 
-        if (yDiffSquared == 1f)
+        if (yDiffSquared >= 1f && dirVec.y > 0)
         {
             Debug.Log("JUMP!!");
             currAction.jumpVelocity = 1f;

@@ -51,7 +51,8 @@ public class Mob : MonoBehaviour
         else
         {
             float velMag = mRigidbody.velocity.sqrMagnitude;
-            mRigidbody.velocity = mRigidbody.velocity * 0.9f;
+            mRigidbody.velocity *= 0.9f;
+            mRigidbody.angularVelocity *= 0.9f;
         }
 
         //mRigidbody.velocity += new Vector3(currentAction.walkingVelocity.x, 0, currentAction.walkingVelocity.y);
