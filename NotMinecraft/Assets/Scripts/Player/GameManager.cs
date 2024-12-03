@@ -10,11 +10,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Vector3Int currentChunkCenter = Vector3Int.zero;
     [HideInInspector] public GameObject player;
 
+    private Camera mainCamera;
+
+    private void Awake() {
+        mainCamera = GetComponent<CameraSwitcher>().mainCamera;
+    }
+
     public void SpawnPlayer() {
         if (player != null) return;
 
         if (world != null) {
             player = Instantiate(playerPrefab, playerSpawnPos, Quaternion.identity);
+            mainCamera.transform.position = new Vector3(playerSpawnPos.x, playerSpawnPos.y + 5, playerSpawnPos.z); 
             CheckWorld();
         }
     }

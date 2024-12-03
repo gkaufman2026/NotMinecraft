@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class CameraSwitcher : MonoBehaviour {
-    [SerializeField] private Camera mainCamera;
+    [SerializeField] public Camera mainCamera;
     [SerializeField] private GameObject player;
     [SerializeField] KeyCode spectactorKey = KeyCode.F3;
 
@@ -32,8 +32,10 @@ public class CameraSwitcher : MonoBehaviour {
     void Update() {
         if (Input.GetKeyDown(spectactorKey)) {
             mainCamera.enabled = !mainCamera.enabled;
+            mainCamera.GetComponent<CameraTest>().enabled = mainCamera.enabled;
             if (playerCamera != null) {
                 playerCamera.enabled = !playerCamera.enabled;
+                player.GetComponentInChildren<PlayerMovement>().enabled = playerCamera.enabled;
             }
         }
     }

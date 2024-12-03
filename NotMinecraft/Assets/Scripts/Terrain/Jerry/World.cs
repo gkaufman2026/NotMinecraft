@@ -6,7 +6,6 @@ public class World : MonoBehaviour {
     public int mapSizeInChunks = 6;
     public int chunkSize = 16, chunkHeight = 100;
     public GameObject chunkPrefab;
-    public Vector3 offset;
     public Vector2Int seedOffset;
     public TerrainGenerator terrainGenerator;
     public GameManager gameManager;
