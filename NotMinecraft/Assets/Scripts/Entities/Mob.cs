@@ -31,6 +31,7 @@ public class Mob : MonoBehaviour
     {
         mRigidbody = GetComponent<Rigidbody>();
         mSteeringPipeline = GetComponent<SteeringPipeline>();
+        mRigidbody.drag = 3;
     }
 
     private void Start()
@@ -46,12 +47,14 @@ public class Mob : MonoBehaviour
         if (!currentAction.idle)
         {
             mRigidbody.AddForce(new Vector3(currentAction.walkingVelocity.x, 0, currentAction.walkingVelocity.y));
-            mRigidbody.AddForce(new Vector3(0, currentAction.jumpVelocity, 0));
+            mRigidbody.AddForce(new Vector3(0, currentAction.jumpVelocity - mRigidbody.velocity.y, 0));
+            mRigidbody.angularVelocity = Vector3.zero;
+            Vector3 target = new Vector3(mRigidbody.velocity.x, 0, mRigidbody.velocity.z);
+            transform.forward = Vector3.Lerp(transform.forward, target, 0.2f);
         }
         else
         {
             float velMag = mRigidbody.velocity.sqrMagnitude;
-            mRigidbody.velocity *= 0.9f;
             mRigidbody.angularVelocity *= 0.9f;
         }
 
