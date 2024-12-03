@@ -51,8 +51,20 @@ MonoBehaviour:
     isSolid: 0
     hasCollider: 0
   - blockType: 6
+    up: {x: 1, y: 1}
+    side: {x: 1, y: 1}
+    down: {x: 1, y: 1}
+    isSolid: 1
+    hasCollider: 1
+  - blockType: 7
+    up: {x: 2, y: 2}
+    side: {x: 2, y: 0}
+    down: {x: 2, y: 0}
+    isSolid: 1
+    hasCollider: 1
+  - blockType: 8
     up: {x: 2, y: 1}
-    side: {x: 2, y: 1}
-    down: {x: 2, y: 1}
+    side: {x: 2, y: 0}
+    down: {x: 2, y: 0}
     isSolid: 1
     hasCollider: 1

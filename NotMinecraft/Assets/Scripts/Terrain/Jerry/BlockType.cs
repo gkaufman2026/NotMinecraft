@@ -5,5 +5,7 @@ public enum BlockType {
     DIRT,
     STONE,
     WATER,
-    SAND
+    SAND,
+    BED_TOP,
+    BED_BOTTOM
 }
