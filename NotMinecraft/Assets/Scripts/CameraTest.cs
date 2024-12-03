@@ -4,10 +4,11 @@ public class CameraTest : MonoBehaviour {
     public float movementSpeed = 10f, fastMovementSpeed = 25f, sensitivity = 3f;
     private bool isLooking = false;
 
+    private Vector2 rot;
+
     void Update() {
         bool isSprinting = Input.GetKey(KeyCode.LeftShift);
         float movementSpeed = isSprinting ? fastMovementSpeed : this.movementSpeed;
-        Vector2 rot;
 
         if (Input.GetKey(KeyCode.A)) {
             transform.position = transform.position + (movementSpeed * Time.deltaTime * -transform.right);
@@ -26,9 +27,14 @@ public class CameraTest : MonoBehaviour {
         }
 
         if (isLooking) {
-            rot.x = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivity;
-            rot.y = transform.localEulerAngles.x - Input.GetAxis("Mouse Y") * sensitivity;
-            transform.localEulerAngles = new Vector3(rot.y, rot.x, 0f);
+            float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
+
+            rot.x -= mouseY;
+            rot.y += mouseX;
+            rot.x = Mathf.Clamp(rot.x, -90f, 90f);
+
+            transform.localRotation = Quaternion.Euler(rot.x, rot.y, 0f);
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
