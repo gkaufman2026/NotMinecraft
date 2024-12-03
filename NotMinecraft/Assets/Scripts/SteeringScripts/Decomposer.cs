@@ -6,7 +6,8 @@ using UnityEngine;
 public class Decomposer
 {
     private List<Vector3Int> mCurrentPath = new();
-    private float satisfactionRadiusSquared = 0.5f;
+    private float satisfactionXSquared = 0.5f;
+    private float satisfactionYSquared = 1f;
 
     public List<Vector3Int> getCurrPath()
     {
@@ -31,9 +32,11 @@ public class Decomposer
             while (mCurrentPath.Count > 0)
             {
                 currSubGoal = mCurrentPath[mCurrentPath.Count - 1];
-                float squaredDist = (characterPos - currSubGoal).sqrMagnitude;
+                Vector3 dist = characterPos - currSubGoal;
+                float squaredDistX = dist.x * dist.x;
+                float squaredDistY = dist.y * dist.y;
 
-                if (squaredDist <= satisfactionRadiusSquared)
+                if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared))
                 {
                     achievedCurrSubGoal();
                 } 
@@ -65,9 +68,11 @@ public class Decomposer
 
     public void updateCurrPathGoals(Vector3 characterPos, Vector3Int subGoal)
     {
-        float squaredDist = (characterPos - subGoal).sqrMagnitude;
+        Vector3 dist = characterPos - subGoal;
+        float squaredDistX = dist.x * dist.x;
+        float squaredDistY = dist.y * dist.y;
 
-        if (squaredDist <= satisfactionRadiusSquared)
+        if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared))
         {
             achievedCurrSubGoal();
         }
