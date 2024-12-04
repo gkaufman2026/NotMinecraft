@@ -49,6 +49,14 @@ public static class Chunk {
         return chunkData.world.GetBlockFromChunkCoordinates(chunkData, new Vector3Int(chunkData.worldPos.x + x, chunkData.worldPos.y + y, chunkData.worldPos.z + z));
     }
 
+    public static bool IsSolidBlock(ChunkData data, int x, int y, int z) {
+        return BlockDataManager.textureList[GetBlockFromChunkCoordinates(data, x, y, z)].isSolid;
+    }
+
+    public static bool HasCollider(ChunkData data, int x, int y, int z) {
+        return BlockDataManager.textureList[GetBlockFromChunkCoordinates(data, x, y, z)].hasCollider;
+    }
+
     // Sets the block based off the chunk's position
     public static void SetBlock(ChunkData chunkData, Vector3Int localPosition, BlockType block) {
         if (IsVectorInRange(chunkData, localPosition)) {

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class World : MonoBehaviour {
@@ -21,13 +20,6 @@ public class World : MonoBehaviour {
         chunksParent = new("Chunks");
     }
 
-    //private void FixedUpdate() {
-    //    foreach (ChunkData data in chunkDataDictionary.Values) {
-    //        Vector3 adjustedPosition = data.worldPos + offset;
-    //        chunksParent.transform.position = adjustedPosition;
-    //    }
-    //}
-
     public void GenerateWorld() {
         chunkDataDictionary.Clear();
         foreach (ChunkRenderer chunk in chunkDictionary.Values) {
@@ -38,10 +30,8 @@ public class World : MonoBehaviour {
         for (int x = 0; x < mapSizeInChunks; x++) {
             for (int z = 0; z < mapSizeInChunks; z++) {
                 Vector3Int chunkPosition = new(x * chunkSize, 0, z * chunkSize);
-                ChunkData data = new(chunkSize, chunkHeight, this, chunkPosition);
-
+                ChunkData data = new(chunkSize, chunkHeight, this, chunkPosition); 
                 ChunkData terrainData = terrainGenerator.GenerateChunkData(data, seedOffset);
-                Debug.Log(terrainData.worldPos);
 
                 chunkDataDictionary.Add(terrainData.worldPos, terrainData);
             }
@@ -80,8 +70,7 @@ public class World : MonoBehaviour {
     internal ChunkData GetChunkDataFromWorldCoords(Vector3Int coords)
     {
         Vector3Int chunkGridCords = (coords / chunkSize) * chunkSize;
-        if (chunkDataDictionary.ContainsKey(chunkGridCords))
-        {
+        if (chunkDataDictionary.ContainsKey(chunkGridCords)) {
             return chunkDataDictionary[chunkGridCords];
         }
 

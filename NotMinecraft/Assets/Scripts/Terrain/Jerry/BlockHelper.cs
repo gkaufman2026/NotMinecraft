@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class BlockHelper {
-    private static Direction[] directions = {
+    public static Direction[] directions = {
         Direction.BACKWARDS,
         Direction.DOWN,
         Direction.FORWARD,
