@@ -6,8 +6,8 @@ using UnityEngine;
 public class PathUI : TerrainUI
 {
     [SerializeField] private GameObject _mMobPrefab;
-    private Vector3 mStartPos = new Vector3(36, 10, 3);
-    private Vector3 mGoalPos = new Vector3(97, 17, 2);
+    private Vector3 mStartPos = new Vector3(78, 10, 27);
+    private Vector3 mGoalPos = new Vector3(70, 10, 70);
 
     private void OnEnable()
     {

@@ -7,6 +7,7 @@ public class Decomposer
 {
     private List<Vector3Int> mCurrentPath = new();
     private float satisfactionXSquared = 0.5f;
+    private float satisfactionZSquared = 0.5f;
     private float satisfactionYSquared = 1f;
 
     public List<Vector3Int> getCurrPath()
@@ -35,8 +36,9 @@ public class Decomposer
                 Vector3 dist = characterPos - currSubGoal;
                 float squaredDistX = dist.x * dist.x;
                 float squaredDistY = dist.y * dist.y;
+                float squaredDistZ = dist.z * dist.z;
 
-                if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared))
+                if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared) && (squaredDistZ <= satisfactionZSquared))
                 {
                     achievedCurrSubGoal();
                 } 
@@ -57,6 +59,13 @@ public class Decomposer
         return null;
     }
 
+    public void setCurrSubGoal(Vector3Int newSubGoal)
+    {
+        if (mCurrentPath.Count > 0)
+        {
+            mCurrentPath[mCurrentPath.Count - 1] = newSubGoal;
+        }
+    }
     public void achievedCurrSubGoal()
     {
         Nullable<Vector3Int> currSubGoal = getCurrSubGoal();
@@ -71,8 +80,9 @@ public class Decomposer
         Vector3 dist = characterPos - subGoal;
         float squaredDistX = dist.x * dist.x;
         float squaredDistY = dist.y * dist.y;
+        float squaredDistZ = dist.z * dist.z;
 
-        if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared))
+        if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared) && (squaredDistZ <= satisfactionZSquared))
         {
             achievedCurrSubGoal();
         }

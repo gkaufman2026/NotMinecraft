@@ -160,4 +160,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mWalkSpeed: 14
-  mMaxJumpPower: 600
+  mMaxJumpPower: 500

@@ -31,6 +31,7 @@ public class Mob : MonoBehaviour
     {
         mRigidbody = GetComponent<Rigidbody>();
         mSteeringPipeline = GetComponent<SteeringPipeline>();
+        mSteeringPipeline.addConstraint(new ZombieAvoidance());
         mRigidbody.drag = 3;
     }
 

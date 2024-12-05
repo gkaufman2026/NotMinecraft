@@ -29,16 +29,46 @@ public class SteeringPipeline : MonoBehaviour
         }
 
         //Runs through each point and makes a line between them, adding up total path length
+        List<Vector3Int> path = decomposer.getCurrPath();
         float totalLength = 0;
-        for (int i = 0; i < decomposer.getCurrPath().Count - 1; i++)
+        for (int i = 0; i < path.Count - 1; i++)
         {
 
             GameObject empty = new GameObject();
             LineRenderer line = empty.AddComponent<LineRenderer>();
 
             //Converts points into world space
-            Vector3 pos1 = new Vector3(decomposer.getCurrPath()[i].x, decomposer.getCurrPath()[i].y, decomposer.getCurrPath()[i].z);
-            Vector3 pos2 = new Vector3(decomposer.getCurrPath()[i + 1].x, decomposer.getCurrPath()[i + 1].y, decomposer.getCurrPath()[i+1].z);
+            Vector3 pos1 = new Vector3(path[i].x, path[i].y, path[i].z);
+            Vector3 pos2 = new Vector3(path[i + 1].x, path[i + 1].y, path[i+1].z);
+            totalLength += (pos2 - pos1).magnitude;
+            line.enabled = true;
+            empty.transform.position = pos1;
+            line.SetPosition(0, pos1);
+            line.SetPosition(1, pos2);
+        }
+    }
+
+    public void UpdatePathVisual()
+    {
+        //Clears previous line renderers
+        LineRenderer[] lineRenderers = FindObjectsOfType<LineRenderer>();
+        foreach (LineRenderer lr in lineRenderers)
+        {
+            Destroy(lr.gameObject);
+        }
+
+        //Runs through each point and makes a line between them, adding up total path length
+        List<Vector3Int> path = decomposer.getCurrPath();
+        float totalLength = 0;
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+
+            GameObject empty = new GameObject();
+            LineRenderer line = empty.AddComponent<LineRenderer>();
+
+            //Converts points into world space
+            Vector3 pos1 = new Vector3(path[i].x, path[i].y, path[i].z);
+            Vector3 pos2 = new Vector3(path[i + 1].x, path[i + 1].y, path[i + 1].z);
             totalLength += (pos2 - pos1).magnitude;
             line.enabled = true;
             empty.transform.position = pos1;
@@ -53,7 +83,7 @@ public class SteeringPipeline : MonoBehaviour
 
         if (currGoal != null )
         {
-            currGoal = decomposer.getCurrSubGoal(transform.position); //Change this to maybe only have one path at a time and handle path creation and destruction here
+            currGoal = decomposer.getCurrSubGoal(transform.position); 
 
             if (currGoal != null)
             {
@@ -64,8 +94,15 @@ public class SteeringPipeline : MonoBehaviour
                     {
                         if (constraint.isViolated(gameObject, startPos, (Vector3Int)currGoal))
                         {
-                            currGoal = constraint.suggestNewGoal(gameObject, startPos, (Vector3Int)currGoal);
-                            goto skipReturn; //DOUBLE CHECK TO SEE IF THIS WORKS 
+                            currGoal = constraint.suggestNewGoal(gameObject, startPos, (Vector3Int)currGoal); //Make sure that this changes sub goal and also handles player position
+
+                            if (currGoal != null)
+                            {
+                                decomposer.setCurrSubGoal((Vector3Int)currGoal);
+                            }
+
+                            UpdatePathVisual();
+                            goto skipReturn;
                         }
                     }
 
@@ -79,8 +116,13 @@ public class SteeringPipeline : MonoBehaviour
             }
         }
 
-        //Debug.Log("DONE!!");
+        Debug.Log("DONE!!");
         Actuator.Action defaultAction = new Actuator.Action(Vector3.zero, 0, false, true);
         return defaultAction;
+    }
+
+    public void addConstraint(Constraint constraint)
+    {
+        constraints.Add(constraint);
     }
 }
