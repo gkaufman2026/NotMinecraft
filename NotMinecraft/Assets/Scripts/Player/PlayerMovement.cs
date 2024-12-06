@@ -35,8 +35,6 @@ public class PlayerMovement : MonoBehaviour {
     [HideInInspector] public bool isSprinting;
     [HideInInspector] public bool isMoving;
 
-    [SerializeField] Transform orientation;
-
     private Vector3 moveDirection;
     private Vector2 movement;
     private Rigidbody rb;
@@ -71,7 +69,7 @@ public class PlayerMovement : MonoBehaviour {
     void HandleInput() {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
-        moveDirection = orientation.forward * movement.y + orientation.right * movement.x;
+        moveDirection = gameObject.transform.forward * -movement.y + gameObject.transform.right * -movement.x;
     }
 
     void HandleJump() {
