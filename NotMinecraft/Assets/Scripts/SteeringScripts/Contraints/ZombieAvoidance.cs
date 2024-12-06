@@ -33,7 +33,7 @@ public class ZombieAvoidance : Constraint
 
     public override Vector3Int suggestNewGoal(GameObject character, Vector3 startPos, Vector3Int goalPos)
     {
-        Vector3 directionVec = (goalPos - zombieLocation);
+        /*Vector3 directionVec = (goalPos - zombieLocation);
         Vector3 playerDirectionVec = (character.transform.position - zombieLocation).normalized;
         float maxCoordDif = Mathf.Max(directionVec.x, directionVec.z);
 
@@ -60,18 +60,50 @@ public class ZombieAvoidance : Constraint
         Vector3Int newGoal = new Vector3Int(Mathf.RoundToInt(zombieLocation.x), goalPos.y, Mathf.RoundToInt(zombieLocation.z)) + new Vector3Int(Mathf.RoundToInt(avoidanceVec.x), 0, Mathf.RoundToInt(avoidanceVec.y));
         mMovedAwayLastFrame = true; //This is to stop the player from entering deadlock in case the suggested new goal is forced to be too close
 
-        return newGoal;
+        return newGoal;*/
 
-        /*
+
+        ////////Change to just add force to mob away from zombie
+        
          mMovedAwayLastFrame = true;
         Vector3 directionVec = (goalPos - zombieLocation).normalized;
         Vector3 playerDirectionVec = (character.transform.position - zombieLocation).normalized;
-        float maxCoordDif = Mathf.Max(directionVec.x, directionVec.z);
+        float maxCoordDif = Mathf.Max(playerDirectionVec.x, playerDirectionVec.z);
 
-        Vector3 avoidanceVec = directionVec * (mAvoidanceRadius);
-        Vector3Int newGoal = new Vector3Int(Mathf.RoundToInt(zombieLocation.x), goalPos.y, Mathf.RoundToInt(zombieLocation.z)) + new Vector3Int(Mathf.RoundToInt(avoidanceVec.x), 0, Mathf.RoundToInt(avoidanceVec.z));
-        newGoal += new Vector3Int(Mathf.RoundToInt(directionVec.x), 0, Mathf.RoundToInt(directionVec.z)); //This should move one block past radius
+        Vector2 avoidanceVec = Vector2.zero;
+
+        if (maxCoordDif == playerDirectionVec.x)
+        {
+            if (character.transform.position.x > zombieLocation.x)
+            {
+                float relativeY = goalPos.z - zombieLocation.z;
+                avoidanceVec.x = Mathf.Sqrt(mAvoidanceRadius * mAvoidanceRadius - relativeY * relativeY);
+                avoidanceVec.y = 0;
+            }
+            else
+            {
+                float relativeY = goalPos.z - zombieLocation.z;
+                avoidanceVec.x = -Mathf.Sqrt(mAvoidanceRadius * mAvoidanceRadius - relativeY * relativeY);
+                avoidanceVec.y = 0;
+            }
+        }
+        else if (maxCoordDif == playerDirectionVec.z)
+        {
+            if (character.transform.position.z > zombieLocation.z)
+            {
+                float relativeX = goalPos.x - zombieLocation.x;
+                avoidanceVec.y = Mathf.Sqrt(mAvoidanceRadius * mAvoidanceRadius - relativeX * relativeX);
+                avoidanceVec.x = 0;
+            }
+            else
+            {
+                float relativeX = goalPos.x - zombieLocation.x;
+                avoidanceVec.y = -Mathf.Sqrt(mAvoidanceRadius * mAvoidanceRadius - relativeX * relativeX);
+                avoidanceVec.x = 0;
+            }
+        }
+
+        Vector3Int newGoal = new Vector3Int(Mathf.RoundToInt(zombieLocation.x), goalPos.y, Mathf.RoundToInt(zombieLocation.z)) + new Vector3Int(Mathf.RoundToInt(avoidanceVec.x), 0, Mathf.RoundToInt(avoidanceVec.y));
         return newGoal;
-         */
     }
 }
