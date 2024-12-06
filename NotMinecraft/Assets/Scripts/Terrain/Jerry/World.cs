@@ -46,7 +46,7 @@ public class World : MonoBehaviour {
             chunkRenderer.InitalizeChunk(data);
             chunkRenderer.UpdateChunk(meshData);
         }
-        gameManager.SpawnPlayer();
+        //gameManager.SpawnPlayer();
     }
 
     public void ClearWorld() {

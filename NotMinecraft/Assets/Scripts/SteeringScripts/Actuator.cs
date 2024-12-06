@@ -21,7 +21,7 @@ public class Actuator
         }
     }
 
-    public Action getActionToPerform(GameObject character, Vector3 start, Vector3 goal)
+    public Action getActionToPerform(GameObject character, Vector3 start, Vector3 goal, Vector3 additionalForces)
     {
         Vector3 dirVec = goal - start;
         float yDiffSquared = dirVec.y * dirVec.y;
@@ -39,6 +39,10 @@ public class Actuator
         if (mobData != null)
         {
             currAction.walkingVelocity *= mobData.WalkSpeed;
+            currAction.walkingVelocity += new Vector2(additionalForces.x, additionalForces.z);
+            currAction.walkingVelocity = currAction.walkingVelocity.normalized;
+            currAction.walkingVelocity *= mobData.WalkSpeed;
+
             currAction.jumpVelocity *= mobData.MaxJumpPower;
         }
 

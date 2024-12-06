@@ -6,9 +6,13 @@ using UnityEngine;
 public class Decomposer
 {
     private List<Vector3Int> mCurrentPath = new();
-    private float satisfactionXSquared = 0.5f;
-    private float satisfactionZSquared = 0.5f;
-    private float satisfactionYSquared = 1f;
+    private float satisfactionXSquaredDest = 0.5f;
+    private float satisfactionZSquaredDest = 0.5f;
+    private float satisfactionYSquaredDest = 1f;
+
+    private float satisfactionXSquared = 25f;
+    private float satisfactionZSquared = 25f;
+    private float satisfactionYSquared = 25f;
 
     public List<Vector3Int> getCurrPath()
     {
@@ -19,7 +23,9 @@ public class Decomposer
     {
         if (mCurrentPath.Count > 0)
         {
-            return mCurrentPath[mCurrentPath.Count - 1];
+            Vector3Int currSubGoal = mCurrentPath[mCurrentPath.Count - 1];
+            Vector3Int nextSubGoal;
+            return currSubGoal;
         }
 
         return null;
@@ -38,13 +44,27 @@ public class Decomposer
                 float squaredDistY = dist.y * dist.y;
                 float squaredDistZ = dist.z * dist.z;
 
-                if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared) && (squaredDistZ <= satisfactionZSquared))
+                if (mCurrentPath.Count - 1 != 0)
                 {
-                    achievedCurrSubGoal();
-                } 
+                    if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared) && (squaredDistZ <= satisfactionZSquared))
+                    {
+                        achievedCurrSubGoal();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
                 else
                 {
-                    break;
+                    if ((squaredDistX <= satisfactionXSquaredDest) && (squaredDistY <= satisfactionYSquaredDest) && (squaredDistZ <= satisfactionZSquaredDest))
+                    {
+                        achievedCurrSubGoal();
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
 
@@ -82,9 +102,19 @@ public class Decomposer
         float squaredDistY = dist.y * dist.y;
         float squaredDistZ = dist.z * dist.z;
 
-        if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared) && (squaredDistZ <= satisfactionZSquared))
+        if (mCurrentPath.Count - 1 != 0)
         {
-            achievedCurrSubGoal();
+            if ((squaredDistX <= satisfactionXSquared) && (squaredDistY <= satisfactionYSquared) && (squaredDistZ <= satisfactionZSquared))
+            {
+                achievedCurrSubGoal();
+            }
+        }
+        else
+        {
+            if ((squaredDistX <= satisfactionXSquaredDest) && (squaredDistY <= satisfactionYSquaredDest) && (squaredDistZ <= satisfactionZSquaredDest))
+            {
+                achievedCurrSubGoal();
+            }
         }
     }
 

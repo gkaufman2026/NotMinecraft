@@ -17,7 +17,7 @@ public class SmoothTurning : Constraint
         return true;
     }
 
-    public override Vector3Int suggestNewGoal(GameObject character, Vector3 startPos, Vector3Int goalPos)
+    public override Vector3 suggestNewGoal(GameObject character, Vector3 startPos, Vector3Int goalPos)
     {
         throw new System.NotImplementedException();
     }

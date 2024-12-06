@@ -11,6 +11,7 @@ public class SteeringPipeline : MonoBehaviour
     Decomposer decomposer = new(); //For determining what sub goal in the path to go to
     List<Constraint> constraints = new(); //For determining if a movement is invalid and fix movment
     Actuator actuator = new(); //For determining the actual movement of the character
+    private Vector3 constraintForces;
 
     private int mConstraintSteps = 2;
 
@@ -88,25 +89,27 @@ public class SteeringPipeline : MonoBehaviour
             if (currGoal != null)
             {
                 Vector3 startPos = transform.position;
+                constraintForces = Vector3.zero;
                 for (int i = 0; i < mConstraintSteps; i++)
                 { 
                     foreach (Constraint constraint in constraints)
                     {
                         if (constraint.isViolated(gameObject, startPos, (Vector3Int)currGoal))
                         {
-                            currGoal = constraint.suggestNewGoal(gameObject, startPos, (Vector3Int)currGoal); //Make sure that this changes sub goal and also handles player position
+                            constraintForces += constraint.suggestNewGoal(gameObject, startPos, (Vector3Int)currGoal);
 
-                            if (currGoal != null)
-                            {
-                                decomposer.setCurrSubGoal((Vector3Int)currGoal);
-                            }
+                            ////This is for when the constraint used to return the new subGoal
+                            //if (currGoal != null)
+                            //{
+                            //    decomposer.setCurrSubGoal((Vector3Int)currGoal);
+                            //}
 
-                            UpdatePathVisual();
+                            //UpdatePathVisual();
                             goto skipReturn;
                         }
                     }
 
-                    return actuator.getActionToPerform(gameObject, startPos, (Vector3Int)currGoal);
+                    return actuator.getActionToPerform(gameObject, startPos, (Vector3Int)currGoal, constraintForces);
                     skipReturn: { }
                 }
             }
