@@ -254,6 +254,7 @@ Transform:
   - {fileID: 381734525}
   - {fileID: 1155581443}
   - {fileID: 442186473}
+  - {fileID: 1574673573}
   - {fileID: 1376168677}
   m_Father: {fileID: 1540865238}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -530,7 +531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c67d3f2b2d8e54419c797b818d3f25e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Next: {fileID: 1155581442}
+  Next: {fileID: 1574673574}
   undergroundBlockType: 3
 --- !u!1 &499907350
 GameObject:
@@ -1311,7 +1312,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1319707881}
-  - {fileID: 1574673573}
   m_Father: {fileID: 269794925}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1540865236
@@ -1385,12 +1385,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1574673572}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1376168677}
+  m_Father: {fileID: 269794925}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1574673574
 MonoBehaviour:
