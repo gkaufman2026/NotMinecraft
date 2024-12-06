@@ -46,7 +46,7 @@ public class World : MonoBehaviour {
             chunkRenderer.InitalizeChunk(data);
             chunkRenderer.UpdateChunk(meshData);
         }
-        //gameManager.SpawnPlayer();
+        gameManager.SpawnPlayer();
     }
 
     public void ClearWorld() {
@@ -80,8 +80,7 @@ public class World : MonoBehaviour {
 
     internal BlockType GetBlockFromWorldCoords(World world, Vector3Int coords) {
         Vector3Int chunkGridCords = Chunk.ChunkPositionFromBlockCoords(world, coords);
-        if (chunkDataDictionary.ContainsKey(chunkGridCords))
-        {
+        if (chunkDataDictionary.ContainsKey(chunkGridCords)) {
             return world.GetBlockFromChunkCoordinates(chunkDataDictionary[chunkGridCords], coords);
         }
 
