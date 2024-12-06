@@ -85,12 +85,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2658839839721469760}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 400054576057338198}
+  m_Father: {fileID: 1432942498998907086}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &917410551779852777
 Camera:
@@ -219,7 +219,6 @@ Transform:
   - {fileID: 1834885447337761111}
   - {fileID: 68404159335020304}
   - {fileID: 3178653519007409915}
-  - {fileID: 816136113407958103}
   m_Father: {fileID: 5146228097899770927}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &6292501995471460693
@@ -264,6 +263,7 @@ MonoBehaviour:
   sensitivity: {x: 100, y: 100}
   cameraPos: {fileID: 816136113407958103}
   orientation: {fileID: 3178653519007409915}
+  head: {fileID: 0}
 --- !u!65 &5308983466366533060
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -438,7 +438,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7876023681238672744, guid: 93113bde7a1c4a74ab1611d7bded1519, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 816136113407958103}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -259972160606440404, guid: 93113bde7a1c4a74ab1611d7bded1519, type: 3}
       insertIndex: -1
