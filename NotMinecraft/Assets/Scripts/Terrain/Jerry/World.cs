@@ -46,7 +46,7 @@ public class World : MonoBehaviour {
             chunkRenderer.InitalizeChunk(data);
             chunkRenderer.UpdateChunk(meshData);
         }
-        //gameManager.SpawnPlayer();
+        gameManager.SpawnPlayer();
     }
 
     public void ClearWorld() {
@@ -67,8 +67,7 @@ public class World : MonoBehaviour {
         return Chunk.GetBlockFromChunkCoordinates(containerChunk, blockInChunkCoordinates);
     }
 
-    internal ChunkData GetChunkDataFromWorldCoords(Vector3Int coords)
-    {
+    internal ChunkData GetChunkDataFromWorldCoords(Vector3Int coords) {
         Vector3Int chunkGridCords = (coords / chunkSize) * chunkSize;
         if (chunkDataDictionary.ContainsKey(chunkGridCords)) {
             return chunkDataDictionary[chunkGridCords];
