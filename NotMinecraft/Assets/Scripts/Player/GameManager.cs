@@ -20,8 +20,7 @@ public class GameManager : MonoBehaviour
         if (player != null) return;
 
         if (world != null) {
-            player = Instantiate(playerPrefab, playerSpawnPos, Quaternion.identity);
-            //mainCamera.transform.position = new Vector3(playerSpawnPos.x, playerSpawnPos.y + 5, playerSpawnPos.z); 
+            player = Instantiate(playerPrefab, playerSpawnPos, Quaternion.identity); 
             CheckWorld();
         }
     }
