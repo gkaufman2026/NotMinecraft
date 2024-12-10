@@ -41,6 +41,23 @@ public static class PathMaker
 
     public static List<Vector3Int> generatePath(ref World world, Vector3Int startPoint, Vector3Int goalPoint)
     {
+        //Initial checks
+        BlockType currBlockType = world.GetBlockFromWorldCoords(world, goalPoint);
+        BlockType currBlockBelowType = world.GetBlockFromWorldCoords(world, goalPoint + Vector3Int.down);
+        bool blockCheck = currBlockType != BlockType.AIR && currBlockType != BlockType.WATER && currBlockType != BlockType.BED_TOP && currBlockType != BlockType.BED_BOTTOM;
+        
+        //Makes sure goal is possible to get to
+        if (blockCheck)
+        {
+            return new List<Vector3Int>();
+        }
+
+        //Makes sure goal is not floating
+        if (currBlockBelowType == BlockType.AIR || currBlockBelowType == BlockType.WATER)
+        {
+            return new List<Vector3Int>();
+        }
+
         Dictionary<Vector3Int, Vector3Int> cameFrom = new Dictionary<Vector3Int, Vector3Int>();
         frontier = new PriorityQueue<AStarNode, float>();
         HashSet<Vector3Int> frontierSet = new HashSet<Vector3Int>();
@@ -130,7 +147,8 @@ public static class PathMaker
                     Vector3Int checkPoint = currPoint + new Vector3Int(i, j, k);
                     BlockType currBlockType = world.GetBlockFromWorldCoords(world, checkPoint);
                     BlockType currBlockBelowType = world.GetBlockFromWorldCoords(world, checkPoint + Vector3Int.down);
-                    if (!frontierSet.Contains(checkPoint) && !visited.ContainsKey(checkPoint) && (currBlockType == BlockType.AIR || currBlockType == BlockType.WATER) && checkPoint != currPoint)
+                    bool blockCheck = currBlockType == BlockType.AIR || currBlockType == BlockType.WATER || currBlockType == BlockType.BED_TOP || currBlockType == BlockType.BED_BOTTOM;
+                    if (!frontierSet.Contains(checkPoint) && !visited.ContainsKey(checkPoint) && blockCheck && checkPoint != currPoint)
                     {
                         if (currBlockBelowType != BlockType.AIR && currBlockBelowType != BlockType.WATER)
                         {

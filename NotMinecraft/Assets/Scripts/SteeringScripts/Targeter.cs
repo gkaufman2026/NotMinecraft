@@ -30,4 +30,9 @@ public class Targeter
             targets.Remove((Vector3Int)currTarget);
         }
     }
+
+    public void clearGoals()
+    {
+        targets.Clear();
+    }
 }

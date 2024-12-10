@@ -15,7 +15,7 @@ public class SteeringPipeline : MonoBehaviour
 
     private int mConstraintSteps = 2;
 
-    public void buildPathToGoal(Vector3Int goal, ref World world)
+    public void buildPathToGoal(Vector3Int goal, World world)
     {
         targeter.addGoal(goal);
 
@@ -109,7 +109,7 @@ public class SteeringPipeline : MonoBehaviour
                         }
                     }
 
-                    return actuator.getActionToPerform(gameObject, startPos, (Vector3Int)currGoal, constraintForces);
+                    return actuator.getActionToPerform(gameObject, startPos, (Vector3Int)currGoal, constraintForces, decomposer.CurrInteractable);
                     skipReturn: { }
                 }
             }
@@ -120,12 +120,22 @@ public class SteeringPipeline : MonoBehaviour
         }
 
         Debug.Log("DONE!!");
-        Actuator.Action defaultAction = new Actuator.Action(Vector3.zero, 0, false, true);
+        //Actuator.Action defaultAction = new Actuator.Action(Vector3.zero, 0, new Actuator.InteractableAction(Actuator.Actions.None, Vector3Int.zero), true);
+        Actuator.Action defaultAction = new Actuator.Action();
+        defaultAction.walkingVelocity = Vector2.zero;
+        defaultAction.idle = true;
+     
         return defaultAction;
     }
 
     public void addConstraint(Constraint constraint)
     {
         constraints.Add(constraint);
+    }
+
+    public void clearPath()
+    {
+        targeter.clearGoals();
+        decomposer.clearPath();
     }
 }

@@ -283,13 +283,16 @@ GameObject:
   m_Component:
   - component: {fileID: 274310587}
   - component: {fileID: 274310586}
+  - component: {fileID: 274310590}
+  - component: {fileID: 274310589}
+  - component: {fileID: 274310588}
   m_Layer: 0
   m_Name: Zombie
   m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &274310586
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -320,7 +323,7 @@ Transform:
   m_GameObject: {fileID: 274310585}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 83, y: 9, z: 50}
+  m_LocalPosition: {x: 90, y: 12, z: 22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -332,6 +335,59 @@ Transform:
   - {fileID: 1818261688}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &274310588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274310585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c540d009ae6a14085ad4dc57d2e35d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mWalkSpeed: 14
+  mMaxJumpPower: 500
+--- !u!114 &274310589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274310585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 581727030382bab4a8de92b0f8204845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &274310590
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274310585}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &290016863
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,6 +1031,7 @@ MonoBehaviour:
   mainCamera: {fileID: 499907352}
   player: {fileID: 0}
   spectactorKey: 284
+  worldRef: {fileID: 0}
 --- !u!4 &1021410499
 Transform:
   m_ObjectHideFlags: 0
@@ -1234,7 +1291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8288adc89ea4e9e44afb557ce7120858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mMobPrefab: {fileID: 2435517005807648034, guid: 4d1189f2d2b3c5d46a8a6a18ebb2e808, type: 3}
+  _mVillagerPrefab: {fileID: 8565984223528687340, guid: 3b25ad30dd79e5447b5be8b7ead960e7, type: 3}
+  _mZombiePrefab: {fileID: 4432953699461063884, guid: 2f4ca8ce1f4c16149bd434fc97304ddc, type: 3}
 --- !u!1 &1319707879
 GameObject:
   m_ObjectHideFlags: 0

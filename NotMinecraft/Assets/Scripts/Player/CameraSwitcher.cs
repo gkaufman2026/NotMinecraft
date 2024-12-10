@@ -4,6 +4,7 @@ public class CameraSwitcher : MonoBehaviour {
     [SerializeField] public Camera mainCamera;
     [SerializeField] private GameObject player;
     [SerializeField] KeyCode spectactorKey = KeyCode.F3;
+    [SerializeField] private World worldRef;
 
     private Camera playerCamera;
 

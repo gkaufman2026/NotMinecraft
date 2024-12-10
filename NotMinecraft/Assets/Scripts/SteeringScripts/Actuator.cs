@@ -5,23 +5,44 @@ using UnityEngine;
 
 public class Actuator
 {
+    public enum Actions
+    {
+        None,
+        Sleep,
+        OpenDoor
+    }
+
+    public struct InteractableAction
+    {
+        public Actions action;
+        public Vector3 interactableLocation;
+        public Interactable currInteractable;
+
+        public InteractableAction(Actions action, Vector3 interactableLocation, Interactable interactable)
+        {
+            this.action = action;
+            this.interactableLocation = interactableLocation;
+            this.currInteractable = interactable;
+        }
+    }
+
     public struct Action
     {
         public Vector2 walkingVelocity;
         public float jumpVelocity;
-        public bool openDoor;
+        public InteractableAction interactableAction;
         public bool idle;
 
-        public Action(Vector3 walkingVelocity, float jumpVelocity, bool openDoor, bool isIdle)
+        public Action(Vector3 walkingVelocity, float jumpVelocity, InteractableAction interactableAction, bool isIdle)
         {
             this.walkingVelocity = walkingVelocity;
             this.jumpVelocity = jumpVelocity;
-            this.openDoor = openDoor;
+            this.interactableAction = interactableAction;
             this.idle = isIdle;
         }
     }
 
-    public Action getActionToPerform(GameObject character, Vector3 start, Vector3 goal, Vector3 additionalForces)
+    public Action getActionToPerform(GameObject character, Vector3 start, Vector3Int goal, Vector3 additionalForces, Interactable interactable)
     {
         Vector3 dirVec = goal - start;
         float yDiffSquared = dirVec.y * dirVec.y;
@@ -30,7 +51,7 @@ public class Actuator
 
         if (yDiffSquared >= 1f && dirVec.y > 0)
         {
-            currAction.jumpVelocity = 1f;
+            //currAction.jumpVelocity = 1f;
         }
 
         currAction.walkingVelocity = new Vector2(dirVec.x, dirVec.z).normalized;
@@ -46,9 +67,17 @@ public class Actuator
             currAction.jumpVelocity *= mobData.MaxJumpPower;
         }
 
-        //Add way to find a door here to mark if the character should open the door
-        currAction.openDoor = false;
-        currAction.idle = false;
+        if (interactable != null)
+        {
+            Vector3 dist = character.transform.position - goal;
+            float squaredDistX = dist.x * dist.x;
+            float squaredDistY = dist.y * dist.y;
+            float squaredDistZ = dist.z * dist.z;
+            if ((squaredDistX <= interactable.InteractableRadiusSquared.x) && (squaredDistY <= interactable.InteractableRadiusSquared.y) && (squaredDistZ <= interactable.InteractableRadiusSquared.z))
+            {
+                currAction.interactableAction = new InteractableAction(Actions.Sleep, interactable.CenterPos, interactable);
+            }
+        }
 
         return currAction;
     }

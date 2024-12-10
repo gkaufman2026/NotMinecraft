@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class PathUI : TerrainUI
 {
-    [SerializeField] private GameObject _mMobPrefab;
-    private Vector3 mStartPos = new Vector3(78, 10, 27);
+    [SerializeField] private GameObject _mVillagerPrefab;
+    [SerializeField] private GameObject _mZombiePrefab;
+    private Vector3 mStartPos = new Vector3(87, 14, 16);
     private Vector3 mGoalPos = new Vector3(70, 10, 70);
+    private Vector3 mZombieStartPos = new Vector3(89, 15, 16);
 
     private void OnEnable()
     {
@@ -53,7 +55,9 @@ public class PathUI : TerrainUI
 
         if (ImGui.Button("Make Path", new Vector2(width, 20)))
         {
-            runPath();
+            //runPath();
+            GameObject villager = Instantiate(_mVillagerPrefab, mStartPos, Quaternion.identity);
+            GameObject zombie = Instantiate(_mZombiePrefab, mZombieStartPos, Quaternion.identity);
         }
     }
 
@@ -80,12 +84,12 @@ public class PathUI : TerrainUI
 
     private void runPath()
     {
-        GameObject mob = Instantiate(_mMobPrefab, mStartPos, Quaternion.identity);
-        Mob mobC = mob.GetComponent<Mob>();
+        GameObject villager = Instantiate(_mVillagerPrefab, mStartPos, Quaternion.identity);
+        Villager villagerScript = villager.GetComponent<Villager>();
 
-        if (mobC != null)
+        if (villagerScript != null)
         {
-            mobC.setGoal(new Vector3Int((int)mGoalPos.x, (int)mGoalPos.y, (int)mGoalPos.z), ref world);
+            villagerScript.setGoal(new Vector3Int((int)mGoalPos.x, (int)mGoalPos.y, (int)mGoalPos.z), world);
         }
     }
 }

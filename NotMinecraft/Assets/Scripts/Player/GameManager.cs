@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance { get; private set; }
     public GameObject playerPrefab;
     public Vector3Int playerPos;
     public Vector3 playerSpawnPos;
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     private Camera mainCamera;
 
     private void Awake() {
+        instance = this;
         mainCamera = GetComponent<CameraSwitcher>().mainCamera;
     }
 
@@ -42,4 +44,6 @@ public class GameManager : MonoBehaviour
             z = Mathf.FloorToInt(pos.z / (float)world.chunkSize) * world.chunkSize,
         };
     }
+
+    public World WorldRef { get { return world; } }
 }
