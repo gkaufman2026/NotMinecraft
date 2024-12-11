@@ -1031,7 +1031,7 @@ MonoBehaviour:
   mainCamera: {fileID: 499907352}
   player: {fileID: 0}
   spectactorKey: 284
-  worldRef: {fileID: 0}
+  worldRef: {fileID: 1638300292}
 --- !u!4 &1021410499
 Transform:
   m_ObjectHideFlags: 0

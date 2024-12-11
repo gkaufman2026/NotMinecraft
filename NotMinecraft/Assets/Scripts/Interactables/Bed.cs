@@ -22,5 +22,11 @@ public class Bed : Interactable
     public Bed()
     {
         mInteractableRadiusSquared = new Vector3(1.5f, 1.5f, 1.5f);
+        mAction = Actions.Sleep;
+    }
+
+    public override bool canVisit()
+    {
+        return !mOccupied;
     }
 }

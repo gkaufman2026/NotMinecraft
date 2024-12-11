@@ -5,20 +5,13 @@ using UnityEngine;
 
 public class Actuator
 {
-    public enum Actions
-    {
-        None,
-        Sleep,
-        OpenDoor
-    }
-
     public struct InteractableAction
     {
-        public Actions action;
+        public Interactable.Actions action;
         public Vector3 interactableLocation;
         public Interactable currInteractable;
 
-        public InteractableAction(Actions action, Vector3 interactableLocation, Interactable interactable)
+        public InteractableAction(Interactable.Actions action, Vector3 interactableLocation, Interactable interactable)
         {
             this.action = action;
             this.interactableLocation = interactableLocation;
@@ -75,7 +68,7 @@ public class Actuator
             float squaredDistZ = dist.z * dist.z;
             if ((squaredDistX <= interactable.InteractableRadiusSquared.x) && (squaredDistY <= interactable.InteractableRadiusSquared.y) && (squaredDistZ <= interactable.InteractableRadiusSquared.z))
             {
-                currAction.interactableAction = new InteractableAction(Actions.Sleep, interactable.CenterPos, interactable);
+                currAction.interactableAction = new InteractableAction(interactable.Action, interactable.CenterPos, interactable);
             }
         }
 

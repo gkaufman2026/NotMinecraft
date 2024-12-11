@@ -30,7 +30,7 @@ public class BiomeGenerator : MonoBehaviour {
         return data;
     }
 
-    private int GetSurfaceHeightNoise(int x, int z, int chunkHeight) {
+    public int GetSurfaceHeightNoise(int x, int z, int chunkHeight) {
         float terrainHeight = !useDomainWarping ? NoiseOptions.OctavePerlin(x, z, biomeNoiseSetting) : domainWarping.GenerateDomainNoise(x, z, biomeNoiseSetting);
         terrainHeight = NoiseOptions.Redistribute(terrainHeight, biomeNoiseSetting);
         return NoiseOptions.ConvertMappedValueToInt(terrainHeight, 0, chunkHeight);

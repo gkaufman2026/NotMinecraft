@@ -30,9 +30,13 @@ public class Mob : MonoBehaviour
 
     private void Awake()
     {
+        loadComponents();
+    }
+
+    protected void loadComponents()
+    {
         mRigidbody = GetComponent<Rigidbody>();
         mSteeringPipeline = GetComponent<SteeringPipeline>();
-        mSteeringPipeline.addConstraint(new ZombieAvoidance());
         mRigidbody.drag = 3;
     }
 }

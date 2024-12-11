@@ -28,13 +28,16 @@ public class ChunkData {
         bool wasChanged = false;
         foreach (var key in keys)
         {
-            Vector3Int vecTo = key - blockChunkCoords;
-            float sqrtMag = vecTo.sqrMagnitude;
-            if (sqrtMag < distance)
+            if (!bedDictionary[key].Occupied)
             {
-                distance = sqrtMag;
-                closestKey = key;
-                wasChanged = true;
+                Vector3Int vecTo = key - blockChunkCoords;
+                float sqrtMag = vecTo.sqrMagnitude;
+                if (sqrtMag < distance)
+                {
+                    distance = sqrtMag;
+                    closestKey = key;
+                    wasChanged = true;
+                }
             }
         }
 

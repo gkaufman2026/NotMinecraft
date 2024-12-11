@@ -138,6 +138,11 @@ public class Decomposer
         {
             ChunkData data = GameManager.instance.WorldRef.GetChunkDataFromWorldCoords(currSubGoal);
             mCurrInteractable = data.GetInteractable(currSubGoal - data.worldPos);
+
+            if (mCurrInteractable != null && !mCurrInteractable.canVisit())
+            {
+                clearPath();
+            }
         }
     }
 

@@ -6,19 +6,22 @@ using UnityEngine;
 public class Villager : Mob {
     private bool mIsSleeping = false;
     private float yOffset = 0.5f;
+    private bool bedIsTargeted = false;
 
     public bool IsSleeping
     {
         get { return mIsSleeping; }
     }
 
+    private void Awake()
+    {
+        loadComponents();
+        mSteeringPipeline.addConstraint(new ZombieAvoidance());
+    }
+
     private void Start()
     {
-        Nullable<Vector3Int> bed = findNearestBed();
-        if (bed != null)
-        {
-            setGoal((Vector3Int)bed, GameManager.instance.WorldRef);
-        }
+        searchForBed();
     }
 
     private Nullable<Vector3Int> findNearestBed()
@@ -29,13 +32,18 @@ public class Villager : Mob {
 
     private void FixedUpdate()
     {
+        if (mIsSleeping)
+        {
+            return;
+        }
+
         Actuator.Action currentAction = mSteeringPipeline.getSteering();
 
         if (!currentAction.idle)
         {
             switch (currentAction.interactableAction.action)
             {
-                case Actuator.Actions.Sleep:
+                case Interactable.Actions.Sleep:
                     gameObject.transform.up = Vector3.right;
                     gameObject.transform.eulerAngles += new Vector3(90, 0, 0);
                     gameObject.transform.position = currentAction.interactableAction.interactableLocation + new Vector3(yOffset, 1, 0 );
@@ -43,8 +51,10 @@ public class Villager : Mob {
                     ((Bed)(currentAction.interactableAction.currInteractable)).Occupied = true;
                     mRigidbody.velocity = Vector3.zero;
                     mIsSleeping = true;
+                    mRigidbody.isKinematic = true;
+                    mSteeringPipeline.UpdatePathVisual();
                     break;
-                case Actuator.Actions.None:
+                case Interactable.Actions.None:
                     mRigidbody.AddForce(new Vector3(currentAction.walkingVelocity.x, 0, currentAction.walkingVelocity.y));
                     //mRigidbody.AddForce(new Vector3(0, currentAction.jumpVelocity - mRigidbody.velocity.y, 0));
                     mRigidbody.angularVelocity = Vector3.zero;
@@ -66,24 +76,55 @@ public class Villager : Mob {
                     break;
             }
 
+            //Maybe find a better way to search for beds while a villager is moving
+            if (!bedIsTargeted)
+            {
+                searchForBed();
+            }
+
         }
         else
         {
-            float velMag = mRigidbody.velocity.sqrMagnitude;
+            if (!searchForBed())
+            {
+                setRandomTarget();
+            }
+
             mRigidbody.angularVelocity *= 0.9f;
         }
+    }
 
-        //mRigidbody.velocity += new Vector3(currentAction.walkingVelocity.x, 0, currentAction.walkingVelocity.y);
+    private bool searchForBed()
+    {
+        Nullable<Vector3Int> bed = findNearestBed();
+        if (bed != null)
+        {
+            mSteeringPipeline.clearPath();
+            setGoal((Vector3Int)bed, GameManager.instance.WorldRef);
+            bedIsTargeted = true;
+            return true;
+        }
 
-        //if (mRigidbody.velocity.magnitude > WalkSpeed)
-        //{
-        //    Vector3 normVec = mRigidbody.velocity.normalized;
-        //    mRigidbody.velocity = normVec * WalkSpeed;
-        //}
+        bedIsTargeted = false;
+        return false;
     }
 
     public void setGoal(Vector3Int goal, World world)
     {
         mSteeringPipeline.buildPathToGoal(goal, world);
+    }
+
+    public void setRandomTarget()
+    {
+        //Could make this better such as by picking a new point in the direction the villager is going
+        int xVal = UnityEngine.Random.Range(-5, 6) + (int)transform.position.x;
+        int zVal = UnityEngine.Random.Range(-5, 6) + (int)transform.position.z;
+        ChunkData chunkData = GameManager.instance.WorldRef.GetChunkDataFromWorldCoords(new Vector3Int(xVal, (int)transform.position.y, zVal));
+
+        int surfHeight = GameManager.instance.WorldRef.terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(xVal, zVal, chunkData.chunkHeight);
+
+        Vector3Int newWorldPos = new Vector3Int(xVal, surfHeight + 1, zVal);
+
+        setGoal(newWorldPos, GameManager.instance.WorldRef);
     }
 }

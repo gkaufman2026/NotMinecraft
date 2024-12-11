@@ -4,9 +4,17 @@ using UnityEngine;
 
 public class Interactable
 {
+    public enum Actions
+    {
+        None,
+        Sleep,
+        OpenDoor
+    }
+
     protected Vector3 mCenterPos = Vector3Int.zero;
     protected Vector3 mInteractableRadiusSquared = Vector3Int.zero;
     protected bool mInteractedWith = false;
+    protected Actions mAction = Actions.None;
 
     public Vector3 InteractableRadiusSquared
     {
@@ -22,5 +30,15 @@ public class Interactable
     public bool InteractedWith { 
         get { return mInteractedWith; } 
         set { mInteractedWith = value; }
+    }
+
+    public Actions Action 
+    { 
+        get { return mAction; }
+    }
+
+    virtual public bool canVisit()
+    {
+        return !mInteractedWith;
     }
 }

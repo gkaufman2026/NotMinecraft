@@ -9,6 +9,7 @@ public class Zombie : Mob
 {
     private float mSearchRadius = 10f;
     private Villager mVillagerChasing = null;
+    private bool paused = false;
 
     private void Start()
     {
@@ -26,12 +27,13 @@ public class Zombie : Mob
                 if (mVillagerChasing.IsSleeping)
                 {
                     mSteeringPipeline.clearPath();
+                    mVillagerChasing = null;
                 }
             }
 
             switch (currentAction.interactableAction.action)
             {
-                case Actuator.Actions.None:
+                case Interactable.Actions.None:
                     mRigidbody.AddForce(new Vector3(currentAction.walkingVelocity.x, 0, currentAction.walkingVelocity.y));
                     //mRigidbody.AddForce(new Vector3(0, currentAction.jumpVelocity - mRigidbody.velocity.y, 0));
                     mRigidbody.angularVelocity = Vector3.zero;
@@ -50,16 +52,16 @@ public class Zombie : Mob
                             mRigidbody.AddForce(new Vector3(0, mMaxJumpPower, 0));
                         }
                     }
-
                     break;
             }
 
         }
         else
         {
-            pathfindToVillager(); //Optomize this to not happen every update probobly
-            float velMag = mRigidbody.velocity.sqrMagnitude;
-            mRigidbody.angularVelocity *= 0.9f;
+            if (!paused)
+            {
+                handleIdleBehavior();
+            }
         }
     }
 
@@ -110,12 +112,55 @@ public class Zombie : Mob
         mSteeringPipeline.buildPathToGoal(goal, world);
     }
 
-    public void pathfindToVillager()
+    public bool pathfindToVillager()
     {
         Nullable<Vector3Int> villager = findNearestVillager();
         if (villager != null)
         {
             setGoal((Vector3Int)villager, GameManager.instance.WorldRef);
+            return true;
         }
+
+        return false;
+    }
+
+    private void handleIdleBehavior()
+    {
+        if (!pathfindToVillager()) //Optomize this to not happen every update probobly
+        {
+            setRandomTarget();
+        }
+
+        float velMag = mRigidbody.velocity.sqrMagnitude;
+        mRigidbody.angularVelocity *= 0.9f;
+    }
+
+    public void setRandomTarget()
+    {
+        int delay = UnityEngine.Random.Range(0, 2);
+        if (delay == 0)
+        {
+            paused = true;
+            mSteeringPipeline.UpdatePathVisual();
+            StartCoroutine(Co_StandStillDelay(UnityEngine.Random.Range(1, 4)));
+            return;
+        }
+
+        int xVal = UnityEngine.Random.Range(-5, 6) + (int)transform.position.x;
+        int zVal = UnityEngine.Random.Range(-5, 6) + (int)transform.position.z;
+        ChunkData chunkData = GameManager.instance.WorldRef.GetChunkDataFromWorldCoords(new Vector3Int(xVal, (int)transform.position.y, zVal));
+
+        int surfHeight = GameManager.instance.WorldRef.terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(xVal, zVal, chunkData.chunkHeight);
+
+        Vector3Int newWorldPos = new Vector3Int(xVal, surfHeight + 1, zVal);
+
+        setGoal(newWorldPos, GameManager.instance.WorldRef);
+    }
+
+    private IEnumerator Co_StandStillDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        handleIdleBehavior();
+        paused = false;
     }
 }
