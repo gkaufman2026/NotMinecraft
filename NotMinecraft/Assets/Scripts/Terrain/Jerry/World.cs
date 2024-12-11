@@ -9,6 +9,8 @@ public class World : MonoBehaviour {
     public Vector2Int seedOffset;
     public TerrainGenerator terrainGenerator;
     public GameManager gameManager;
+    [SerializeField] private GameObject _mVillagerPrefab;
+    [SerializeField] private GameObject _mZombiePrefab;
 
     private GameObject chunksParent;
     private Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new();
@@ -47,6 +49,22 @@ public class World : MonoBehaviour {
             chunkRenderer.InitalizeChunk(data);
             chunkRenderer.UpdateChunk(meshData);
         }
+
+        int mZomsSpawned = 0;
+        while (mZomsSpawned < 100) //Make this more efficient
+        {
+            int randX = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
+            int randZ = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
+            int randY = terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(randX, randZ, chunkHeight);
+            Vector3Int spawnPos = new Vector3Int(randX, randY + 1, randZ);
+            BlockType surfBlock = GetBlockFromWorldCoords(this, spawnPos);
+            if (surfBlock == BlockType.AIR)
+            {
+                Instantiate(_mZombiePrefab, spawnPos, Quaternion.identity);
+                mZomsSpawned++;
+            }
+        }
+
         //gameManager.SpawnPlayer();
     }
 
@@ -69,9 +87,12 @@ public class World : MonoBehaviour {
     }
 
     internal ChunkData GetChunkDataFromWorldCoords(Vector3Int coords) {
-        Vector3Int chunkGridCords = (coords / chunkSize) * chunkSize;
-        if (chunkDataDictionary.ContainsKey(chunkGridCords)) {
-            return chunkDataDictionary[chunkGridCords];
+        float chunkGridX = (coords.x / chunkSize) * chunkSize;
+        float chunkGridY = (coords.y / chunkHeight) * chunkHeight;
+        float chunkGridZ = (coords.z / chunkSize) * chunkSize;
+        Vector3Int chunkCoord = Vector3Int.RoundToInt(new Vector3(chunkGridX, chunkGridY, chunkGridZ));
+        if (chunkDataDictionary.ContainsKey(chunkCoord)) {
+            return chunkDataDictionary[chunkCoord];
         }
 
         Debug.Log("Could not find chunk");
@@ -121,10 +142,22 @@ public class World : MonoBehaviour {
         data3 = GetChunkDataFromWorldCoords(point + new Vector3Int(0, 0, chunkSize * direction.y));
         data4 = GetChunkDataFromWorldCoords(point + new Vector3Int(chunkSize * direction.x, 0, chunkSize * direction.y));
 
-        beds.Add(data.GetNearestBed(point));
-        beds.Add(data2.GetNearestBed(point));
-        beds.Add(data3.GetNearestBed(point));
-        beds.Add(data4.GetNearestBed(point));
+        if (data != null)
+        {
+            beds.Add(data.GetNearestBed(point));
+        }
+        if (data2 != null)
+        {
+            beds.Add(data2.GetNearestBed(point));
+        }
+        if (data3 != null)
+        {
+            beds.Add(data3.GetNearestBed(point));
+        }
+        if (data4 != null)
+        {
+            beds.Add(data4.GetNearestBed(point));
+        }
 
         float distance = chunkSize * 2 * chunkSize * 2 + 1;
         Vector3Int closestBed = Vector3Int.zero;

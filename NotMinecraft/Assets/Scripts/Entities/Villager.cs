@@ -99,6 +99,7 @@ public class Villager : Mob {
         Nullable<Vector3Int> bed = findNearestBed();
         if (bed != null)
         {
+            mSteeringPipeline.SetGoalSatisfactoryRadius(0.8f, 1f, 0.8f); //Makes vilagers go all the way to the bed
             mSteeringPipeline.clearPath();
             setGoal((Vector3Int)bed, GameManager.instance.WorldRef);
             bedIsTargeted = true;
@@ -125,6 +126,7 @@ public class Villager : Mob {
 
         Vector3Int newWorldPos = new Vector3Int(xVal, surfHeight + 1, zVal);
 
+        mSteeringPipeline.SetGoalSatisfactoryRadius(5f, 2f, 5f); //Makes villagers only need to be somewhat close to acheive the goal
         setGoal(newWorldPos, GameManager.instance.WorldRef);
     }
 }

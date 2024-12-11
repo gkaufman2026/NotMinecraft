@@ -42,6 +42,7 @@ public static class PathMaker
     public static List<Vector3Int> generatePath(ref World world, Vector3Int startPoint, Vector3Int goalPoint)
     {
         //Initial checks
+        BlockType startBlockType = world.GetBlockFromWorldCoords(world, startPoint);
         BlockType currBlockType = world.GetBlockFromWorldCoords(world, goalPoint);
         BlockType currBlockBelowType = world.GetBlockFromWorldCoords(world, goalPoint + Vector3Int.down);
         bool blockCheck = currBlockType != BlockType.AIR && currBlockType != BlockType.WATER && currBlockType != BlockType.BED_TOP && currBlockType != BlockType.BED_BOTTOM;
@@ -54,6 +55,12 @@ public static class PathMaker
 
         //Makes sure goal is not floating
         if (currBlockBelowType == BlockType.AIR || currBlockBelowType == BlockType.WATER)
+        {
+            return new List<Vector3Int>();
+        }
+
+        //Makes sure start is not in ground
+        if (startBlockType != BlockType.AIR && startBlockType != BlockType.WATER)
         {
             return new List<Vector3Int>();
         }
@@ -86,7 +93,7 @@ public static class PathMaker
             visited[currNode.centerPoint] = true; //Sets the current point as visited
 
             //Gest neighbors from gridmask
-            List<Vector3Int> neighbors = getVisitableNeightbors(ref world, currNode.centerPoint, ref frontierSet, ref visited); //Gets the neighbors of the current point
+            List<Vector3Int> neighbors = getVisitableNeightbors(ref world, currNode.centerPoint, ref frontierSet, ref visited, goalPoint); //Gets the neighbors of the current point
             totalNeighborsEvaluated += neighbors.Count;
 
             //While the neighbors exist, update the cameFrom map with them and add them to the priority queue
@@ -134,7 +141,7 @@ public static class PathMaker
         return path;
     }
 
-    private static List<Vector3Int> getVisitableNeightbors(ref World world, Vector3Int currPoint, ref HashSet<Vector3Int> frontierSet, ref Dictionary<Vector3Int, bool> visited)
+    private static List<Vector3Int> getVisitableNeightbors(ref World world, Vector3Int currPoint, ref HashSet<Vector3Int> frontierSet, ref Dictionary<Vector3Int, bool> visited, Vector3Int goal)
     {
         List<Vector3Int> visitables = new();
 
@@ -147,12 +154,23 @@ public static class PathMaker
                     Vector3Int checkPoint = currPoint + new Vector3Int(i, j, k);
                     BlockType currBlockType = world.GetBlockFromWorldCoords(world, checkPoint);
                     BlockType currBlockBelowType = world.GetBlockFromWorldCoords(world, checkPoint + Vector3Int.down);
-                    bool blockCheck = currBlockType == BlockType.AIR || currBlockType == BlockType.WATER || currBlockType == BlockType.BED_TOP || currBlockType == BlockType.BED_BOTTOM;
-                    if (!frontierSet.Contains(checkPoint) && !visited.ContainsKey(checkPoint) && blockCheck && checkPoint != currPoint)
+                    bool blockCheckNotGround = currBlockType == BlockType.AIR || currBlockType == BlockType.WATER;
+                    bool blockCheckIsBed = currBlockType == BlockType.BED_TOP || currBlockType == BlockType.BED_BOTTOM;
+                    if (!frontierSet.Contains(checkPoint) && !visited.ContainsKey(checkPoint) && checkPoint != currPoint)
                     {
-                        if (currBlockBelowType != BlockType.AIR && currBlockBelowType != BlockType.WATER)
+                        if (blockCheckNotGround)
                         {
-                            visitables.Add(checkPoint);
+                            if (currBlockBelowType != BlockType.AIR && currBlockBelowType != BlockType.WATER)
+                            {
+                                visitables.Add(checkPoint);
+                            }
+                        }
+                        else if (blockCheckIsBed)
+                        {
+                            if (checkPoint == goal)
+                            {
+                                visitables.Add(checkPoint);
+                            }
                         }
                     }
                 }

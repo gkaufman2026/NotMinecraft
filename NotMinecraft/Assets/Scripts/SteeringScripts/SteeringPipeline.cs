@@ -20,7 +20,7 @@ public class SteeringPipeline : MonoBehaviour
     {
         targeter.addGoal(goal);
 
-        Vector3Int startPos = new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
+        Vector3Int startPos = new Vector3Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), Mathf.RoundToInt(transform.position.z));
         decomposer.buildAndAddNextPath(ref world, startPos, goal);
 
         UpdatePathVisual();
@@ -124,7 +124,7 @@ public class SteeringPipeline : MonoBehaviour
             }
         }
 
-        Debug.Log("DONE!!");
+        //Debug.Log("DONE!!");
         //Actuator.Action defaultAction = new Actuator.Action(Vector3.zero, 0, new Actuator.InteractableAction(Actuator.Actions.None, Vector3Int.zero), true);
         Actuator.Action defaultAction = new Actuator.Action();
         defaultAction.walkingVelocity = Vector2.zero;
@@ -142,5 +142,15 @@ public class SteeringPipeline : MonoBehaviour
     {
         targeter.clearGoals();
         decomposer.clearPath();
+    }
+
+    public void SetSubGoalSatisfactoryRadius(float x, float y, float z)
+    {
+        decomposer.SetSubGoalSatisfactoryRadius(x, y, z);
+    }
+
+    public void SetGoalSatisfactoryRadius(float x, float y, float z)
+    {
+        decomposer.SetGoalSatisfactoryRadius(x, y, z);
     }
 }

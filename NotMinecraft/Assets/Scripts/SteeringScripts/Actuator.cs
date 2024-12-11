@@ -42,10 +42,11 @@ public class Actuator
 
         Action currAction = new Action();
 
-        if (yDiffSquared >= 1f && dirVec.y > 0)
-        {
+        //Old jumping
+        //if (yDiffSquared >= 1f && dirVec.y > 0)
+        //{
             //currAction.jumpVelocity = 1f;
-        }
+        //}
 
         currAction.walkingVelocity = new Vector2(dirVec.x, dirVec.z).normalized;
 

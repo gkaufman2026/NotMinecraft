@@ -15,6 +15,20 @@ public class Decomposer
     private float satisfactionZSquared = 25f;
     private float satisfactionYSquared = 25f;
 
+    public void SetSubGoalSatisfactoryRadius(float x, float y, float z)
+    {
+        satisfactionXSquared = x; 
+        satisfactionYSquared = y; 
+        satisfactionZSquared = z;
+    }
+
+    public void SetGoalSatisfactoryRadius(float x, float y, float z)
+    {
+        satisfactionXSquaredDest = x;
+        satisfactionYSquaredDest = y;
+        satisfactionZSquaredDest = z;
+    }
+
     private Interactable mCurrInteractable = null;
 
     public Interactable CurrInteractable
@@ -137,11 +151,14 @@ public class Decomposer
         if (mCurrentPath.Count > 0)
         {
             ChunkData data = GameManager.instance.WorldRef.GetChunkDataFromWorldCoords(currSubGoal);
-            mCurrInteractable = data.GetInteractable(currSubGoal - data.worldPos);
-
-            if (mCurrInteractable != null && !mCurrInteractable.canVisit())
+            if (data != null)
             {
-                clearPath();
+                mCurrInteractable = data.GetInteractable(currSubGoal - data.worldPos);
+
+                if (mCurrInteractable != null && !mCurrInteractable.canVisit())
+                {
+                    clearPath();
+                }
             }
         }
     }

@@ -13,14 +13,17 @@ public class Zombie : Mob
 
     private void Start()
     {
+        //This is a cheap way of making zombies that have a path around a 2
+        //block cliff not acheive the subgoal before getting there, making them get stuck
+        mSteeringPipeline.SetSubGoalSatisfactoryRadius(5f, 5f, 5f); 
+
         pathfindToVillager();
     }
 
     private void FixedUpdate()
     {
         Actuator.Action currentAction = mSteeringPipeline.getSteering();
-
-        if (!currentAction.idle)
+        if (!currentAction.idle) //Should be a way to cancel path if zombie takes too long trying to get there (means it is stuck)
         {
             if (mVillagerChasing != null) //Optomize this to not call every update
             {
@@ -62,6 +65,8 @@ public class Zombie : Mob
             {
                 handleIdleBehavior();
             }
+
+            mRigidbody.angularVelocity *= 0.9f;
         }
     }
 
@@ -117,6 +122,7 @@ public class Zombie : Mob
         Nullable<Vector3Int> villager = findNearestVillager();
         if (villager != null)
         {
+            mSteeringPipeline.SetGoalSatisfactoryRadius(0.8f, 1f, 0.8f); //Makes zombies go all the way to villagers
             setGoal((Vector3Int)villager, GameManager.instance.WorldRef);
             return true;
         }
@@ -130,9 +136,6 @@ public class Zombie : Mob
         {
             setRandomTarget();
         }
-
-        float velMag = mRigidbody.velocity.sqrMagnitude;
-        mRigidbody.angularVelocity *= 0.9f;
     }
 
     public void setRandomTarget()
@@ -142,25 +145,33 @@ public class Zombie : Mob
         {
             paused = true;
             mSteeringPipeline.UpdatePathVisual();
-            StartCoroutine(Co_StandStillDelay(UnityEngine.Random.Range(1, 4)));
+            StartCoroutine(Co_StandStillDelay(UnityEngine.Random.Range(1, 3)));
             return;
         }
 
-        int xVal = UnityEngine.Random.Range(-5, 6) + (int)transform.position.x;
-        int zVal = UnityEngine.Random.Range(-5, 6) + (int)transform.position.z;
+        int xVal = UnityEngine.Random.Range(-5, 6) + Mathf.RoundToInt(transform.position.x);
+        int zVal = UnityEngine.Random.Range(-5, 6) + Mathf.RoundToInt(transform.position.z);
         ChunkData chunkData = GameManager.instance.WorldRef.GetChunkDataFromWorldCoords(new Vector3Int(xVal, (int)transform.position.y, zVal));
+        if (chunkData != null)
+        {
+            int surfHeight = GameManager.instance.WorldRef.terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(xVal, zVal, chunkData.chunkHeight);
 
-        int surfHeight = GameManager.instance.WorldRef.terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(xVal, zVal, chunkData.chunkHeight);
+            Vector3Int newWorldPos = new Vector3Int(xVal, surfHeight + 1, zVal);
 
-        Vector3Int newWorldPos = new Vector3Int(xVal, surfHeight + 1, zVal);
+            BlockType targetBlock = GameManager.instance.WorldRef.GetBlockFromWorldCoords(GameManager.instance.WorldRef, newWorldPos);
 
-        setGoal(newWorldPos, GameManager.instance.WorldRef);
+            if (targetBlock != BlockType.BED_BOTTOM && targetBlock != BlockType.BED_TOP) 
+            {
+                mSteeringPipeline.SetGoalSatisfactoryRadius(5f, 5f, 5f); //Makes zombies able to acheive goal from a ways away to not get stuck
+                setGoal(newWorldPos, GameManager.instance.WorldRef);
+            }
+        }
     }
 
     private IEnumerator Co_StandStillDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        handleIdleBehavior();
         paused = false;
+        handleIdleBehavior();
     }
 }
