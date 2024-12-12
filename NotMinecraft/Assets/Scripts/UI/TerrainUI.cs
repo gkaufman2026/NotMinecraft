@@ -123,14 +123,16 @@ public class TerrainUI : MonoBehaviour {
     {
         if (ImGui.CollapsingHeader("Mob Settings"))
         {
+            ImGui.Checkbox("Can Spawn Entities ", ref world.canSpawnEntities);
+
             ImGui.Text("Number of Villagers");
             ImGui.SameLine(labelWidth);
             ImGui.SetNextItemWidth(width);
-            ImGui.SliderInt("##Number of Villagers", ref world.mNumberOfVillagersToSpawn, 0, 250);
+            ImGui.SliderInt("## Num of Villagers", ref world.mNumberOfVillagersToSpawn, 0, 250);
             ImGui.Text("Number of Zombies");
             ImGui.SameLine(labelWidth);
             ImGui.SetNextItemWidth(width);
-            ImGui.SliderInt("##Number of Zombies", ref world.mNumberOfZombiesToSpawn, 0, 250);
+            ImGui.SliderInt("## Num of Zombies", ref world.mNumberOfZombiesToSpawn, 0, 250);
         }
     }
 

@@ -9,6 +9,7 @@ public class World : MonoBehaviour {
     public Vector2Int seedOffset;
     public TerrainGenerator terrainGenerator;
     public GameManager gameManager;
+    public bool canSpawnEntities = true;
     [SerializeField] private GameObject _mVillagerPrefab;
     [SerializeField] private GameObject _mZombiePrefab;
     public int mNumberOfZombiesToSpawn = 50;
@@ -52,34 +53,9 @@ public class World : MonoBehaviour {
             chunkRenderer.UpdateChunk(meshData);
         }
 
-        int mZomsSpawned = 0;
-        while (mZomsSpawned < mNumberOfZombiesToSpawn) //Make this more efficient
-        {
-            int randX = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
-            int randZ = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
-            int randY = terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(randX, randZ, chunkHeight);
-            Vector3Int spawnPos = new Vector3Int(randX, randY + 1, randZ);
-            BlockType surfBlock = GetBlockFromWorldCoords(this, spawnPos);
-            if (surfBlock == BlockType.AIR)
-            {
-                Instantiate(_mZombiePrefab, spawnPos, Quaternion.identity);
-                mZomsSpawned++;
-            }
-        }
-
-        int mVillagersSpawned = 0;
-        while (mVillagersSpawned < mNumberOfVillagersToSpawn) //Make this more efficient
-        {
-            int randX = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
-            int randZ = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
-            int randY = terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(randX, randZ, chunkHeight);
-            Vector3Int spawnPos = new Vector3Int(randX, randY + 1, randZ);
-            BlockType surfBlock = GetBlockFromWorldCoords(this, spawnPos);
-            if (surfBlock == BlockType.AIR)
-            {
-                Instantiate(_mVillagerPrefab, spawnPos, Quaternion.identity);
-                mVillagersSpawned++;
-            }
+        if (canSpawnEntities) {
+            SpawnEntities(mNumberOfZombiesToSpawn, _mZombiePrefab);
+            SpawnEntities(mNumberOfVillagersToSpawn, _mVillagerPrefab);
         }
 
         gameManager.SpawnPlayer();
@@ -126,8 +102,7 @@ public class World : MonoBehaviour {
         return BlockType.AIR;
     }
 
-    internal Nullable<Vector3Int> GetNearestBedInChunk(Vector3Int point)
-    {
+    internal Nullable<Vector3Int> GetNearestBedInChunk(Vector3Int point) {
         //Finds current chunk entity is in
         ChunkData data = GetChunkDataFromWorldCoords(point);
         if (data != null)
@@ -139,21 +114,17 @@ public class World : MonoBehaviour {
             List<Nullable<Vector3Int>> beds = new List<Nullable<Vector3Int>>();
 
             Vector3Int posInChunk = point - data.worldPos;
-            if (posInChunk.x < data.chunkSize / 2)
-            {
+            if (posInChunk.x < data.chunkSize / 2) {
                 direction.x = -1;
             }
-            else
-            {
+            else {
                 direction.x = 1;
             }
 
-            if (posInChunk.z < data.chunkSize / 2)
-            {
+            if (posInChunk.z < data.chunkSize / 2) {
                 direction.y = -1;
             }
-            else
-            {
+            else {
                 direction.y = 1;
             }
 
@@ -162,31 +133,25 @@ public class World : MonoBehaviour {
             data4 = GetChunkDataFromWorldCoords(point + new Vector3Int(chunkSize * direction.x, 0, chunkSize * direction.y));
 
             beds.Add(data.GetNearestBed(point));
-            if (data2 != null)
-            {
+            if (data2 != null) {
                 beds.Add(data2.GetNearestBed(point));
             }
-            if (data3 != null)
-            {
+            if (data3 != null)  {
                 beds.Add(data3.GetNearestBed(point));
             }
-            if (data4 != null)
-            {
+            if (data4 != null) {
                 beds.Add(data4.GetNearestBed(point));
             }
 
             float distance = chunkSize * 2 * chunkSize * 2 + 1;
             Vector3Int closestBed = Vector3Int.zero;
             bool wasChanged = false;
-            foreach (var bed in beds)
-            {
-                if (bed != null)
-                {
+            foreach (var bed in beds) {
+                if (bed != null) {
                     Vector3Int bedNew = (Vector3Int)bed;
                     Vector3Int vecTo = bedNew - point;
                     float sqrtMag = vecTo.sqrMagnitude;
-                    if (sqrtMag < distance)
-                    {
+                    if (sqrtMag < distance) {
                         distance = sqrtMag;
                         closestBed = bedNew;
                         wasChanged = true;
@@ -194,13 +159,26 @@ public class World : MonoBehaviour {
                 }
             }
 
-            if (wasChanged)
-            {
+            if (wasChanged) {
                 return closestBed;
             }
         }
 
         return null;
     }
-        
+
+    void SpawnEntities(int numberOfEntitiesToSpawn, GameObject prefab) {
+        int entitiesSpawned = 0;
+        while (entitiesSpawned < numberOfEntitiesToSpawn) {
+            int randX = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
+            int randZ = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
+            int randY = terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(randX, randZ, chunkHeight);
+            Vector3Int spawnPos = new Vector3Int(randX, randY + 1, randZ);
+            BlockType surfBlock = GetBlockFromWorldCoords(this, spawnPos);
+            if (surfBlock == BlockType.AIR) {
+                Instantiate(prefab, spawnPos, Quaternion.identity);
+                entitiesSpawned++;
+            }
+        }
+    }
 }
