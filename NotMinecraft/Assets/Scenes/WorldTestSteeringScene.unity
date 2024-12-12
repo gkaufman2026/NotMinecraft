@@ -361,6 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 581727030382bab4a8de92b0f8204845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mLineVisualMaterial: {fileID: 0}
 --- !u!54 &274310590
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1012,7 +1013,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 9006255333725012504, guid: 59912e4269f1d94438e265b4c12a33da, type: 3}
   playerPos: {x: 0, y: 0, z: 0}
-  playerSpawnPos: {x: 35, y: 15, z: 0}
+  playerSpawnPos: {x: 76, y: 9, z: 49}
   world: {fileID: 1638300292}
   currentChunkCenter: {x: 0, y: 0, z: 0}
   player: {fileID: 0}
@@ -1219,6 +1220,7 @@ GameObject:
   - component: {fileID: 1177953964}
   - component: {fileID: 1177953965}
   - component: {fileID: 1177953966}
+  - component: {fileID: 1177953967}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -1286,13 +1288,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1177953962}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8288adc89ea4e9e44afb557ce7120858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _mVillagerPrefab: {fileID: 8565984223528687340, guid: 3b25ad30dd79e5447b5be8b7ead960e7, type: 3}
   _mZombiePrefab: {fileID: 4432953699461063884, guid: 2f4ca8ce1f4c16149bd434fc97304ddc, type: 3}
+--- !u!114 &1177953967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1177953962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a3b6733bce1a54ba6f80510b2cf4b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1319707879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1501,6 +1515,10 @@ MonoBehaviour:
   seedOffset: {x: 0, y: 0}
   terrainGenerator: {fileID: 1540865237}
   gameManager: {fileID: 1021410497}
+  _mVillagerPrefab: {fileID: 8565984223528687340, guid: 3b25ad30dd79e5447b5be8b7ead960e7, type: 3}
+  _mZombiePrefab: {fileID: 4432953699461063884, guid: 2f4ca8ce1f4c16149bd434fc97304ddc, type: 3}
+  mNumberOfZombiesToSpawn: 50
+  mNumberOfVillagersToSpawn: 25
 --- !u!4 &1638300293
 Transform:
   m_ObjectHideFlags: 0

@@ -47,6 +47,9 @@ public class TerrainUI : MonoBehaviour {
         // Adding Chunk Visuals for Scene Viewing
         AddChunkVisuals();
 
+        // Adds entity visuals
+        AddEntityVisuals();
+
         ImGui.Separator();
 
         // Centering Buttons
@@ -113,6 +116,21 @@ public class TerrainUI : MonoBehaviour {
                     }
                 }
             }
+        }
+    }
+
+    private void AddEntityVisuals()
+    {
+        if (ImGui.CollapsingHeader("Mob Settings"))
+        {
+            ImGui.Text("Number of Villagers");
+            ImGui.SameLine(labelWidth);
+            ImGui.SetNextItemWidth(width);
+            ImGui.SliderInt("##Number of Villagers", ref world.mNumberOfVillagersToSpawn, 0, 250);
+            ImGui.Text("Number of Zombies");
+            ImGui.SameLine(labelWidth);
+            ImGui.SetNextItemWidth(width);
+            ImGui.SliderInt("##Number of Zombies", ref world.mNumberOfZombiesToSpawn, 0, 250);
         }
     }
 

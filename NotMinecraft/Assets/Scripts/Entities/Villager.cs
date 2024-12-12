@@ -27,7 +27,7 @@ public class Villager : Mob {
     private Nullable<Vector3Int> findNearestBed()
     {
         //Needs to figure how to recalculate this when the thing enters a new chunk (this could also be used for zombies finding villagers)
-        return GameManager.instance.WorldRef.GetNearestBedInChunk(new Vector3Int((int)gameObject.transform.position.x, (int)gameObject.transform.position.y, (int)gameObject.transform.position.z));
+        return GameManager.instance.WorldRef.GetNearestBedInChunk(new Vector3Int(Mathf.RoundToInt(gameObject.transform.position.x), Mathf.RoundToInt(gameObject.transform.position.y), Mathf.RoundToInt(gameObject.transform.position.z)));
     }
 
     private void FixedUpdate()
@@ -122,11 +122,14 @@ public class Villager : Mob {
         int zVal = UnityEngine.Random.Range(-5, 6) + (int)transform.position.z;
         ChunkData chunkData = GameManager.instance.WorldRef.GetChunkDataFromWorldCoords(new Vector3Int(xVal, (int)transform.position.y, zVal));
 
-        int surfHeight = GameManager.instance.WorldRef.terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(xVal, zVal, chunkData.chunkHeight);
+        if (chunkData != null)
+        {
+            int surfHeight = GameManager.instance.WorldRef.terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(xVal, zVal, chunkData.chunkHeight);
 
-        Vector3Int newWorldPos = new Vector3Int(xVal, surfHeight + 1, zVal);
+            Vector3Int newWorldPos = new Vector3Int(xVal, surfHeight + 1, zVal);
 
-        mSteeringPipeline.SetGoalSatisfactoryRadius(5f, 2f, 5f); //Makes villagers only need to be somewhat close to acheive the goal
-        setGoal(newWorldPos, GameManager.instance.WorldRef);
+            mSteeringPipeline.SetGoalSatisfactoryRadius(5f, 2f, 5f); //Makes villagers only need to be somewhat close to acheive the goal
+            setGoal(newWorldPos, GameManager.instance.WorldRef);
+        }
     }
 }

@@ -11,6 +11,8 @@ public class World : MonoBehaviour {
     public GameManager gameManager;
     [SerializeField] private GameObject _mVillagerPrefab;
     [SerializeField] private GameObject _mZombiePrefab;
+    public int mNumberOfZombiesToSpawn = 50;
+    public int mNumberOfVillagersToSpawn = 20;
 
     private GameObject chunksParent;
     private Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new();
@@ -51,7 +53,7 @@ public class World : MonoBehaviour {
         }
 
         int mZomsSpawned = 0;
-        while (mZomsSpawned < 100) //Make this more efficient
+        while (mZomsSpawned < mNumberOfZombiesToSpawn) //Make this more efficient
         {
             int randX = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
             int randZ = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
@@ -65,7 +67,22 @@ public class World : MonoBehaviour {
             }
         }
 
-        //gameManager.SpawnPlayer();
+        int mVillagersSpawned = 0;
+        while (mVillagersSpawned < mNumberOfVillagersToSpawn) //Make this more efficient
+        {
+            int randX = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
+            int randZ = UnityEngine.Random.Range(0, mapSizeInChunks - 1) * chunkSize + UnityEngine.Random.Range(0, chunkSize);
+            int randY = terrainGenerator.biomeGenerator.GetSurfaceHeightNoise(randX, randZ, chunkHeight);
+            Vector3Int spawnPos = new Vector3Int(randX, randY + 1, randZ);
+            BlockType surfBlock = GetBlockFromWorldCoords(this, spawnPos);
+            if (surfBlock == BlockType.AIR)
+            {
+                Instantiate(_mVillagerPrefab, spawnPos, Quaternion.identity);
+                mVillagersSpawned++;
+            }
+        }
+
+        gameManager.SpawnPlayer();
     }
 
     public void ClearWorld() {
@@ -113,74 +130,74 @@ public class World : MonoBehaviour {
     {
         //Finds current chunk entity is in
         ChunkData data = GetChunkDataFromWorldCoords(point);
-        ChunkData data2;
-        ChunkData data3;
-        ChunkData data4;
-        Vector2Int direction = Vector2Int.zero;
-        List<Nullable<Vector3Int>> beds = new List<Nullable<Vector3Int>>();
-
-        Vector3Int posInChunk = point - data.worldPos;
-        if (posInChunk.x < data.chunkSize / 2)
-        {
-            direction.x = -1;
-        }
-        else
-        {
-            direction.x = 1;
-        }
-
-        if (posInChunk.z < data.chunkSize / 2)
-        {
-            direction.y = -1;
-        }
-        else
-        {
-            direction.y = 1;
-        }
-
-        data2 = GetChunkDataFromWorldCoords(point + new Vector3Int(chunkSize * direction.x, 0, 0));
-        data3 = GetChunkDataFromWorldCoords(point + new Vector3Int(0, 0, chunkSize * direction.y));
-        data4 = GetChunkDataFromWorldCoords(point + new Vector3Int(chunkSize * direction.x, 0, chunkSize * direction.y));
-
         if (data != null)
         {
-            beds.Add(data.GetNearestBed(point));
-        }
-        if (data2 != null)
-        {
-            beds.Add(data2.GetNearestBed(point));
-        }
-        if (data3 != null)
-        {
-            beds.Add(data3.GetNearestBed(point));
-        }
-        if (data4 != null)
-        {
-            beds.Add(data4.GetNearestBed(point));
-        }
+            ChunkData data2;
+            ChunkData data3;
+            ChunkData data4;
+            Vector2Int direction = Vector2Int.zero;
+            List<Nullable<Vector3Int>> beds = new List<Nullable<Vector3Int>>();
 
-        float distance = chunkSize * 2 * chunkSize * 2 + 1;
-        Vector3Int closestBed = Vector3Int.zero;
-        bool wasChanged = false;
-        foreach (var bed in beds)
-        {
-            if (bed != null)
+            Vector3Int posInChunk = point - data.worldPos;
+            if (posInChunk.x < data.chunkSize / 2)
             {
-                Vector3Int bedNew = (Vector3Int)bed;
-                Vector3Int vecTo = bedNew - point;
-                float sqrtMag = vecTo.sqrMagnitude;
-                if (sqrtMag < distance)
+                direction.x = -1;
+            }
+            else
+            {
+                direction.x = 1;
+            }
+
+            if (posInChunk.z < data.chunkSize / 2)
+            {
+                direction.y = -1;
+            }
+            else
+            {
+                direction.y = 1;
+            }
+
+            data2 = GetChunkDataFromWorldCoords(point + new Vector3Int(chunkSize * direction.x, 0, 0));
+            data3 = GetChunkDataFromWorldCoords(point + new Vector3Int(0, 0, chunkSize * direction.y));
+            data4 = GetChunkDataFromWorldCoords(point + new Vector3Int(chunkSize * direction.x, 0, chunkSize * direction.y));
+
+            beds.Add(data.GetNearestBed(point));
+            if (data2 != null)
+            {
+                beds.Add(data2.GetNearestBed(point));
+            }
+            if (data3 != null)
+            {
+                beds.Add(data3.GetNearestBed(point));
+            }
+            if (data4 != null)
+            {
+                beds.Add(data4.GetNearestBed(point));
+            }
+
+            float distance = chunkSize * 2 * chunkSize * 2 + 1;
+            Vector3Int closestBed = Vector3Int.zero;
+            bool wasChanged = false;
+            foreach (var bed in beds)
+            {
+                if (bed != null)
                 {
-                    distance = sqrtMag;
-                    closestBed = bedNew;
-                    wasChanged = true;
+                    Vector3Int bedNew = (Vector3Int)bed;
+                    Vector3Int vecTo = bedNew - point;
+                    float sqrtMag = vecTo.sqrMagnitude;
+                    if (sqrtMag < distance)
+                    {
+                        distance = sqrtMag;
+                        closestBed = bedNew;
+                        wasChanged = true;
+                    }
                 }
             }
-        }
 
-        if (wasChanged)
-        {
-            return closestBed;
+            if (wasChanged)
+            {
+                return closestBed;
+            }
         }
 
         return null;

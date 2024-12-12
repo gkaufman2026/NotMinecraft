@@ -38,7 +38,7 @@ public class Actuator
     public Action getActionToPerform(GameObject character, Vector3 start, Vector3Int goal, Vector3 additionalForces, Interactable interactable)
     {
         Vector3 dirVec = goal - start;
-        float yDiffSquared = dirVec.y * dirVec.y;
+        float yDiffSquared = dirVec.y * dirVec.y;  
 
         Action currAction = new Action();
 

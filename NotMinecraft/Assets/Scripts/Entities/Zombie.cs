@@ -83,8 +83,11 @@ public class Zombie : Mob
                 if (villagerScript != null && !villagerScript.IsSleeping)
                 {
                     Vector3Int intPos = new Vector3Int((int)collision.transform.position.x, (int)collision.transform.position.y, (int)collision.transform.position.z);
-                    villagersScripts.Add(intPos, collision.gameObject.GetComponent<Villager>());
-                    villagers.Add(intPos);
+                    if (!villagersScripts.ContainsKey(intPos))
+                    {
+                        villagersScripts.Add(intPos, collision.gameObject.GetComponent<Villager>());
+                        villagers.Add(intPos);
+                    }
                 }
             }
         }
