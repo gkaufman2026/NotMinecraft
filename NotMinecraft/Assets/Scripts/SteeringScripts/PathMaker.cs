@@ -119,14 +119,14 @@ public static class PathMaker
 
         List<Vector3Int> path = new List<Vector3Int>(); //Path from the goal to the start
 
-        if (endPoint != goalPoint)
+        /*if (endPoint != goalPoint)
         {
             Debug.Log("Did not find goal");
         }
         else
         {
             Debug.Log("Found Goal!!");
-        }
+        }*/
 
         //Builds path only if a goal was found
         Vector3Int current = endPoint;

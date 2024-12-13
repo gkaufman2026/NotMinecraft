@@ -28,56 +28,59 @@ public class SteeringPipeline : MonoBehaviour
 
     public void UpdatePathVisual()
     {
-        //Clears previous line renderers
-        LineRenderer[] lineRenderers = gameObject.GetComponentsInChildren<LineRenderer>();
-        foreach (LineRenderer lr in lineRenderers)
+        if (GameManager.instance.WorldRef.showSteeringVisual)
         {
-            Destroy(lr.gameObject);
-        }
-
-        //Runs through each point and makes a line between them, adding up total path length
-        List<Vector3Int> path = decomposer.getCurrPath();
-        float totalLength = 0;
-        if (path.Count > 1)
-        {
-            for (int i = 0; i < path.Count - 1; i++)
+            //Clears previous line renderers
+            LineRenderer[] lineRenderers = gameObject.GetComponentsInChildren<LineRenderer>();
+            foreach (LineRenderer lr in lineRenderers)
             {
-                GameObject empty = new GameObject();
-                empty.transform.parent = gameObject.transform;
-                LineRenderer line = empty.AddComponent<LineRenderer>();
+                Destroy(lr.gameObject);
+            }
 
-                //Converts points into world space
-                Vector3 pos1 = new Vector3(path[i].x, path[i].y, path[i].z);
-                Vector3 pos2 = new Vector3(path[i + 1].x, path[i + 1].y, path[i + 1].z);
-                totalLength += (pos2 - pos1).magnitude;
-                line.enabled = true;
-                empty.transform.position = pos1;
-                line.SetPosition(0, pos1);
-                line.SetPosition(1, pos2);
-                line.startWidth = 0.5f;
-                line.endWidth = 0.5f;
+            //Runs through each point and makes a line between them, adding up total path length
+            List<Vector3Int> path = decomposer.getCurrPath();
+            float totalLength = 0;
+            if (path.Count > 1)
+            {
+                for (int i = 0; i < path.Count - 1; i++)
+                {
+                    GameObject empty = new GameObject();
+                    empty.transform.parent = gameObject.transform;
+                    LineRenderer line = empty.AddComponent<LineRenderer>();
+
+                    //Converts points into world space
+                    Vector3 pos1 = new Vector3(path[i].x, path[i].y, path[i].z);
+                    Vector3 pos2 = new Vector3(path[i + 1].x, path[i + 1].y, path[i + 1].z);
+                    totalLength += (pos2 - pos1).magnitude;
+                    line.enabled = true;
+                    empty.transform.position = pos1;
+                    line.SetPosition(0, pos1);
+                    line.SetPosition(1, pos2);
+                    line.startWidth = 0.5f;
+                    line.endWidth = 0.5f;
+
+                    if (_mLineVisualMaterial != null)
+                    {
+                        line.material = _mLineVisualMaterial;
+                    }
+                }
+            }
+
+            if (path.Count > 0)
+            {
+                GameObject finalLine = new GameObject();
+                finalLine.transform.parent = gameObject.transform;
+                LineRenderer lineLast = finalLine.AddComponent<LineRenderer>();
+                Vector3 pos2Path = new Vector3(path[path.Count - 1].x, path[path.Count - 1].y, path[path.Count - 1].z);
+                lineLast.SetPosition(0, gameObject.transform.position);
+                lineLast.SetPosition(1, pos2Path);
+                lineLast.startWidth = 0.5f;
+                lineLast.endWidth = 0.5f;
 
                 if (_mLineVisualMaterial != null)
                 {
-                    line.material = _mLineVisualMaterial;
+                    lineLast.material = _mLineVisualMaterial;
                 }
-            }
-        }
-
-        if (path.Count > 0)
-        {
-            GameObject finalLine = new GameObject();
-            finalLine.transform.parent = gameObject.transform;
-            LineRenderer lineLast = finalLine.AddComponent<LineRenderer>();
-            Vector3 pos2Path = new Vector3(path[path.Count - 1].x, path[path.Count - 1].y, path[path.Count - 1].z);
-            lineLast.SetPosition(0, gameObject.transform.position);
-            lineLast.SetPosition(1, pos2Path);
-            lineLast.startWidth = 0.5f;
-            lineLast.endWidth = 0.5f;
-
-            if (_mLineVisualMaterial != null)
-            {
-                lineLast.material = _mLineVisualMaterial;
             }
         }
     }

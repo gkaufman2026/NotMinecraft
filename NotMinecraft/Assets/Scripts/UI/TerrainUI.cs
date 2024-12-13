@@ -125,6 +125,8 @@ public class TerrainUI : MonoBehaviour {
         {
             ImGui.Checkbox("Can Spawn Entities ", ref world.canSpawnEntities);
 
+            ImGui.Checkbox("Show Steering Visual ", ref world.showSteeringVisual);
+
             ImGui.Text("Number of Villagers");
             ImGui.SameLine(labelWidth);
             ImGui.SetNextItemWidth(width);

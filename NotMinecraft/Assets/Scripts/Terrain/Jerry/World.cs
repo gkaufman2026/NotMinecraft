@@ -10,6 +10,7 @@ public class World : MonoBehaviour {
     public TerrainGenerator terrainGenerator;
     public GameManager gameManager;
     public bool canSpawnEntities = true;
+    public bool showSteeringVisual = true;
     [SerializeField] private GameObject _mVillagerPrefab;
     [SerializeField] private GameObject _mZombiePrefab;
     public int mNumberOfZombiesToSpawn = 50;
